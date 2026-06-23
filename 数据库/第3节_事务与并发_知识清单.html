@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第3节 事务与并发 - 知识清单</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
+        .header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 40px 30px; text-align: center; }
+        .header h1 { font-size: 2.2em; margin-bottom: 10px; }
+        .header p { font-size: 1.1em; opacity: 0.9; }
+        .content { padding: 30px; }
+        .section { margin-bottom: 35px; border-left: 4px solid #f5576c; padding-left: 20px; }
+        .section h2 { color: #333; font-size: 1.5em; margin-bottom: 15px; display: flex; align-items: center; }
+        .section h2 span { background: #f5576c; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 0.8em; }
+        .section h3 { color: #555; font-size: 1.2em; margin: 20px 0 10px; }
+        .section p, .section li { color: #666; line-height: 1.8; margin-bottom: 8px; }
+        .section ul { padding-left: 25px; }
+        .figure { margin: 20px 0; text-align: center; }
+        .figure img { max-width: 100%; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .figure figcaption { color: #888; font-size: 0.9em; margin-top: 8px; }
+        .highlight { background: #f8d7da; padding: 2px 6px; border-radius: 4px; }
+        .code { background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.9em; overflow-x: auto; margin: 15px 0; }
+        .nav { background: #f8f9fa; padding: 15px 30px; border-top: 1px solid #e9ecef; display: flex; justify-content: space-between; align-items: center; }
+        .nav a { color: #f5576c; text-decoration: none; font-weight: 500; }
+        .nav a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>第3节 事务与并发</h1>
+            <p>事务与ACID · 调度与可串行化 · 封锁协议2PL · 故障恢复日志</p>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h2><span>1</span>事务与ACID</h2>
+                
+                <h3>1.1 本讲目录</h3>
+                <figure class="figure">
+                    <img src="../_images/slide0062_p17_s2.jpg" alt="事务可靠性四个板块">
+                    <figcaption>图1-1 事务可靠性知识框架</figcaption>
+                </figure>
+                
+                <h3>1.2 事务：要么全做，要么全不做</h3>
+                <figure class="figure">
+                    <img src="../_images/slide0065_p18_s1.jpg" alt="事务定义">
+                    <figcaption>图1-2 事务定义与状态机</figcaption>
+                </figure>
+                <p><strong>定义</strong>：事务是访问/更新数据库的一个操作序列，是并发控制与故障恢复的基本单位。经典例子：转账——A减50、B加50，两步必须同时成功或同时失败。</p>
+                <p><strong>事务状态机</strong>：</p>
+                <ul>
+                    <li><strong>活动（active）</strong>→ 执行完最后一条 → <strong>部分提交（partially committed）</strong> → <strong>提交（committed）</strong></li>
+                    <li>活动（出错回滚）→ <strong>失败（failed）</strong> → <strong>中止（aborted）</strong></li>
+                </ul>
+                <p><span class="highlight">考点提示</span>：事务是后面一切（调度、封锁、恢复）的最小单位——先牢牢记住"全做，或全不做"。</p>
+                
+                <h3>1.3 事务的四大特性ACID</h3>
+                <figure class="figure">
+                    <img src="../_images/slide0066_p18_s2.jpg" alt="ACID特性">
+                    <figcaption>图1-3 事务的四大特性ACID</figcaption>
+                </figure>
+                <ul>
+                    <li><strong>原子性 A（Atomicity）</strong>：全做或全不做，中途失败必须整体回滚。机制：UNDO日志</li>
+                    <li><strong>一致性 C（Consistency）</strong>：事务前后数据库都满足完整性约束。机制：约束+应用逻辑</li>
+                    <li><strong>隔离性 I（Isolation）</strong>：并发事务互不干扰，效果如同串行。机制：封锁/2PL</li>
+                    <li><strong>持久性 D（Durability）</strong>：一旦提交，崩溃后修改也不丢失。机制：REDO日志+WAL</li>
+                </ul>
+                <p><span class="highlight">记忆</span>：A靠UNDO、D靠REDO、I靠封锁，C是总目标——后面三个板块正好对应ACID的实现。</p>
+                
+                <h3>1.4 ACID选择题怎么考</h3>
+                <figure class="figure">
+                    <img src="../_images/slide0067_p18_s3.jpg" alt="ACID选择题">
+                    <figcaption>图1-4 ACID选择题考点</figcaption>
+                </figure>
+                <p><strong>易混淆的四个坑</strong>：</p>
+                <ul>
+                    <li>并发也能"一致"，靠隔离性/可串行化保证，不必串行执行</li>
+                    <li>隔离性=效果"等价于串行"，并非禁止并发</li>
+                    <li>A靠UNDO、D靠REDO，别记反</li>
+                    <li>原子性≠持久性：一个管"全或无"，一个管"不丢失"</li>
+                </ul>
+                <p><span class="highlight">记忆</span>：选项D把"一致性"误当成"必须串行"——这是最常见的ACID陷阱。</p>
+            </div>
+            
+            <div class="section">
+                <h2><span>2</span>调度与可串行化</h2>
+                
+                <h3>2.1 调度与并发的三类异常</h3>
+                <figure class="figure">
+                    <img src="../_images/slide0069_p19_s1.jpg" alt="并发异常">
+                    <figcaption>图2-1 调度与并发的三类异常</figcaption>
+                </figure>
+                <p><strong>调度Schedule</strong>：一组事务所有操作的一个执行次序。<strong>串行调度</strong>：事务一个接一个；<strong>并发调度</strong>：操作交错。并发能提高吞吐，但调度不当会出错。</p>
+                <ul>
+                    <li><strong>丢失更新（Lost Update）</strong>：T2覆盖了T1尚未提交的写，T1的修改"凭空消失"。例：两人同时改同一余额</li>
+                    <li><strong>脏读（Dirty Read）</strong>：读到了别的事务"未提交"的数据，而它随后又被回滚。例：读了又被撤销的中间值</li>
+                    <li><strong>不可重复读（Non-repeatable）</strong>：同一事务两次读同一数据，结果却不同。例：中途被别的事务改写</li>
+                </ul>
+                <p><strong>并发控制目标</strong>：允许交错以提高效率，但要保证结果等价于某个串行调度——这就是"可串行化"。</p>
+                
+                <h3>2.2 冲突·冲突等价·冲突可串行化</h3>
+                <figure class="figure">
+                    <img src="../_images/slide0070_p19_s2.jpg" alt="冲突可串行化">
+                    <figcaption>图2-2 冲突与冲突可串行化</figcaption>
+                </figure>
+                <p><strong>两个操作"冲突"需同时满足</strong>：①来自不同事务 ②访问同一数据项 ③至少一个是写操作</p>
+                <p><strong>四种组合</strong>：</p>
+                <ul>
+                    <li>R-R：不冲突</li>
+                    <li>R-W、W-R、W-W：冲突</li>
+                </ul>
+                <p><strong>冲突等价 Conflict-Equivalent</strong>：两个调度，若所有冲突操作的相对次序都相同，则它们冲突等价。可以通过交换"相邻、非冲突"的操作互相转换。</p>
+                <p><strong>冲突可串行化 Conflict-Serializable</strong>：一个并发调度如果冲突等价于某个串行调度，就称为冲突可串行化的——这是判断并发"正确"的标准。</p>
+                <p><span class="highlight">判定口诀</span>：只交换"相邻、非冲突"的操作；能换成串行就是冲突可串行化——但手工交换易错，于是用先行图。</p>
+                
+                <h3>2.3 先行图：三步判定可串行化</h3>
+                <figure class="figure">
+                    <img src="../_images/slide0071_p19_s3.jpg" alt="先行图">
+                    <figcaption>图2-3 先行图判定可串行化</figcaption>
+                </figure>
+                <ol>
+                    <li><strong>画结点</strong>：每个事务对应一个结点 T₁, T₂, ...</li>
+                    <li><strong>连有向边</strong>：若Tᵢ的某操作与Tⱼ的某操作冲突、且Tᵢ的在前，则画 Tᵢ → Tⱼ</li>
+                    <li><strong>看是否有环</strong>：无环⇒冲突可串行化（拓扑排序即串行序）；有环⇒不可串行化</li>
+                </ol>
+                <p><strong>本质</strong>：先行图描述了"谁必须排在谁前面"。如果这种先后要求自相矛盾（成环），就不存在合法的串行次序。</p>
+                
+                <h3>2.4 可串行化的调度例题</h3>
+                <figure class="figure">
+                    <img src="../_images/slide0072_p19_s4.jpg" alt="可串行化例题">
+                    <figcaption>图2-4 可串行化调度例题</figcaption>
+                </figure>
+                <p><strong>找冲突</strong>：</p>
+                <ul>
+                    <li>在A上：T₁的写W₁(A)都在T₂的R₂(A)/W₂(A)之前⇒仅 T₁→T₂</li>
+                    <li>在B上：T₁的写W₁(B)也在T₂的R₂(B)/W₂(B)之前⇒仍 T₁→T₂</li>
+                </ul>
+                <p>所有冲突方向一致，没有反向边→<strong>无环✓可串行化</strong>。等价串行调度为 T₁;T₂（先做完T₁再做T₂）。</p>
+            </div>
+            
+            <div class="section">
+                <h2><span>3</span>封锁协议2PL</h2>
+                
+                <h3>3.1 共享锁S与排他锁X</h3>
+                <figure class="figure">
+                    <img src="../_images/slide0074_p20_s2.jpg" alt="锁类型">
+                    <figcaption>图3-1 共享锁与排他锁</figcaption>
+                </figure>
+                <ul>
+                    <li><strong>共享锁S（读锁/Shared）</strong>：读数据前加S锁。多个事务可同时对同一对象持有S锁——读读不冲突。</li>
+                    <li><strong>排他锁X（写锁/eXclusive）</strong>：写数据前加X锁。某对象上的X锁只能被一个事务独占，其他任何加锁请求都要等待。</li>
+                </ul>
+                <p><strong>锁相容矩阵</strong>：只有S-S相容，其余三种组合（含任意X）都互斥。</p>
+                <p><span class="highlight">核心关系</span>：S-S相容="读读不冲突"；只要有写（X），就必须互斥——这正是上一讲冲突的封锁实现。</p>
+                
+                <h3>3.2 两段锁协议2PL与三种变体</h3>
+                <figure class="figure">
+                    <img src="../_images/slide0075_p20_s3.jpg" alt="2PL协议">
+                    <figcaption>图3-2 两段锁协议与三种变体</figcaption>
+                </figure>
+                <p><strong>两段锁协议2PL</strong>：每个事务分两个阶段：①<strong>增长阶段</strong>（只能申请锁、不能释放）→ ②<strong>收缩阶段</strong>（只能释放锁、不能再申请）。</p>
+                <p><strong>核心定理</strong>：所有事务都遵守2PL ⇒ 任何调度都是冲突可串行化的。</p>
+                <ul>
+                    <li><strong>基本2PL</strong>：满足"先增长后收缩"即可。可串行化，但可能发生级联回滚。</li>
+                    <li><strong>严格2PL</strong>：所有X（写）锁保持到事务提交/中止后才释放。避免脏读与级联回滚。</li>
+                    <li><strong>强严格2PL</strong>：所有锁（S和X）都保持到事务结束。最易实现，本卷例题即用此。</li>
+                </ul>
+                <p><span class="highlight">一句话</span>：2PL保证可串行化；锁"持有得越久"越安全（Rigorous最严），但并发度越低。</p>
+                
+                <h3>3.3 为两个事务加排他锁例题</h3>
+                <figure class="figure">
+                    <img src="../_images/slide0077_p21_s1.jpg" alt="加锁例题">
+                    <figcaption>图3-3 强严格2PL加锁例题</figcaption>
+                </figure>
+                <div class="code">
+-- T₁ 操作B、C
+XLOCK(B)
+Read(B);  B := B * 1.1
+Write(B)
+XLOCK(C)
+Read(C);  C := C * 2
+Write(C)
+commit
+UNLOCK(B);  UNLOCK(C)
+
+-- T₂ 操作A、B（转账）
+XLOCK(A)
+Read(A);  A := A - 50
+Write(A)
+XLOCK(B)
+Read(B);  B := B + 50
+Write(B)
+commit
+UNLOCK(A);  UNLOCK(B)
+                </div>
+                <p><strong>要点</strong>：每个事务先把要用的对象全部加上X锁，直到commit后才解锁（锁全程持有）——加锁3分。</p>
+            </div>
+            
+            <div class="section">
+                <h2><span>4</span>故障恢复日志</h2>
+                
+                <h3>4.1 崩溃后：谁REDO，谁UNDO</h3>
+                <figure class="figure">
+                    <img src="../_images/slide0081_p22_s1.jpg" alt="REDO和UNDO">
+                    <figcaption>图4-1 崩溃后的REDO与UNDO</figcaption>
+                </figure>
+                <p>恢复时扫描日志，按事务有没有&lt;COMMIT&gt;把它分成两类，分别处理：</p>
+                <ul>
+                    <li><strong>REDO 重做（已提交事务，有COMMIT）</strong>：把日志里记录的"新值"重新写一遍，保证已提交的修改不丢（持久性D）。操作：数据项←新值</li>
+                    <li><strong>UNDO 撤销（未提交事务，无COMMIT）</strong>：把日志里记录的"旧值"写回去，抹掉这个半途事务的痕迹（原子性A）。操作：数据项←旧值</li>
+                </ul>
+                <p><span class="highlight">八字口诀</span>：已提交就REDO（写新值）、未提交就UNDO（写旧值）——一切恢复都围绕这八个字。</p>
+                
+                <h3>4.2 检查点与恢复流程</h3>
+                <figure class="figure">
+                    <img src="../_images/slide0082_p22_s2.jpg" alt="检查点">
+                    <figcaption>图4-2 检查点与恢复流程</figcaption>
+                </figure>
+                <p><strong>检查点Checkpoint</strong>：系统周期性地把内存缓冲刷盘并写一条&lt;CHECKPOINT&gt;。恢复时只需处理最近检查点之后的日志，更早的已提交事务无需REDO，大幅缩短恢复时间。</p>
+                <p><strong>恢复流程</strong>：</p>
+                <ol>
+                    <li><strong>扫描日志，分两类</strong>：找出每个事务有无COMMIT，建立REDO表与UNDO表</li>
+                    <li><strong>REDO已提交</strong>：对REDO表中的事务，按日志顺序重做（写新值）</li>
+                    <li><strong>UNDO未提交</strong>：对UNDO表中的事务，反向撤销（写旧值）</li>
+                </ol>
+                <p><span class="highlight">口诀</span>：先分类、再REDO、后UNDO；有检查点就从检查点开始扫——恢复又快又稳。</p>
+                
+                <h3>4.3 崩溃后的日志恢复例题</h3>
+                <figure class="figure">
+                    <img src="../_images/slide0083_p22_s3.jpg" alt="日志恢复例题">
+                    <figcaption>图4-3 崩溃后的日志恢复例题</figcaption>
+                </figure>
+                <p><strong>判断状态</strong>：</p>
+                <ul>
+                    <li>T₁提交（有COMMIT）⇒ REDO</li>
+                    <li>T₂未提交（无COMMIT）⇒ UNDO</li>
+                    <li>T₃未提交（无COMMIT）⇒ UNDO</li>
+                </ul>
+                <p><strong>恢复操作</strong>：</p>
+                <ul>
+                    <li>REDO：R101.Rstatus ← 'checked' (T₁)</li>
+                    <li>UNDO：R102.Rprice 350 → 300 (T₃)</li>
+                    <li>UNDO：R103.Rstatus 'occupied'→'free' (T₂)</li>
+                </ul>
+                
+                <h3>4.4 易错清单与全卷地图</h3>
+                <figure class="figure">
+                    <img src="../_images/slide0085_p23_s1.jpg" alt="易错清单">
+                    <figcaption>图4-4 事务可靠性易错清单与全卷地图</figcaption>
+                </figure>
+                <p><strong>本讲易错清单</strong>：</p>
+                <ul>
+                    <li>隔离性≠禁止并发，而是效果"等价于串行"</li>
+                    <li>先行图判定：有环就一定不可串行化</li>
+                    <li>冲突需"不同事务+同一数据+至少一个写"</li>
+                    <li>强严格2PL：所有锁持有到提交后才释放</li>
+                    <li>死锁看等待图有没有环，无环则无死锁</li>
+                    <li>REDO写新值（已提交）、UNDO写旧值（未提交）</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="nav">
+            <a href="index.html">← 返回目录</a>
+            <a href="第3节_事务与并发_章节测试.html">章节测试 →</a>
+        </div>
+    </div>
+</body>
+</html>

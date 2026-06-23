@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>数据库系统概论 - 复习资料总目录</title>
+<style>
+:root {
+  --paper: #fdf6e3; --paper-dark: #f5ecd7; --ink: #2c2c2c; --ink-light: #555;
+  --accent: #2563eb; --accent-hover: #1d4ed8; --divider: #d6c8a8;
+  --card-bg: #fef9ef; --card-border: #e8dcc8; --radius: 8px;
+}
+* { box-sizing: border-box; }
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 13pt; line-height: 1.75; color: var(--ink);
+  max-width: 800px; margin: auto; padding: 32px 20px 60px; background: var(--paper);
+}
+h1 { font-size: 1.8em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 12px; }
+h2 { font-size: 1.2em; margin-top: 28px; color: var(--ink-light); }
+.section-card {
+  background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius);
+  padding: 20px 24px; margin: 16px 0; display: flex; justify-content: space-between; align-items: center;
+  transition: box-shadow 0.2s;
+}
+.section-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.section-info { flex: 1; }
+.section-title { font-size: 1.15em; font-weight: 700; margin-bottom: 4px; }
+.section-desc { font-size: 0.9em; color: var(--ink-light); }
+.section-tag { font-size: 0.78em; padding: 2px 8px; border-radius: 3px; margin-left: 8px; }
+.tag-query { background: #dbeafe; color: #1e40af; }
+.tag-model { background: #fef3c7; color: #92400e; }
+.tag-tx { background: #fee2e2; color: #991b1b; }
+.tag-recovery { background: #f0fdf4; color: #166534; }
+.section-links { display: flex; gap: 8px; flex-shrink: 0; }
+.section-links a {
+  padding: 6px 14px; border-radius: 4px; text-decoration: none; font-size: 0.9em; font-weight: 600;
+  border: 1px solid var(--divider); white-space: nowrap;
+}
+.link-guide { color: var(--accent); background: #fff; }
+.link-guide:hover { background: #dbeafe; }
+.link-test { color: #166534; background: #f0fdf4; border-color: #bbf7d0; }
+.link-test:hover { background: #dcfce7; }
+.footer { text-align: center; margin-top: 40px; font-size: 0.85em; color: var(--ink-light); }
+
+</style>
+</head>
+<body>
+
+<h1>📚 数据库系统概论</h1>
+<p style="text-align:center;color:var(--ink-light);margin-top:-10px;">期末复习资料 · 按章节整理</p>
+
+<p style="text-align:center;margin:8px 0 20px 0;color:var(--ink-light);font-size:0.92em;">
+  覆盖全部课件（18份PDF）与三份复习资料 | 每节包含知识清单 + 交互式章节测试
+</p>
+
+<!-- Section 1 -->
+<div class="section-card">
+<div class="section-info">
+  <div class="section-title">
+    第1节：查询为王 <span class="section-tag tag-query">SQL & 基础</span>
+  </div>
+  <div class="section-desc">
+    DBMS体系 · 关系代数 · SQL查询 · JOIN · 子查询 · 索引 · 查询优化
+  </div>
+  <div class="section-desc" style="font-size:0.8em;margin-top:2px;">
+    来源：复习第一讲 + db课件3.18~4.29
+  </div>
+</div>
+<div class="section-links">
+  <a class="link-guide" href="第1节_查询为王_知识清单.html">📘 知识清单</a>
+  <a class="link-test" href="第1节_查询为王_章节测试.html">📝 章节测试</a>
+</div>
+</div>
+
+<!-- Section 2 -->
+<div class="section-card">
+<div class="section-info">
+  <div class="section-title">
+    第2节：建模与范式 <span class="section-tag tag-model">ER & 范式</span>
+  </div>
+  <div class="section-desc">
+    ER建模 · 弱实体 · ER转关系模式 · 函数依赖 · Armstrong公理 · 1NF→BCNF→4NF · BCNF分解
+  </div>
+  <div class="section-desc" style="font-size:0.8em;margin-top:2px;">
+    来源：复习第二讲 + er5.20
+  </div>
+</div>
+<div class="section-links">
+  <a class="link-guide" href="第2节_建模与范式_知识清单.html">📘 知识清单</a>
+  <a class="link-test" href="第2节_建模与范式_章节测试.html">📝 章节测试</a>
+</div>
+</div>
+
+<!-- Section 3 -->
+<div class="section-card">
+<div class="section-info">
+  <div class="section-title">
+    第3节：事务与并发 <span class="section-tag tag-tx">ACID & 锁</span>
+  </div>
+  <div class="section-desc">
+    ACID特性 · 事务状态 · 可串行化 · 优先图 · 2PL锁协议 · 死锁 · Wait-Die/Wound-Wait
+  </div>
+  <div class="section-desc" style="font-size:0.8em;margin-top:2px;">
+    来源：复习lecture3 + transactions5.27 + transactions6.3
+  </div>
+</div>
+<div class="section-links">
+  <a class="link-guide" href="第3节_事务与并发_知识清单.html">📘 知识清单</a>
+  <a class="link-test" href="第3节_事务与并发_章节测试.html">📝 章节测试</a>
+</div>
+</div>
+
+<!-- Section 4 -->
+<div class="section-card">
+<div class="section-info">
+  <div class="section-title">
+    第4节：恢复与向量数据库 <span class="section-tag tag-recovery">Recovery & AI</span>
+  </div>
+  <div class="section-desc">
+    故障类型 · WAL协议 · UNDO/REDO · ARIES · 检查点 · Embedding · ANN · HNSW · 相似度度量
+  </div>
+  <div class="section-desc" style="font-size:0.8em;margin-top:2px;">
+    来源：recovery6.3 + recovery6.10 + vectordb6.10
+  </div>
+</div>
+<div class="section-links">
+  <a class="link-guide" href="第4节_恢复与向量数据库_知识清单.html">📘 知识清单</a>
+  <a class="link-test" href="第4节_恢复与向量数据库_章节测试.html">📝 章节测试</a>
+</div>
+</div>
+
+<hr style="margin:28px 0 12px 0;border-top:1px solid var(--divider)">
+
+<h2>📊 各节测试概览</h2>
+
+<table>
+<tr><th>节次</th><th>选择题</th><th>判断题</th><th>填空题</th><th>简答题</th><th>综合题</th><th>总分</th></tr>
+<tr><td>第1节 查询为王</td><td>20×2=40</td><td>10×1=10</td><td>10×2=20</td><td>4×5=20</td><td>1×10=10</td><td><strong>100</strong></td></tr>
+<tr><td>第2节 建模与范式</td><td>20×2=40</td><td>10×1=10</td><td>10×2=20</td><td>4×5=20</td><td>1×10=10</td><td><strong>100</strong></td></tr>
+<tr><td>第3节 事务与并发</td><td>20×2=40</td><td>10×1=10</td><td>10×2=20</td><td>4×5=20</td><td>1×10=10</td><td><strong>100</strong></td></tr>
+<tr><td>第4节 恢复与向量</td><td>20×2=40</td><td>10×1=10</td><td>10×2=20</td><td>4×5=20</td><td>1×10=10</td><td><strong>100</strong></td></tr>
+<tr style="font-weight:700;background:var(--paper-dark);"><td>合计</td><td>160</td><td>40</td><td>80</td><td>80</td><td>40</td><td><strong>400</strong></td></tr>
+</table>
+
+<h2>🖼️ 课件图片说明</h2>
+<p style="font-size:0.92em;color:var(--ink-light);">
+  每节知识清单中嵌入的图片来源于对应课件/复习资料 PDF 中的独立幻灯片（共319页，2001张幻灯片图片）。
+  图片存储于 <code>../_images/</code> 目录下，按 <code>slide{序号}_p{页码}_s{页内序号}.jpg</code> 命名。
+  每张图片对应一份独立的幻灯片，确保文图精确匹配。
+</p>
+
+<div class="footer">
+  Generated by ExamPass Assistant · 2026-06-22
+</div>
+
+</body>
+</html>

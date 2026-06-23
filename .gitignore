@@ -1,0 +1,8 @@
+# PDF 源文件（不提交）
+*.pdf
+
+# 临时文件
+*.tmp
+*.log
+.DS_Store
+Thumbs.db
