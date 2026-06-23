@@ -1,6 +1,9 @@
 # PDF 源文件（不提交）
 *.pdf
 
+# 工作区数据
+.codebuddy/
+
 # 临时文件
 *.tmp
 *.log

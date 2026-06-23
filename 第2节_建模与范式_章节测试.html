@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第2节：建模与范式 - 章节测试</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\(', '\)']], displayMath: [['$$', '$$'], ['\[', '\]']] }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+:root {
+  --paper: #fdf6e3; --paper-dark: #f5ecd7; --ink: #2c2c2c; --ink-light: #555;
+  --accent: #2563eb; --accent-hover: #1d4ed8; --divider: #d6c8a8;
+  --card-bg: #fef9ef; --card-border: #e8dcc8;
+  --correct: #22c55e; --correct-bg: #f0fdf4;
+  --wrong: #ef4444; --wrong-bg: #fef2f2;
+  --radius: 6px;
+}
+* { box-sizing: border-box; }
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 900px; margin: auto; padding: 24px 20px 60px; background: var(--paper);
+}
+@media print { body { font-size: 10.5pt; background: #fff; } }
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; }
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+code { background: #f0ede0; padding: 2px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #f0ede0; padding: 10px; border-radius: var(--radius); overflow-x: auto; }
+.nav-bar { text-align: center; margin-bottom: 20px; font-size: 0.95em; }
+.nav-bar a { margin: 0 8px; padding: 4px 10px; border: 1px solid var(--divider); border-radius: 4px; }
+.nav-bar a:hover { background: var(--card-bg); }
+
+.quiz-section { margin-bottom: 24px; }
+.question { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 14px 18px; margin: 10px 0; }
+.question.correct { background: var(--correct-bg); border-color: var(--correct); }
+.question.wrong { background: var(--wrong-bg); border-color: var(--wrong); }
+.q-num { font-weight: 700; color: var(--accent); margin-right: 6px; }
+.option { display: block; margin: 4px 0; padding: 4px 10px; border-radius: 4px; cursor: pointer; }
+.option:hover { background: var(--paper-dark); }
+.option.selected { background: #dbeafe; font-weight: 600; }
+.feedback { display: none; margin-top: 8px; padding: 8px 12px; border-radius: 4px; font-size: 0.93em; }
+.feedback.show { display: block; }
+.feedback.correct-fb { background: var(--correct-bg); color: #166534; }
+.feedback.wrong-fb { background: var(--wrong-bg); color: #991b1b; }
+.btn {
+  display: inline-block; padding: 6px 18px; border: none; border-radius: var(--radius);
+  background: var(--accent); color: #fff; font-size: 0.95em; cursor: pointer; margin: 4px;
+}
+.btn:hover { background: var(--accent-hover); }
+.btn-outline { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+.btn-outline:hover { background: #dbeafe; }
+.score-box {
+  text-align: center; font-size: 1.3em; padding: 16px; margin: 16px 0;
+  background: var(--card-bg); border: 2px solid var(--accent); border-radius: var(--radius);
+}
+.fill-blank { font-family: monospace; padding: 3px 8px; border: 1px dashed var(--accent); border-radius: 3px; background: #fff; width: 150px; }
+textarea.essay { width: 100%; min-height: 60px; border: 1px solid var(--card-border); border-radius: var(--radius); padding: 8px; font-family: inherit; }
+</style>
+</head>
+<body>
+
+<div class="nav-bar no-print">
+  <a href="index.html">📑 总目录</a>
+  <a href="第2节_建模与范式_知识清单.html">📘 知识清单</a>
+  <a href="第1节_查询为王_章节测试.html">← 上一节测试</a> | <a href="第3节_事务与并发_章节测试.html">下一节测试 →</a>
+</div>
+
+<h1>第2节：建模与范式 — 章节测试</h1>
+<p style="text-align:center;color:var(--ink-light);margin-top:-8px;">
+  总分 100 分 | 选择题 40分 + 判断题 10分 + 填空题 20分 + 简答题 20分 + 综合题 10分 | 建议 60 分钟
+</p>
+
+<div class="score-box" id="scoreBox" style="display:none;">
+  <span id="scoreDisplay">0</span> / 100 分
+  <br><span id="gradeDisplay" style="font-size:0.8em;color:var(--ink-light);"></span>
+</div>
+
+<!-- ============ 选择题 20题 × 2分 = 40分 ============ -->
+<h2>一、选择题（每题 2 分，共 40 分）</h2>
+<div class="quiz-section" id="section1">
+
+<div class="question" id="q1">
+<p><span class="q-num">1.</span> ER 图中，弱实体用什么图形表示？</p>
+<label class="option"><input type="radio" name="q1" value="A" onclick="selectOption(this)"> A. 矩形</label>
+<label class="option"><input type="radio" name="q1" value="B" onclick="selectOption(this)"> B. 双线矩形</label>
+<label class="option"><input type="radio" name="q1" value="C" onclick="selectOption(this)"> C. 菱形</label>
+<label class="option"><input type="radio" name="q1" value="D" onclick="selectOption(this)"> D. 椭圆</label>
+<div class="feedback correct-fb" id="fb1"><strong>✓ 正确！</strong> 弱实体用双线矩形表示，其标识关系用双线菱形表示。</div>
+</div>
+
+<div class="question" id="q2">
+<p><span class="q-num">2.</span> 派生属性在 ER 图中用什么图形表示？</p>
+<label class="option"><input type="radio" name="q2" value="A" onclick="selectOption(this)"> A. 双线椭圆</label>
+<label class="option"><input type="radio" name="q2" value="B" onclick="selectOption(this)"> B. 虚线椭圆</label>
+<label class="option"><input type="radio" name="q2" value="C" onclick="selectOption(this)"> C. 双线矩形</label>
+<label class="option"><input type="radio" name="q2" value="D" onclick="selectOption(this)"> D. 虚线矩形</label>
+<div class="feedback correct-fb" id="fb2"><strong>✓ 正确！</strong> 派生属性用虚线椭圆表示（如年龄可由出生日期派生）。</div>
+</div>
+
+<div class="question" id="q3">
+<p><span class="q-num">3.</span> ER 图中 M:N 关系转化为关系模式时应该？</p>
+<label class="option"><input type="radio" name="q3" value="A" onclick="selectOption(this)"> A. 在任一方加外键</label>
+<label class="option"><input type="radio" name="q3" value="B" onclick="selectOption(this)"> B. 在 N 方加外键</label>
+<label class="option"><input type="radio" name="q3" value="C" onclick="selectOption(this)"> C. 新建关系表，含双方主键为外键</label>
+<label class="option"><input type="radio" name="q3" value="D" onclick="selectOption(this)"> D. 合并两实体为一张表</label>
+<div class="feedback correct-fb" id="fb3"><strong>✓ 正确！</strong> M:N 关系必须单独建表，含双方主键为外键，主键为两外键组合。</div>
+</div>
+
+<div class="question" id="q4">
+<p><span class="q-num">4.</span> 弱实体的主键由什么组成？</p>
+<label class="option"><input type="radio" name="q4" value="A" onclick="selectOption(this)"> A. 弱实体自己的属性</label>
+<label class="option"><input type="radio" name="q4" value="B" onclick="selectOption(this)"> B. 拥有者主键 + 部分键</label>
+<label class="option"><input type="radio" name="q4" value="C" onclick="selectOption(this)"> C. 部分键</label>
+<label class="option"><input type="radio" name="q4" value="D" onclick="selectOption(this)"> D. 自动生成的 ID</label>
+<div class="feedback correct-fb" id="fb4"><strong>✓ 正确！</strong> 弱实体没有独立主键，主键 = 拥有者主键 + 部分键（区分符）。</div>
+</div>
+
+<div class="question" id="q5">
+<p><span class="q-num">5.</span> Armstrong 公理系统中，以下哪个不是基本公理？</p>
+<label class="option"><input type="radio" name="q5" value="A" onclick="selectOption(this)"> A. 自反律</label>
+<label class="option"><input type="radio" name="q5" value="B" onclick="selectOption(this)"> B. 增广律</label>
+<label class="option"><input type="radio" name="q5" value="C" onclick="selectOption(this)"> C. 合并律</label>
+<label class="option"><input type="radio" name="q5" value="D" onclick="selectOption(this)"> D. 传递律</label>
+<div class="feedback correct-fb" id="fb5"><strong>✓ 正确！</strong> 合并律是推论而非基本公理。三个基本公理：自反律、增广律、传递律。</div>
+</div>
+
+<div class="question" id="q6">
+<p><span class="q-num">6.</span> 给定 R(A,B,C,D)，FD={A→B, B→C}，则 A⁺ = ？</p>
+<label class="option"><input type="radio" name="q6" value="A" onclick="selectOption(this)"> A. {A}</label>
+<label class="option"><input type="radio" name="q6" value="B" onclick="selectOption(this)"> B. {A, B}</label>
+<label class="option"><input type="radio" name="q6" value="C" onclick="selectOption(this)"> C. {A, B, C}</label>
+<label class="option"><input type="radio" name="q6" value="D" onclick="selectOption(this)"> D. {A, B, C, D}</label>
+<div class="feedback correct-fb" id="fb6"><strong>✓ 正确！</strong> A→B 得 AB，B→C 得 ABC。D 不在闭包中，因为无依赖能导出 D。</div>
+</div>
+
+<div class="question" id="q7">
+<p><span class="q-num">7.</span> 2NF 消除了什么问题？</p>
+<label class="option"><input type="radio" name="q7" value="A" onclick="selectOption(this)"> A. 传递依赖</label>
+<label class="option"><input type="radio" name="q7" value="B" onclick="selectOption(this)"> B. 部分依赖</label>
+<label class="option"><input type="radio" name="q7" value="C" onclick="selectOption(this)"> C. 多值依赖</label>
+<label class="option"><input type="radio" name="q7" value="D" onclick="selectOption(this)"> D. 连接依赖</label>
+<div class="feedback correct-fb" id="fb7"><strong>✓ 正确！</strong> 2NF 要求非主属性完全函数依赖于候选键，消除部分依赖。</div>
+</div>
+
+<div class="question" id="q8">
+<p><span class="q-num">8.</span> 关于 BCNF，以下说法正确的是？</p>
+<label class="option"><input type="radio" name="q8" value="A" onclick="selectOption(this)"> A. BCNF 比 3NF 宽松</label>
+<label class="option"><input type="radio" name="q8" value="B" onclick="selectOption(this)"> B. BCNF 一定能保持函数依赖</label>
+<label class="option"><input type="radio" name="q8" value="C" onclick="selectOption(this)"> C. BCNF 要求每个非平凡 FD 的决定因素都是超键</label>
+<label class="option"><input type="radio" name="q8" value="D" onclick="selectOption(this)"> D. BCNF 允许传递依赖</label>
+<div class="feedback correct-fb" id="fb8"><strong>✓ 正确！</strong> BCNF 的核心条件：所有非平凡 FD 的决定因素都是超键。BCNF 不一定保持依赖。</div>
+</div>
+
+<div class="question" id="q9">
+<p><span class="q-num">9.</span> 多值属性在转化为关系模式时应该？</p>
+<label class="option"><input type="radio" name="q9" value="A" onclick="selectOption(this)"> A. 作为实体表的一列</label>
+<label class="option"><input type="radio" name="q9" value="B" onclick="selectOption(this)"> B. 新建一张表，含实体主键 + 属性值</label>
+<label class="option"><input type="radio" name="q9" value="C" onclick="selectOption(this)"> C. 忽略不管</label>
+<label class="option"><input type="radio" name="q9" value="D" onclick="selectOption(this)"> D. 作为外键</label>
+<div class="feedback correct-fb" id="fb9"><strong>✓ 正确！</strong> 多值属性必须新建表，主键 = 全部列（实体主键 + 属性值）。</div>
+</div>
+
+<div class="question" id="q10">
+<p><span class="q-num">10.</span> BCNF 分解算法保证什么？</p>
+<label class="option"><input type="radio" name="q10" value="A" onclick="selectOption(this)"> A. 保证无损连接和保持依赖</label>
+<label class="option"><input type="radio" name="q10" value="B" onclick="selectOption(this)"> B. 保证无损连接，不一定保持依赖</label>
+<label class="option"><input type="radio" name="q10" value="C" onclick="selectOption(this)"> C. 保证保持依赖，不一定无损连接</label>
+<label class="option"><input type="radio" name="q10" value="D" onclick="selectOption(this)"> D. 两者都不保证</label>
+<div class="feedback correct-fb" id="fb10"><strong>✓ 正确！</strong> BCNF 分解保证无损连接但不一定保持函数依赖。3NF 分解两者都保证。</div>
+</div>
+
+<div class="question" id="q11">
+<p><span class="q-num">11.</span> 函数依赖 X→Y 是平凡依赖，当且仅当？</p>
+<label class="option"><input type="radio" name="q11" value="A" onclick="selectOption(this)"> A. X 是超键</label>
+<label class="option"><input type="radio" name="q11" value="B" onclick="selectOption(this)"> B. Y ⊆ X</label>
+<label class="option"><input type="radio" name="q11" value="C" onclick="selectOption(this)"> C. X 是候选键</label>
+<label class="option"><input type="radio" name="q11" value="D" onclick="selectOption(this)"> D. X 和 Y 无交集</label>
+<div class="feedback correct-fb" id="fb11"><strong>✓ 正确！</strong> Y ⊆ X 时是平凡依赖，如 {A,B}→{A}，恒成立。</div>
+</div>
+
+<div class="question" id="q12">
+<p><span class="q-num">12.</span> 3NF 与 BCNF 的主要区别是什么？</p>
+<label class="option"><input type="radio" name="q12" value="A" onclick="selectOption(this)"> A. 3NF 不允许传递依赖</label>
+<label class="option"><input type="radio" name="q12" value="B" onclick="selectOption(this)"> B. 3NF 允许主属性间的依赖，BCNF 不允许</label>
+<label class="option"><input type="radio" name="q12" value="C" onclick="selectOption(this)"> C. BCNF 不允许传递依赖</label>
+<label class="option"><input type="radio" name="q12" value="D" onclick="selectOption(this)"> D. 3NF 比 BCNF 更严格</label>
+<div class="feedback correct-fb" id="fb12"><strong>✓ 正确！</strong> BCNF 不允许任何非平凡 FD 的决定因素不是超键（包括主属性间的依赖），3NF 对主属性间的依赖放宽了条件。</div>
+</div>
+
+<div class="question" id="q13">
+<p><span class="q-num">13.</span> 属性闭包 X⁺ 包含所有属性说明什么？</p>
+<label class="option"><input type="radio" name="q13" value="A" onclick="selectOption(this)"> A. X 是候选键</label>
+<label class="option"><input type="radio" name="q13" value="B" onclick="selectOption(this)"> B. X 是超键</label>
+<label class="option"><input type="radio" name="q13" value="C" onclick="selectOption(this)"> C. X 不是键</label>
+<label class="option"><input type="radio" name="q13" value="D" onclick="selectOption(this)"> D. 关系是 3NF</label>
+<div class="feedback correct-fb" id="fb13"><strong>✓ 正确！</strong> X⁺ 包含所有属性 ⇒ X 是超键。若 X 的任何真子集的闭包都不包含所有属性，则 X 是候选键。</div>
+</div>
+
+<div class="question" id="q14">
+<p><span class="q-num">14.</span> 特化 (Specialization) 是指什么过程？</p>
+<label class="option"><input type="radio" name="q14" value="A" onclick="selectOption(this)"> A. 自底向上抽象出父类</label>
+<label class="option"><input type="radio" name="q14" value="B" onclick="selectOption(this)"> B. 自顶向下分出子类</label>
+<label class="option"><input type="radio" name="q14" value="C" onclick="selectOption(this)"> C. 横向合并实体</label>
+<label class="option"><input type="radio" name="q14" value="D" onclick="selectOption(this)"> D. 消除冗余属性</label>
+<div class="feedback correct-fb" id="fb14"><strong>✓ 正确！</strong> 特化是自顶向下（一般→特殊），泛化是自底向上（特殊→一般）。</div>
+</div>
+
+<div class="question" id="q15">
+<p><span class="q-num">15.</span> 4NF 消除了什么问题？</p>
+<label class="option"><input type="radio" name="q15" value="A" onclick="selectOption(this)"> A. 部分依赖</label>
+<label class="option"><input type="radio" name="q15" value="B" onclick="selectOption(this)"> B. 传递依赖</label>
+<label class="option"><input type="radio" name="q15" value="C" onclick="selectOption(this)"> C. 非平凡多值依赖</label>
+<label class="option"><input type="radio" name="q15" value="D" onclick="selectOption(this)"> D. 连接依赖</label>
+<div class="feedback correct-fb" id="fb15"><strong>✓ 正确！</strong> 4NF 要求所有非平凡 MVD 的决定因素都是超键，消除多值依赖带来的冗余。</div>
+</div>
+
+<div class="question" id="q16">
+<p><span class="q-num">16.</span> 复合属性在转化为关系模式时应如何处理？</p>
+<label class="option"><input type="radio" name="q16" value="A" onclick="selectOption(this)"> A. 作为一列存储</label>
+<label class="option"><input type="radio" name="q16" value="B" onclick="selectOption(this)"> B. 展开为多个简单列</label>
+<label class="option"><input type="radio" name="q16" value="C" onclick="selectOption(this)"> C. 新建一张表</label>
+<label class="option"><input type="radio" name="q16" value="D" onclick="selectOption(this)"> D. 忽略不存储</label>
+<div class="feedback correct-fb" id="fb16"><strong>✓ 正确！</strong> 复合属性（如地址=省+市+区）展开为多个简单列，每个子属性成为独立列。</div>
+</div>
+
+<div class="question" id="q17">
+<p><span class="q-num">17.</span> 给定 FD={A→B, BC→D}，以下哪个依赖能从 Armstrong 公理推导？</p>
+<label class="option"><input type="radio" name="q17" value="A" onclick="selectOption(this)"> A. A→D</label>
+<label class="option"><input type="radio" name="q17" value="B" onclick="selectOption(this)"> B. AC→D</label>
+<label class="option"><input type="radio" name="q17" value="C" onclick="selectOption(this)"> C. B→D</label>
+<label class="option"><input type="radio" name="q17" value="D" onclick="selectOption(this)"> D. D→A</label>
+<div class="feedback correct-fb" id="fb17"><strong>✓ 正确！</strong> 增广律：A→B ⇒ AC→BC；传递律：AC→BC 且 BC→D ⇒ AC→D。</div>
+</div>
+
+<div class="question" id="q18">
+<p><span class="q-num">18.</span> 最小覆盖 (Canonical Cover) 中，每个 FD 的右边应是什么形式？</p>
+<label class="option"><input type="radio" name="q18" value="A" onclick="selectOption(this)"> A. 可以是任意多个属性</label>
+<label class="option"><input type="radio" name="q18" value="B" onclick="selectOption(this)"> B. 只能是单个属性</label>
+<label class="option"><input type="radio" name="q18" value="C" onclick="selectOption(this)"> C. 至少两个属性</label>
+<label class="option"><input type="radio" name="q18" value="D" onclick="selectOption(this)"> D. 不能有空集</label>
+<div class="feedback correct-fb" id="fb18"><strong>✓ 正确！</strong> 最小覆盖中每个 FD 的右边必须是单个属性（如 A→B, A→C 而非 A→BC）。</div>
+</div>
+
+<div class="question" id="q19">
+<p><span class="q-num">19.</span> 1:1 关系在转化为关系模式时，外键放在哪里？</p>
+<label class="option"><input type="radio" name="q19" value="A" onclick="selectOption(this)"> A. 必须在左边实体</label>
+<label class="option"><input type="radio" name="q19" value="B" onclick="selectOption(this)"> B. 必须在右边实体</label>
+<label class="option"><input type="radio" name="q19" value="C" onclick="selectOption(this)"> C. 任一方加外键</label>
+<label class="option"><input type="radio" name="q19" value="D" onclick="selectOption(this)"> D. 必须单独建表</label>
+<div class="feedback correct-fb" id="fb19"><strong>✓ 正确！</strong> 1:1 关系只需在任一方加外键即可。也可以合并为一张表。</div>
+</div>
+
+<div class="question" id="q20">
+<p><span class="q-num">20.</span> 关于 ER 图到关系模式的转换，以下说法错误的是？</p>
+<label class="option"><input type="radio" name="q20" value="A" onclick="selectOption(this)"> A. 强实体→一个表</label>
+<label class="option"><input type="radio" name="q20" value="B" onclick="selectOption(this)"> B. 1:N 关系→N方加外键</label>
+<label class="option"><input type="radio" name="q20" value="C" onclick="selectOption(this)"> C. M:N 关系→任一方加外键</label>
+<label class="option"><input type="radio" name="q20" value="D" onclick="selectOption(this)"> D. 多值属性→单独建表</label>
+<div class="feedback correct-fb" id="fb20"><strong>✓ 正确！</strong> M:N 关系必须单独建关系表，不能在任一方加外键。这是最常见的错误。</div>
+</div>
+
+</div>
+
+<!-- ============ 判断题 10题 × 1分 = 10分 ============ -->
+<h2>二、判断题（每题 1 分，共 10 分）</h2>
+<div class="quiz-section" id="section2">
+
+<div class="question" id="q21">
+<p><span class="q-num">21.</span> 弱实体可以独立存在，有自己的主键。</p>
+<label class="option"><input type="radio" name="q21" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q21" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb21"><strong>✗ 错误！</strong> 弱实体依赖强实体存在，没有独立主键，主键=拥有者主键+部分键。</div>
+</div>
+
+<div class="question" id="q22">
+<p><span class="q-num">22.</span> 自反律是 Armstrong 公理之一：若 Y ⊆ X，则 X→Y。</p>
+<label class="option"><input type="radio" name="q22" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q22" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb22"><strong>✓ 正确！</strong> 自反律、增广律、传递律是 Armstrong 三大基本公理。</div>
+</div>
+
+<div class="question" id="q23">
+<p><span class="q-num">23.</span> 1NF 要求关系中所有属性都具有原子性（不可再分）。</p>
+<label class="option"><input type="radio" name="q23" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q23" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb23"><strong>✓ 正确！</strong> 1NF 是最基本的要求：每个属性值都是原子的，没有嵌套表或多值列。</div>
+</div>
+
+<div class="question" id="q24">
+<p><span class="q-num">24.</span> BCNF 分解一定能保持所有函数依赖。</p>
+<label class="option"><input type="radio" name="q24" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q24" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb24"><strong>✗ 错误！</strong> BCNF 分解保证无损连接，但不一定保持依赖。3NF 分解两者都保证。</div>
+</div>
+
+<div class="question" id="q25">
+<p><span class="q-num">25.</span> 传递依赖是违反 3NF 的根本原因。</p>
+<label class="option"><input type="radio" name="q25" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q25" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb25"><strong>✓ 正确！</strong> 3NF 要求非主属性不传递依赖于候选键，消除传递依赖。</div>
+</div>
+
+<div class="question" id="q26">
+<p><span class="q-num">26.</span> 每个函数依赖 (FD) 也是一个多值依赖 (MVD)。</p>
+<label class="option"><input type="radio" name="q26" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q26" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb26"><strong>✓ 正确！</strong> 每个 FD 都是 MVD 的特例。但反过来 MVD 不一定是 FD。</div>
+</div>
+
+<div class="question" id="q27">
+<p><span class="q-num">27.</span> 属性闭包 X⁺ 的计算结果依赖于 FD 的处理顺序。</p>
+<label class="option"><input type="radio" name="q27" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q27" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb27"><strong>✗ 错误！</strong> 闭包计算结果唯一，与处理顺序无关。中间结果可能不同但最终一致。</div>
+</div>
+
+<div class="question" id="q28">
+<p><span class="q-num">28.</span> ER 图中，关系 (Relationship) 用菱形表示。</p>
+<label class="option"><input type="radio" name="q28" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q28" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb28"><strong>✓ 正确！</strong> 实体→矩形，属性→椭圆，关系→菱形，是 ER 图的基本符号规则。</div>
+</div>
+
+<div class="question" id="q29">
+<p><span class="q-num">29.</span> 泛化 (Generalization) 是自顶向下的过程。</p>
+<label class="option"><input type="radio" name="q29" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q29" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb29"><strong>✗ 错误！</strong> 泛化是自底向上（子类→父类），特化是自顶向下（父类→子类）。</div>
+</div>
+
+<div class="question" id="q30">
+<p><span class="q-num">30.</span> 3NF 合成算法保证无损连接和保持依赖。</p>
+<label class="option"><input type="radio" name="q30" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q30" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb30"><strong>✓ 正确！</strong> 3NF 合成算法同时保证无损连接和保持函数依赖，这是它相比 BCNF 分解的优势。</div>
+</div>
+
+</div>
+
+<!-- ============ 填空题 10题 × 2分 = 20分 ============ -->
+<h2>三、填空题（每题 2 分，共 20 分）</h2>
+<div class="quiz-section" id="section3">
+
+<div class="question" id="q31">
+<p><span class="q-num">31.</span> ER 图中，<input type="text" class="fill-blank" id="fill31" placeholder="填入答案"> 属性用双线椭圆表示。</p>
+<div class="feedback correct-fb" id="fb31"><strong>答案：多值</strong> — 如电话号码（一个实体可以有多个值）。</div>
+</div>
+
+<div class="question" id="q32">
+<p><span class="q-num">32.</span> 弱实体的主键 = 拥有者主键 + <input type="text" class="fill-blank" id="fill32" placeholder="填入答案">。</p>
+<div class="feedback correct-fb" id="fb32"><strong>答案：部分键 / 区分符</strong> — 用于区分同一拥有者下的不同弱实体。</div>
+</div>
+
+<div class="question" id="q33">
+<p><span class="q-num">33.</span> Armstrong 三大公理：自反律、<input type="text" class="fill-blank" id="fill33" placeholder="填入答案">、传递律。</p>
+<div class="feedback correct-fb" id="fb33"><strong>答案：增广律</strong> — 若 X→Y 则 XZ→YZ。</div>
+</div>
+
+<div class="question" id="q34">
+<p><span class="q-num">34.</span> <input type="text" class="fill-blank" id="fill34" placeholder="填入答案"> 依赖是非主属性对候选键的部分依赖，违反 2NF。</p>
+<div class="feedback correct-fb" id="fb34"><strong>答案：部分</strong> — 部分函数依赖是违反 2NF 的根源。</div>
+</div>
+
+<div class="question" id="q35">
+<p><span class="q-num">35.</span> BCNF 要求所有非平凡 FD 的 <input type="text" class="fill-blank" id="fill35" placeholder="填入答案"> 都是超键。</p>
+<div class="feedback correct-fb" id="fb35"><strong>答案：决定因素 / 左边 / 左部</strong> — 即每个 FD X→Y 的 X 必须是超键。</div>
+</div>
+
+<div class="question" id="q36">
+<p><span class="q-num">36.</span> 4NF 消除了由非平凡 <input type="text" class="fill-blank" id="fill36" placeholder="填入答案"> 引起的冗余。</p>
+<div class="feedback correct-fb" id="fb36"><strong>答案：多值依赖 / MVD</strong> — 如课程→→教材（一门课可用多本教材）。</div>
+</div>
+
+<div class="question" id="q37">
+<p><span class="q-num">37.</span> 与 F 等价的、最简函数依赖集称为 <input type="text" class="fill-blank" id="fill37" placeholder="填入答案">。</p>
+<div class="feedback correct-fb" id="fb37"><strong>答案：最小覆盖 / Canonical Cover / Fc</strong> — 每个FD右边单属性，无冗余。</div>
+</div>
+
+<div class="question" id="q38">
+<p><span class="q-num">38.</span> ER 图中 <input type="text" class="fill-blank" id="fill38" placeholder="填入答案"> 关系表示弱实体与其拥有者之间的关系。</p>
+<div class="feedback correct-fb" id="fb38"><strong>答案：标识 / Identifying</strong> — 用双线菱形表示。</div>
+</div>
+
+<div class="question" id="q39">
+<p><span class="q-num">39.</span> 自底向上从子类抽象出父类的过程称为 <input type="text" class="fill-blank" id="fill39" placeholder="填入答案">。</p>
+<div class="feedback correct-fb" id="fb39"><strong>答案：泛化 / Generalization</strong> — 与特化（自顶向下）方向相反。</div>
+</div>
+
+<div class="question" id="q40">
+<p><span class="q-num">40.</span> BCNF 分解算法保证 <input type="text" class="fill-blank" id="fill40" placeholder="填入答案"> 连接，但不一定保持函数依赖。</p>
+<div class="feedback correct-fb" id="fb40"><strong>答案：无损 / Lossless</strong> — 可通过自然连接恢复原始关系。</div>
+</div>
+
+</div>
+
+<!-- ============ 简答题 4题 × 5分 = 20分 ============ -->
+<h2>四、简答题（每题 5 分，共 20 分）</h2>
+<div class="quiz-section" id="section4">
+
+<div class="question" id="q41">
+<p><span class="q-num">41.</span> 简述 ER 图中 M:N 关系、1:N 关系、1:1 关系分别如何转化为关系模式？</p>
+<textarea class="essay" id="essay41" placeholder="在此作答..."></textarea>
+<div class="feedback correct-fb" id="fb41"><strong>参考答案：</strong>1:1 关系：在任一方添加外键指向对方主键。1:N 关系：在 N 方添加外键指向 1 方主键。M:N 关系：必须新建关系表，包含双方主键作为外键，关系表的主键为两个外键的组合。此外关系自身如有属性也放在关系表中。</div>
+</div>
+
+<div class="question" id="q42">
+<p><span class="q-num">42.</span> 解释 2NF、3NF、BCNF 各自消除了什么问题，并说明它们之间的递进关系。</p>
+<textarea class="essay" id="essay42" placeholder="在此作答..."></textarea>
+<div class="feedback correct-fb" id="fb42"><strong>参考答案：</strong>2NF 消除部分依赖（非主属性部分依赖于候选键），3NF 消除传递依赖（非主属性传递依赖于候选键），BCNF 消除主属性间的依赖（所有非平凡FD的决定因素都是超键）。递进关系：BCNF ⊂ 3NF ⊂ 2NF ⊂ 1NF，BCNF 最严格。3NF 保证无损连接+保持依赖；BCNF 保证无损连接但不一定保持依赖。</div>
+</div>
+
+<div class="question" id="q43">
+<p><span class="q-num">43.</span> 简述属性闭包 X⁺ 的计算算法及其两个主要用途。</p>
+<textarea class="essay" id="essay43" placeholder="在此作答..."></textarea>
+<div class="feedback correct-fb" id="fb43"><strong>参考答案：</strong>算法：result=X，反复遍历FD集：若某FD的左部⊆result，将右部加入result，直到不变。用途1：判断超键——若X⁺包含所有属性，则X是超键。用途2：判断依赖蕴含——若Y⊆X⁺，则X→Y被F蕴含。</div>
+</div>
+
+<div class="question" id="q44">
+<p><span class="q-num">44.</span> 什么是最小覆盖 (Canonical Cover)？简述计算最小覆盖的步骤。</p>
+<textarea class="essay" id="essay44" placeholder="在此作答..."></textarea>
+<div class="feedback correct-fb" id="fb44"><strong>参考答案：</strong>最小覆盖Fc是与F等价的最简函数依赖集，每个FD右边只有单个属性且无冗余属性/依赖。步骤：1.将所有FD右边分解为单属性（用分解律）。2.检查每个FD左边有无冗余属性（逐一移除，检查是否等价）。3.检查每个FD本身是否冗余（逐一移除，检查是否等价）。</div>
+</div>
+
+</div>
+
+<!-- ============ 综合题 1题 × 10分 = 10分 ============ -->
+<h2>五、综合题（10 分）</h2>
+<div class="quiz-section" id="section5">
+
+<div class="question" id="q45">
+<p><span class="q-num">45.</span> 给定关系模式 R(A, B, C, D, E)，函数依赖集 F = {A→BC, CD→E, B→D, E→A}。<br>
+(1) 求 R 的所有候选键<br>
+(2) 判断 R 属于第几范式，说明理由<br>
+(3) 若不属于 BCNF，请分解到 BCNF</p>
+<textarea class="essay" id="essay45" placeholder="在此作答..." style="min-height:120px;"></textarea>
+<div class="feedback correct-fb" id="fb45"><strong>参考答案：</strong><br>
+(1) 计算各属性闭包：A⁺={A,B,C,D,E}→A是超键；B⁺={B,D}≠全部；E⁺={E,A,B,C,D}→E是超键；CD⁺={C,D,E,A,B}→CD是超键。候选键：A, E, CD（三个）。<br>
+(2) 检查 BCNF：FD B→D，B不是超键（B⁺={B,D}），违反BCNF。所以R最高为3NF（检查：无非主属性的部分/传递依赖问题，主属性间的依赖违反BCNF但不违反3NF）。<br>
+(3) 用 BCNF 分解：选 B→D 分解，R1(B,D)，R2(A,B,C,E)。R1 中 B→D 且 B 是 R1 的超键→BCNF。R2 中 FD 有 A→BC, E→A。A⁺={A,B,C}⊂R2（缺E），A不是超键，用 A→BC 分解：R2a(A,B,C)，R2b(A,E)。R2a 中 A→BC 且 A 是超键→BCNF。R2b 中 A→E 且 A 是超键→BCNF。最终分解：{BD, ABC, AE}。</div>
+</div>
+
+</div>
+
+<hr>
+<div style="text-align:center;margin:20px 0;">
+  <button class="btn" onclick="checkAll()">📊 提交评分</button>
+  <button class="btn btn-outline" onclick="showAllAnswers()">📖 显示全部答案</button>
+  <button class="btn btn-outline" onclick="resetAll()">🔄 重新作答</button>
+</div>
+
+<div class="score-box" id="scoreBox2" style="display:none;">
+  <span id="scoreDisplay2">0</span> / 100 分
+  <br><span id="gradeDisplay2" style="font-size:0.8em;color:var(--ink-light);"></span>
+</div>
+
+<div class="nav-bar no-print" style="margin-top:20px;">
+  <a href="index.html">📑 总目录</a>
+  <a href="第2节_建模与范式_知识清单.html">📘 知识清单</a>
+  <a href="第1节_查询为王_章节测试.html">← 上一节测试</a> | <a href="第3节_事务与并发_章节测试.html">下一节测试 →</a>
+</div>
+
+<script>
+const answers = {
+  q1:'B',q2:'B',q3:'C',q4:'B',q5:'C',q6:'C',q7:'B',q8:'C',q9:'B',q10:'B',
+  q11:'B',q12:'B',q13:'B',q14:'B',q15:'C',q16:'B',q17:'B',q18:'B',q19:'C',q20:'C',
+  q21:'F',q22:'T',q23:'T',q24:'F',q25:'T',q26:'T',q27:'F',q28:'T',q29:'F',q30:'T',
+  fill31:'多值',fill32:'部分键',fill33:'增广律',fill34:'部分',fill35:'决定因素',
+  fill36:'多值依赖',fill37:'最小覆盖',fill38:'标识',fill39:'泛化',fill40:'无损'
+};
+
+function selectOption(el) {
+  const q = el.closest('.question');
+  q.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function checkAll() {
+  let total = 0;
+  for(let i=1;i<=20;i++) {
+    const q = document.getElementById('q'+i);
+    const sel = q.querySelector('input:checked');
+    q.classList.remove('correct','wrong');
+    const fb = document.getElementById('fb'+i);
+    fb.classList.remove('show');
+    if(sel && sel.value === answers['q'+i]) {
+      q.classList.add('correct'); fb.classList.add('show'); total+=2;
+    } else if(sel) {
+      q.classList.add('wrong'); fb.classList.add('show');
+    }
+  }
+  for(let i=21;i<=30;i++) {
+    const q = document.getElementById('q'+i);
+    const sel = q.querySelector('input:checked');
+    q.classList.remove('correct','wrong');
+    const fb = document.getElementById('fb'+i);
+    fb.classList.remove('show');
+    if(sel && sel.value === answers['q'+i]) {
+      q.classList.add('correct'); fb.classList.add('show'); total+=1;
+    } else if(sel) {
+      q.classList.add('wrong'); fb.classList.add('show');
+    }
+  }
+  const fillKeys = ['fill31','fill32','fill33','fill34','fill35','fill36','fill37','fill38','fill39','fill40'];
+  for(let i=0;i<fillKeys.length;i++) {
+    const q = document.getElementById('q'+(31+i));
+    const inp = document.getElementById(fillKeys[i]);
+    const userAns = inp.value.trim().toLowerCase();
+    const correctAns = answers[fillKeys[i]].toLowerCase();
+    q.classList.remove('correct','wrong');
+    const fb = document.getElementById('fb'+(31+i));
+    fb.classList.remove('show');
+    let isCorrect = false;
+    for(let opt of correctAns.split('/')) {
+      if(userAns.includes(opt.trim())) { isCorrect = true; break; }
+    }
+    if(isCorrect) { q.classList.add('correct'); fb.classList.add('show'); total+=2; }
+    else if(userAns !== '') { q.classList.add('wrong'); fb.classList.add('show'); }
+  }
+  document.getElementById('scoreDisplay').textContent = total;
+  document.getElementById('scoreDisplay2').textContent = total;
+  document.getElementById('scoreBox').style.display = 'block';
+  document.getElementById('scoreBox2').style.display = 'block';
+  let grade = total>=90?'🏆 优秀':total>=75?'👍 良好':total>=60?'📚 及格':'💪 继续加油';
+  document.getElementById('gradeDisplay').textContent = grade;
+  document.getElementById('gradeDisplay2').textContent = grade;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showAllAnswers() {
+  for(let i=1;i<=30;i++) {
+    const q = document.getElementById('q'+i);
+    const fb = document.getElementById('fb'+i);
+    q.classList.add('correct'); fb.classList.add('show');
+  }
+  for(let i=31;i<=45;i++) {
+    const q = document.getElementById('q'+i);
+    const fb = document.getElementById('fb'+i);
+    if(q) q.classList.add('correct');
+    if(fb) fb.classList.add('show');
+  }
+}
+
+function resetAll() {
+  document.querySelectorAll('input[type=radio]').forEach(r => r.checked = false);
+  document.querySelectorAll('.fill-blank').forEach(i => i.value = '');
+  document.querySelectorAll('textarea').forEach(t => t.value = '');
+  document.querySelectorAll('.question').forEach(q => q.classList.remove('correct','wrong'));
+  document.querySelectorAll('.feedback').forEach(f => f.classList.remove('show'));
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  document.getElementById('scoreBox').style.display = 'none';
+  document.getElementById('scoreBox2').style.display = 'none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+
+</body>
+</html>

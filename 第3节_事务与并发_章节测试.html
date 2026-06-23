@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第3节：事务与并发 - 章节测试</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\(', '\)']], displayMath: [['$$', '$$'], ['\[', '\]']] }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+:root {
+  --paper: #fdf6e3; --paper-dark: #f5ecd7; --ink: #2c2c2c; --ink-light: #555;
+  --accent: #2563eb; --accent-hover: #1d4ed8; --divider: #d6c8a8;
+  --card-bg: #fef9ef; --card-border: #e8dcc8;
+  --correct: #22c55e; --correct-bg: #f0fdf4;
+  --wrong: #ef4444; --wrong-bg: #fef2f2;
+  --radius: 6px;
+}
+* { box-sizing: border-box; }
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 900px; margin: auto; padding: 24px 20px 60px; background: var(--paper);
+}
+@media print { body { font-size: 10.5pt; background: #fff; } }
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; }
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+code { background: #f0ede0; padding: 2px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #f0ede0; padding: 10px; border-radius: var(--radius); overflow-x: auto; }
+.nav-bar { text-align: center; margin-bottom: 20px; font-size: 0.95em; }
+.nav-bar a { margin: 0 8px; padding: 4px 10px; border: 1px solid var(--divider); border-radius: 4px; }
+.nav-bar a:hover { background: var(--card-bg); }
+.quiz-section { margin-bottom: 24px; }
+.question { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 14px 18px; margin: 10px 0; }
+.question.correct { background: var(--correct-bg); border-color: var(--correct); }
+.question.wrong { background: var(--wrong-bg); border-color: var(--wrong); }
+.q-num { font-weight: 700; color: var(--accent); margin-right: 6px; }
+.option { display: block; margin: 4px 0; padding: 4px 10px; border-radius: 4px; cursor: pointer; }
+.option:hover { background: var(--paper-dark); }
+.option.selected { background: #dbeafe; font-weight: 600; }
+.feedback { display: none; margin-top: 8px; padding: 8px 12px; border-radius: 4px; font-size: 0.93em; }
+.feedback.show { display: block; }
+.feedback.correct-fb { background: var(--correct-bg); color: #166534; }
+.feedback.wrong-fb { background: var(--wrong-bg); color: #991b1b; }
+.btn {
+  display: inline-block; padding: 6px 18px; border: none; border-radius: var(--radius);
+  background: var(--accent); color: #fff; font-size: 0.95em; cursor: pointer; margin: 4px;
+}
+.btn:hover { background: var(--accent-hover); }
+.btn-outline { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+.btn-outline:hover { background: #dbeafe; }
+.score-box {
+  text-align: center; font-size: 1.3em; padding: 16px; margin: 16px 0;
+  background: var(--card-bg); border: 2px solid var(--accent); border-radius: var(--radius);
+}
+.fill-blank { font-family: monospace; padding: 3px 8px; border: 1px dashed var(--accent); border-radius: 3px; background: #fff; width: 150px; }
+textarea.essay { width: 100%; min-height: 60px; border: 1px solid var(--card-border); border-radius: var(--radius); padding: 8px; font-family: inherit; }
+</style>
+</head>
+<body>
+
+<div class="nav-bar no-print">
+  <a href="index.html">📑 总目录</a>
+  <a href="第3节_事务与并发_知识清单.html">📘 知识清单</a>
+  <a href="第2节_建模与范式_章节测试.html">← 上一节测试</a> | <a href="第4节_恢复与向量数据库_章节测试.html">下一节测试 →</a>
+</div>
+
+<h1>第3节：事务与并发 — 章节测试</h1>
+<p style="text-align:center;color:var(--ink-light);margin-top:-8px;">
+  总分 100 分 | 选择题 40分 + 判断题 10分 + 填空题 20分 + 简答题 20分 + 综合题 10分 | 建议 60 分钟
+</p>
+
+<div class="score-box" id="scoreBox" style="display:none;">
+  <span id="scoreDisplay">0</span> / 100 分
+  <br><span id="gradeDisplay" style="font-size:0.8em;color:var(--ink-light);"></span>
+</div>
+
+<!-- ============ 选择题 20题 × 2分 = 40分 ============ -->
+<h2>一、选择题（每题 2 分，共 40 分）</h2>
+<div class="quiz-section" id="section1">
+
+<div class="question" id="q1"><p><span class="q-num">1.</span> ACID 中，哪个特性保证"事务要么全做要么全不做"？</p>
+<label class="option"><input type="radio" name="q1" value="A" onclick="selectOption(this)"> A. 一致性</label>
+<label class="option"><input type="radio" name="q1" value="B" onclick="selectOption(this)"> B. 原子性</label>
+<label class="option"><input type="radio" name="q1" value="C" onclick="selectOption(this)"> C. 隔离性</label>
+<label class="option"><input type="radio" name="q1" value="D" onclick="selectOption(this)"> D. 持久性</label>
+<div class="feedback correct-fb" id="fb1"><strong>✓ 正确！</strong> 原子性(Atomicity)=All or Nothing，通过日志+UNDO实现。</div></div>
+
+<div class="question" id="q2"><p><span class="q-num">2.</span> 事务状态转换中，PARTIALLY COMMITTED 之后的下一个状态是？</p>
+<label class="option"><input type="radio" name="q2" value="A" onclick="selectOption(this)"> A. ACTIVE</label>
+<label class="option"><input type="radio" name="q2" value="B" onclick="selectOption(this)"> B. FAILED</label>
+<label class="option"><input type="radio" name="q2" value="C" onclick="selectOption(this)"> C. COMMITTED</label>
+<label class="option"><input type="radio" name="q2" value="D" onclick="selectOption(this)"> D. ABORTED</label>
+<div class="feedback correct-fb" id="fb2"><strong>✓ 正确！</strong> 成功路径：ACTIVE→PARTIALLY COMMITTED→COMMITTED。失败路径：ACTIVE→FAILED→ABORTED。</div></div>
+
+<div class="question" id="q3"><p><span class="q-num">3.</span> 以下哪对操作不冲突？</p>
+<label class="option"><input type="radio" name="q3" value="A" onclick="selectOption(this)"> A. Read(X) 和 Write(X)</label>
+<label class="option"><input type="radio" name="q3" value="B" onclick="selectOption(this)"> B. Write(X) 和 Write(X)</label>
+<label class="option"><input type="radio" name="q3" value="C" onclick="selectOption(this)"> C. Read(X) 和 Read(X)</label>
+<label class="option"><input type="radio" name="q3" value="D" onclick="selectOption(this)"> D. Write(X) 和 Read(X)</label>
+<div class="feedback correct-fb" id="fb3"><strong>✓ 正确！</strong> 读-读不冲突。只有涉及写操作（读写/写写）才可能冲突。</div></div>
+
+<div class="question" id="q4"><p><span class="q-num">4.</span> 优先图中出现环说明什么？</p>
+<label class="option"><input type="radio" name="q4" value="A" onclick="selectOption(this)"> A. 调度是可串行化的</label>
+<label class="option"><input type="radio" name="q4" value="B" onclick="selectOption(this)"> B. 调度是冲突可串行化的</label>
+<label class="option"><input type="radio" name="q4" value="C" onclick="selectOption(this)"> C. 调度不是冲突可串行化的</label>
+<label class="option"><input type="radio" name="q4" value="D" onclick="selectOption(this)"> D. 调度不是视图可串行化的</label>
+<div class="feedback correct-fb" id="fb4"><strong>✓ 正确！</strong> 优先图有环=不可冲突可串行化。无环=冲突可串行化。</div></div>
+
+<div class="question" id="q5"><p><span class="q-num">5.</span> 两阶段锁 (2PL) 的增长阶段特征是什么？</p>
+<label class="option"><input type="radio" name="q5" value="A" onclick="selectOption(this)"> A. 只释放锁</label>
+<label class="option"><input type="radio" name="q5" value="B" onclick="selectOption(this)"> B. 只获取锁，不释放</label>
+<label class="option"><input type="radio" name="q5" value="C" onclick="selectOption(this)"> C. 获取和释放交替</label>
+<label class="option"><input type="radio" name="q5" value="D" onclick="selectOption(this)"> D. 不获取也不释放</label>
+<div class="feedback correct-fb" id="fb5"><strong>✓ 正确！</strong> 增长阶段只获取锁不释放，收缩阶段只释放锁不获取。</div></div>
+
+<div class="question" id="q6"><p><span class="q-num">6.</span> 锁兼容矩阵中，S 锁和 X 锁之间是？</p>
+<label class="option"><input type="radio" name="q6" value="A" onclick="selectOption(this)"> A. 兼容</label>
+<label class="option"><input type="radio" name="q6" value="B" onclick="selectOption(this)"> B. 冲突</label>
+<label class="option"><input type="radio" name="q6" value="C" onclick="selectOption(this)"> C. 有时兼容有时不兼容</label>
+<label class="option"><input type="radio" name="q6" value="D" onclick="selectOption(this)"> D. 不存在这种情况</label>
+<div class="feedback correct-fb" id="fb6"><strong>✓ 正确！</strong> S锁与X锁冲突。只有S+S兼容。</div></div>
+
+<div class="question" id="q7"><p><span class="q-num">7.</span> 严格 2PL 排他锁何时释放？</p>
+<label class="option"><input type="radio" name="q7" value="A" onclick="selectOption(this)"> A. 不再需要时</label>
+<label class="option"><input type="radio" name="q7" value="B" onclick="selectOption(this)"> B. 事务提交后</label>
+<label class="option"><input type="radio" name="q7" value="C" onclick="selectOption(this)"> C. 事务开始前</label>
+<label class="option"><input type="radio" name="q7" value="D" onclick="selectOption(this)"> D. 收缩阶段开始</label>
+<div class="feedback correct-fb" id="fb7"><strong>✓ 正确！</strong> 严格2PL中排他锁在COMMIT后释放，避免级联回滚。</div></div>
+
+<div class="question" id="q8"><p><span class="q-num">8.</span> 死锁的四个必要条件中不包括？</p>
+<label class="option"><input type="radio" name="q8" value="A" onclick="selectOption(this)"> A. 互斥</label>
+<label class="option"><input type="radio" name="q8" value="B" onclick="selectOption(this)"> B. 持有并等待</label>
+<label class="option"><input type="radio" name="q8" value="C" onclick="selectOption(this)"> C. 可抢占</label>
+<label class="option"><input type="radio" name="q8" value="D" onclick="selectOption(this)"> D. 循环等待</label>
+<div class="feedback correct-fb" id="fb8"><strong>✓ 正确！</strong> 四个必要条件是：互斥、持有并等待、<strong>不可抢占</strong>、循环等待。可抢占会消除死锁。</div></div>
+
+<div class="question" id="q9"><p><span class="q-num">9.</span> Wait-Die 方案中，新事务等老事务时会发生什么？</p>
+<label class="option"><input type="radio" name="q9" value="A" onclick="selectOption(this)"> A. 新事务等待</label>
+<label class="option"><input type="radio" name="q9" value="B" onclick="selectOption(this)"> B. 新事务死亡（回滚）</label>
+<label class="option"><input type="radio" name="q9" value="C" onclick="selectOption(this)"> C. 老事务死亡</label>
+<label class="option"><input type="radio" name="q9" value="D" onclick="selectOption(this)"> D. 老事务等待</label>
+<div class="feedback correct-fb" id="fb9"><strong>✓ 正确！</strong> Wait-Die：新等老→新死。Wound-Wait：新等老→新等待，老等新→新受伤。</div></div>
+
+<div class="question" id="q10"><p><span class="q-num">10.</span> 2PL 协议保证什么？</p>
+<label class="option"><input type="radio" name="q10" value="A" onclick="selectOption(this)"> A. 无死锁</label>
+<label class="option"><input type="radio" name="q10" value="B" onclick="selectOption(this)"> B. 冲突可串行化</label>
+<label class="option"><input type="radio" name="q10" value="C" onclick="selectOption(this)"> C. 无级联回滚</label>
+<label class="option"><input type="radio" name="q10" value="D" onclick="selectOption(this)"> D. 严格调度</label>
+<div class="feedback correct-fb" id="fb10"><strong>✓ 正确！</strong> 基本2PL保证冲突可串行化。严格2PL才保证无级联回滚。</div></div>
+
+<div class="question" id="q11"><p><span class="q-num">11.</span> 无级联调度 (Cascadeless) 的特征是？</p>
+<label class="option"><input type="radio" name="q11" value="A" onclick="selectOption(this)"> A. 可读取未提交数据</label>
+<label class="option"><input type="radio" name="q11" value="B" onclick="selectOption(this)"> B. 只能读取已提交事务的数据</label>
+<label class="option"><input type="radio" name="q11" value="C" onclick="selectOption(this)"> C. 不能读取任何数据</label>
+<label class="option"><input type="radio" name="q11" value="D" onclick="selectOption(this)"> D. 只能读取自己的数据</label>
+<div class="feedback correct-fb" id="fb11"><strong>✓ 正确！</strong> 无级联调度避免脏读，Ti只能读取已提交事务写入的数据。</div></div>
+
+<div class="question" id="q12"><p><span class="q-num">12.</span> ACID 中持久性 (Durability) 主要通过什么实现？</p>
+<label class="option"><input type="radio" name="q12" value="A" onclick="selectOption(this)"> A. 锁</label>
+<label class="option"><input type="radio" name="q12" value="B" onclick="selectOption(this)"> B. WAL + 日志 + 检查点</label>
+<label class="option"><input type="radio" name="q12" value="C" onclick="selectOption(this)"> C. 索引</label>
+<label class="option"><input type="radio" name="q12" value="D" onclick="selectOption(this)"> D. 视图</label>
+<div class="feedback correct-fb" id="fb12"><strong>✓ 正确！</strong> 持久性通过WAL（日志先写）+检查点+REDO恢复实现。</div></div>
+
+<div class="question" id="q13"><p><span class="q-num">13.</span> 优先图中边 Ti→Tj 表示什么？</p>
+<label class="option"><input type="radio" name="q13" value="A" onclick="selectOption(this)"> A. Ti 在 Tj 之后执行</label>
+<label class="option"><input type="radio" name="q13" value="B" onclick="selectOption(this)"> B. Ti 和 Tj 有冲突且 Ti 先执行</label>
+<label class="option"><input type="radio" name="q13" value="C" onclick="selectOption(this)"> C. Tj 等待 Ti 释放锁</label>
+<label class="option"><input type="radio" name="q13" value="D" onclick="selectOption(this)"> D. Ti 和 Tj 不冲突</label>
+<div class="feedback correct-fb" id="fb13"><strong>✓ 正确！</strong> 优先图边 Ti→Tj 表示Ti和Tj有冲突操作且Ti先执行。与等待图不同。</div></div>
+
+<div class="question" id="q14"><p><span class="q-num">14.</span> 哪个调度层次最严格？</p>
+<label class="option"><input type="radio" name="q14" value="A" onclick="selectOption(this)"> A. 串行调度</label>
+<label class="option"><input type="radio" name="q14" value="B" onclick="selectOption(this)"> B. 严格调度</label>
+<label class="option"><input type="radio" name="q14" value="C" onclick="selectOption(this)"> C. 无级联调度</label>
+<label class="option"><input type="radio" name="q14" value="D" onclick="selectOption(this)"> D. 可恢复调度</label>
+<div class="feedback correct-fb" id="fb14"><strong>✓ 正确！</strong> 严格⊂无级联⊂可恢复。严格调度不允许读写未提交数据。</div></div>
+
+<div class="question" id="q15"><p><span class="q-num">15.</span> 强 2PL (Rigorous 2PL) 释放锁的时机是？</p>
+<label class="option"><input type="radio" name="q15" value="A" onclick="selectOption(this)"> A. 不再需要时</label>
+<label class="option"><input type="radio" name="q15" value="B" onclick="selectOption(this)"> B. 所有锁在 COMMIT 后释放</label>
+<label class="option"><input type="radio" name="q15" value="C" onclick="selectOption(this)"> C. 只有 X 锁在 COMMIT 后释放</label>
+<label class="option"><input type="radio" name="q15" value="D" onclick="selectOption(this)"> D. 事务开始时释放</label>
+<div class="feedback correct-fb" id="fb15"><strong>✓ 正确！</strong> 强2PL所有锁都在COMMIT后释放，保证严格调度。</div></div>
+
+<div class="question" id="q16"><p><span class="q-num">16.</span> 等待图中出现环说明什么？</p>
+<label class="option"><input type="radio" name="q16" value="A" onclick="selectOption(this)"> A. 调度不可串行化</label>
+<label class="option"><input type="radio" name="q16" value="B" onclick="selectOption(this)"> B. 存在死锁</label>
+<label class="option"><input type="radio" name="q16" value="C" onclick="selectOption(this)"> C. 调度冲突可串行化</label>
+<label class="option"><input type="radio" name="q16" value="D" onclick="selectOption(this)"> D. 无死锁</label>
+<div class="feedback correct-fb" id="fb16"><strong>✓ 正确！</strong> 等待图有环⇔死锁。注意与优先图的区别：优先图有环=不可冲突可串行化。</div></div>
+
+<div class="question" id="q17"><p><span class="q-num">17.</span> 以下哪个是冲突可串行化但不属于可恢复调度的情况？</p>
+<label class="option"><input type="radio" name="q17" value="A" onclick="selectOption(this)"> A. T1写X, T2读X, T2提交, T1提交</label>
+<label class="option"><input type="radio" name="q17" value="B" onclick="selectOption(this)"> B. T1写X, T2读X, T1提交, T2提交</label>
+<label class="option"><input type="radio" name="q17" value="C" onclick="selectOption(this)"> C. T1读X, T2读X, T1提交, T2提交</label>
+<label class="option"><input type="radio" name="q17" value="D" onclick="selectOption(this)"> D. T1写X, T2写X, T1提交, T2提交</label>
+<div class="feedback correct-fb" id="fb17"><strong>✓ 正确！</strong> A中T2在T1之前提交但读了T1的未提交数据，不可恢复（T1若回滚T2无法恢复）。</div></div>
+
+<div class="question" id="q18"><p><span class="q-num">18.</span> Wound-Wait 方案的特点是什么？</p>
+<label class="option"><input type="radio" name="q18" value="A" onclick="selectOption(this)"> A. 老事务总是等待</label>
+<label class="option"><input type="radio" name="q18" value="B" onclick="selectOption(this)"> B. 新事务等老事务→新等待，老事务等新事务→新受伤</label>
+<label class="option"><input type="radio" name="q18" value="C" onclick="selectOption(this)"> C. 任何事务都可以抢占</label>
+<label class="option"><input type="radio" name="q18" value="D" onclick="selectOption(this)"> D. 新事务有更高优先级</label>
+<div class="feedback correct-fb" id="fb18"><strong>✓ 正确！</strong> Wound-Wait优先老事务：老等新则新受伤回滚，新等老则新等待。</div></div>
+
+<div class="question" id="q19"><p><span class="q-num">19.</span> 视图可串行化与冲突可串行化的关系是？</p>
+<label class="option"><input type="radio" name="q19" value="A" onclick="selectOption(this)"> A. 两者等价</label>
+<label class="option"><input type="radio" name="q19" value="B" onclick="selectOption(this)"> B. 冲突可串行化 ⊂ 视图可串行化</label>
+<label class="option"><input type="radio" name="q19" value="C" onclick="selectOption(this)"> C. 视图可串行化 ⊂ 冲突可串行化</label>
+<label class="option"><input type="radio" name="q19" value="D" onclick="selectOption(this)"> D. 两者互不相交</label>
+<div class="feedback correct-fb" id="fb19"><strong>✓ 正确！</strong> 冲突可串行化是视图可串行化的子集。视图可串行化范围更广但判断是NP完全的。</div></div>
+
+<div class="question" id="q20"><p><span class="q-num">20.</span> 解决死锁的"检测+恢复"策略通常怎么做？</p>
+<label class="option"><input type="radio" name="q20" value="A" onclick="selectOption(this)"> A. 一次获取所有锁</label>
+<label class="option"><input type="radio" name="q20" value="B" onclick="selectOption(this)"> B. 定期检查等待图，回滚牺牲者</label>
+<label class="option"><input type="radio" name="q20" value="C" onclick="selectOption(this)"> C. 使用超时机制</label>
+<label class="option"><input type="radio" name="q20" value="D" onclick="selectOption(this)"> D. 不允许循环等待</label>
+<div class="feedback correct-fb" id="fb20"><strong>✓ 正确！</strong> 检测+恢复：周期性地构建等待图，发现有环就回滚一个事务打破环路。</div></div>
+
+</div>
+
+<!-- ============ 判断题 10题 × 1分 = 10分 ============ -->
+<h2>二、判断题（每题 1 分，共 10 分）</h2>
+<div class="quiz-section" id="section2">
+
+<div class="question" id="q21"><p><span class="q-num">21.</span> ACID 中的一致性 (Consistency) 完全由 DBMS 保证。</p>
+<label class="option"><input type="radio" name="q21" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q21" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb21"><strong>✗ 错误！</strong> 一致性由DBMS和应用共同保证。DBMS保证完整性约束，但业务逻辑一致性需应用层保证。</div></div>
+
+<div class="question" id="q22"><p><span class="q-num">22.</span> 两个不同事务的 Read(X) 操作是冲突的。</p>
+<label class="option"><input type="radio" name="q22" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q22" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb22"><strong>✗ 错误！</strong> 读-读不冲突。只有涉及写操作（读写/写写）才可能冲突。</div></div>
+
+<div class="question" id="q23"><p><span class="q-num">23.</span> 遵循基本 2PL 的调度一定是冲突可串行化的。</p>
+<label class="option"><input type="radio" name="q23" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q23" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb23"><strong>✓ 正确！</strong> 这是2PL的核心保证：遵循2PL的调度一定是冲突可串行化的。</div></div>
+
+<div class="question" id="q24"><p><span class="q-num">24.</span> 优先图无环说明调度是冲突可串行化的。</p>
+<label class="option"><input type="radio" name="q24" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q24" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb24"><strong>✓ 正确！</strong> 优先图无环⇔冲突可串行化。拓扑排序给出等价串行顺序。</div></div>
+
+<div class="question" id="q25"><p><span class="q-num">25.</span> 死锁预防中的"一次获取所有锁"方案不会降低并发度。</p>
+<label class="option"><input type="radio" name="q25" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q25" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb25"><strong>✗ 错误！</strong> 一次获取所有锁会严重降低并发度，因为事务在开始时就要锁定所有可能用到的数据。</div></div>
+
+<div class="question" id="q26"><p><span class="q-num">26.</span> 严格 2PL 可以避免级联回滚。</p>
+<label class="option"><input type="radio" name="q26" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q26" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb26"><strong>✓ 正确！</strong> 严格2PL中排他锁在提交后才释放，其他事务无法读到未提交数据。</div></div>
+
+<div class="question" id="q27"><p><span class="q-num">27.</span> S 锁和 S 锁之间是兼容的。</p>
+<label class="option"><input type="radio" name="q27" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q27" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb27"><strong>✓ 正确！</strong> 多个事务可以同时持有同一数据的共享锁（读锁），读-读不冲突。</div></div>
+
+<div class="question" id="q28"><p><span class="q-num">28.</span> 等待图 (Wait-for Graph) 和优先图 (Precedence Graph) 是同一个概念。</p>
+<label class="option"><input type="radio" name="q28" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q28" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb28"><strong>✗ 错误！</strong> 等待图用于死锁检测（边=等待锁），优先图用于判断可串行化（边=冲突顺序）。</div></div>
+
+<div class="question" id="q29"><p><span class="q-num">29.</span> Wait-Die 和 Wound-Wait 都保证无饥饿。</p>
+<label class="option"><input type="radio" name="q29" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q29" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb29"><strong>✓ 正确！</strong> 两者都基于时间戳，老事务不会被无限延迟（无饥饿）。</div></div>
+
+<div class="question" id="q30"><p><span class="q-num">30.</span> 可恢复调度中，Ti 读取了 Tj 的数据后 Ti 可以先于 Tj 提交。</p>
+<label class="option"><input type="radio" name="q30" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q30" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb30"><strong>✗ 错误！</strong> 可恢复调度要求：若Ti读取Tj的数据，Ti必须在Tj提交后才能提交。否则Tj回滚时Ti无法恢复。</div></div>
+
+</div>
+
+<!-- ============ 填空题 10题 × 2分 = 20分 ============ -->
+<h2>三、填空题（每题 2 分，共 20 分）</h2>
+<div class="quiz-section" id="section3">
+
+<div class="question" id="q31"><p><span class="q-num">31.</span> ACID 中，I 代表 <input type="text" class="fill-blank" id="fill31" placeholder="填入答案">。</p>
+<div class="feedback correct-fb" id="fb31"><strong>答案：隔离性 / Isolation</strong> — 并发事务互不干扰，通过锁/时间戳实现。</div></div>
+
+<div class="question" id="q32"><p><span class="q-num">32.</span> 事务失败路径：ACTIVE → <input type="text" class="fill-blank" id="fill32" placeholder="填入答案"> → ABORTED。</p>
+<div class="feedback correct-fb" id="fb32"><strong>答案：FAILED</strong> — 成功路径是ACTIVE→PARTIALLY COMMITTED→COMMITTED。</div></div>
+
+<div class="question" id="q33"><p><span class="q-num">33.</span> 两个操作冲突的三个条件：不同事务、同一数据项、至少一个是 <input type="text" class="fill-blank" id="fill33" placeholder="填入答案">。</p>
+<div class="feedback correct-fb" id="fb33"><strong>答案：写 / Write</strong> — 读-读不冲突。</div></div>
+
+<div class="question" id="q34"><p><span class="q-num">34.</span> 2PL 的两个阶段是：增长阶段和 <input type="text" class="fill-blank" id="fill34" placeholder="填入答案"> 阶段。</p>
+<div class="feedback correct-fb" id="fb34"><strong>答案：收缩 / Shrinking</strong> — 增长只获取，收缩只释放。</div></div>
+
+<div class="question" id="q35"><p><span class="q-num">35.</span> 死锁检测通过构建 <input type="text" class="fill-blank" id="fill35" placeholder="填入答案"> 图来判断。</p>
+<div class="feedback correct-fb" id="fb35"><strong>答案：等待 / Wait-for</strong> — 有环=死锁。</div></div>
+
+<div class="question" id="q36"><p><span class="q-num">36.</span> <input type="text" class="fill-blank" id="fill36" placeholder="填入答案"> 锁（读锁）之间是兼容的。</p>
+<div class="feedback correct-fb" id="fb36"><strong>答案：共享 / S / Shared</strong> — S+S兼容，S+X冲突，X+X冲突。</div></div>
+
+<div class="question" id="q37"><p><span class="q-num">37.</span> 严格 2PL 中，<input type="text" class="fill-blank" id="fill37" placeholder="填入答案"> 锁在提交后才释放。</p>
+<div class="feedback correct-fb" id="fb37"><strong>答案：排他 / X / Exclusive</strong> — 避免级联回滚。</div></div>
+
+<div class="question" id="q38"><p><span class="q-num">38.</span> <input type="text" class="fill-blank" id="fill38" placeholder="填入答案"> 调度不允许读取未提交事务的数据。</p>
+<div class="feedback correct-fb" id="fb38"><strong>答案：无级联 / Cascadeless</strong> — 避免脏读导致的级联回滚。</div></div>
+
+<div class="question" id="q39"><p><span class="q-num">39.</span> Wait-Die 方案中，新事务等老事务时，新事务会 <input type="text" class="fill-blank" id="fill39" placeholder="填入答案">。</p>
+<div class="feedback correct-fb" id="fb39"><strong>答案：死亡 / Die / 回滚</strong> — 新事务比老事务年轻，所以"死亡"并重试。</div></div>
+
+<div class="question" id="q40"><p><span class="q-num">40.</span> <input type="text" class="fill-blank" id="fill40" placeholder="填入答案"> 图用于判断调度是否冲突可串行化。</p>
+<div class="feedback correct-fb" id="fb40"><strong>答案：优先 / Precedence</strong> — 无环=冲突可串行化。</div></div>
+
+</div>
+
+<!-- ============ 简答题 4题 × 5分 = 20分 ============ -->
+<h2>四、简答题（每题 5 分，共 20 分）</h2>
+<div class="quiz-section" id="section4">
+
+<div class="question" id="q41"><p><span class="q-num">41.</span> 简述 ACID 四大特性及其实现机制。</p>
+<textarea class="essay" id="essay41" placeholder="在此作答..."></textarea>
+<div class="feedback correct-fb" id="fb41"><strong>参考答案：</strong>原子性：All or Nothing，通过日志+UNDO实现。一致性：事务前后数据库满足约束，DBMS保证完整性约束+应用保证业务逻辑。隔离性：并发事务互不干扰，通过锁/时间戳并发控制实现。持久性：提交后永久保存，通过WAL+日志+检查点+REDO实现。</div></div>
+
+<div class="question" id="q42"><p><span class="q-num">42.</span> 简述优先图法判断冲突可串行化的步骤。</p>
+<textarea class="essay" id="essay42" placeholder="在此作答..."></textarea>
+<div class="feedback correct-fb" id="fb42"><strong>参考答案：</strong>1.为每个事务Ti创建节点。2.找出所有冲突操作对（不同事务、同一数据、至少一个写），按执行顺序加边Ti→Tj。3.检查是否有环：无环→冲突可串行化，拓扑排序给出等价串行顺序；有环→不可冲突可串行化。</div></div>
+
+<div class="question" id="q43"><p><span class="q-num">43.</span> 对比基本2PL、严格2PL、强2PL的区别及各自保证的性质。</p>
+<textarea class="essay" id="essay43" placeholder="在此作答..."></textarea>
+<div class="feedback correct-fb" id="fb43"><strong>参考答案：</strong>基本2PL：锁在不再需要时释放→保证冲突可串行化。严格2PL：排他锁在COMMIT后释放→保证冲突可串行化+无级联回滚。强2PL：所有锁在COMMIT后释放→保证冲突可串行化+严格调度。严格程度递增，但并发度递减。</div></div>
+
+<div class="question" id="q44"><p><span class="q-num">44.</span> 简述死锁的四个必要条件和三种处理策略。</p>
+<textarea class="essay" id="essay44" placeholder="在此作答..."></textarea>
+<div class="feedback correct-fb" id="fb44"><strong>参考答案：</strong>四个条件：互斥、持有并等待、不可抢占、循环等待（破除任一可预防）。三种策略：1.预防：一次获取所有锁/超时；2.检测+恢复：定期检查等待图，有环则回滚牺牲者；3.避免：时间戳方案（Wait-Die/Wound-Wait），保证无死锁且无饥饿。</div></div>
+
+</div>
+
+<!-- ============ 综合题 1题 × 10分 = 10分 ============ -->
+<h2>五、综合题（10 分）</h2>
+<div class="quiz-section" id="section5">
+
+<div class="question" id="q45"><p><span class="q-num">45.</span> 给定以下调度 S（按时间顺序）：<br>
+T1: R(X), W(X) &nbsp; T2: R(X), W(Y) &nbsp; T3: R(Y), W(Y)<br>
+具体顺序：T1:R(X), T2:R(X), T1:W(X), T3:R(Y), T2:W(Y), T3:W(Y)<br>
+(1) 画出优先图<br>
+(2) 判断 S 是否冲突可串行化<br>
+(3) 如果可串行化，给出等价串行顺序</p>
+<textarea class="essay" id="essay45" placeholder="在此作答..." style="min-height:120px;"></textarea>
+<div class="feedback correct-fb" id="fb45"><strong>参考答案：</strong><br>
+(1) 分析冲突：T1:W(X)和T2:R(X)→T1→T2；T2:W(Y)和T3:R(Y)→T2→T3；T2:W(Y)和T3:W(Y)→T2→T3。优先图：T1→T2→T3。<br>
+(2) 无环，S是冲突可串行化的。<br>
+(3) 拓扑排序给出等价串行顺序：T1→T2→T3。</div></div>
+
+</div>
+
+<hr>
+<div style="text-align:center;margin:20px 0;">
+  <button class="btn" onclick="checkAll()">📊 提交评分</button>
+  <button class="btn btn-outline" onclick="showAllAnswers()">📖 显示全部答案</button>
+  <button class="btn btn-outline" onclick="resetAll()">🔄 重新作答</button>
+</div>
+
+<div class="score-box" id="scoreBox2" style="display:none;">
+  <span id="scoreDisplay2">0</span> / 100 分
+  <br><span id="gradeDisplay2" style="font-size:0.8em;color:var(--ink-light);"></span>
+</div>
+
+<div class="nav-bar no-print" style="margin-top:20px;">
+  <a href="index.html">📑 总目录</a>
+  <a href="第3节_事务与并发_知识清单.html">📘 知识清单</a>
+  <a href="第2节_建模与范式_章节测试.html">← 上一节测试</a> | <a href="第4节_恢复与向量数据库_章节测试.html">下一节测试 →</a>
+</div>
+
+<script>
+const answers = {
+  q1:'B',q2:'C',q3:'C',q4:'C',q5:'B',q6:'B',q7:'B',q8:'C',q9:'B',q10:'B',
+  q11:'B',q12:'B',q13:'B',q14:'A',q15:'B',q16:'B',q17:'A',q18:'B',q19:'B',q20:'B',
+  q21:'F',q22:'F',q23:'T',q24:'T',q25:'F',q26:'T',q27:'T',q28:'F',q29:'T',q30:'F',
+  fill31:'隔离性',fill32:'FAILED',fill33:'写',fill34:'收缩',fill35:'等待',
+  fill36:'共享',fill37:'排他',fill38:'无级联',fill39:'死亡',fill40:'优先'
+};
+function selectOption(el) { const q = el.closest('.question'); q.querySelectorAll('.option').forEach(o => o.classList.remove('selected')); el.classList.add('selected'); }
+function checkAll() {
+  let total = 0;
+  for(let i=1;i<=20;i++) { const q=document.getElementById('q'+i); const sel=q.querySelector('input:checked'); q.classList.remove('correct','wrong'); const fb=document.getElementById('fb'+i); fb.classList.remove('show'); if(sel&&sel.value===answers['q'+i]){q.classList.add('correct');fb.classList.add('show');total+=2}else if(sel){q.classList.add('wrong');fb.classList.add('show')} }
+  for(let i=21;i<=30;i++) { const q=document.getElementById('q'+i); const sel=q.querySelector('input:checked'); q.classList.remove('correct','wrong'); const fb=document.getElementById('fb'+i); fb.classList.remove('show'); if(sel&&sel.value===answers['q'+i]){q.classList.add('correct');fb.classList.add('show');total+=1}else if(sel){q.classList.add('wrong');fb.classList.add('show')} }
+  const fk=['fill31','fill32','fill33','fill34','fill35','fill36','fill37','fill38','fill39','fill40'];
+  for(let i=0;i<fk.length;i++){const q=document.getElementById('q'+(31+i));const inp=document.getElementById(fk[i]);const ua=inp.value.trim().toLowerCase();const ca=answers[fk[i]].toLowerCase();q.classList.remove('correct','wrong');const fb=document.getElementById('fb'+(31+i));fb.classList.remove('show');let ok=false;for(let o of ca.split('/')){if(ua.includes(o.trim())){ok=true;break}}if(ok){q.classList.add('correct');fb.classList.add('show');total+=2}else if(ua!==''){q.classList.add('wrong');fb.classList.add('show')}}
+  document.getElementById('scoreDisplay').textContent=total;document.getElementById('scoreDisplay2').textContent=total;document.getElementById('scoreBox').style.display='block';document.getElementById('scoreBox2').style.display='block';let g=total>=90?'🏆 优秀':total>=75?'👍 良好':total>=60?'📚 及格':'💪 继续加油';document.getElementById('gradeDisplay').textContent=g;document.getElementById('gradeDisplay2').textContent=g;window.scrollTo({top:0,behavior:'smooth'});
+}
+function showAllAnswers(){for(let i=1;i<=30;i++){const q=document.getElementById('q'+i);const fb=document.getElementById('fb'+i);q.classList.add('correct');fb.classList.add('show')}for(let i=31;i<=45;i++){const q=document.getElementById('q'+i);const fb=document.getElementById('fb'+i);if(q)q.classList.add('correct');if(fb)fb.classList.add('show')}}
+function resetAll(){document.querySelectorAll('input[type=radio]').forEach(r=>r.checked=false);document.querySelectorAll('.fill-blank').forEach(i=>i.value='');document.querySelectorAll('textarea').forEach(t=>t.value='');document.querySelectorAll('.question').forEach(q=>q.classList.remove('correct','wrong'));document.querySelectorAll('.feedback').forEach(f=>f.classList.remove('show'));document.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));document.getElementById('scoreBox').style.display='none';document.getElementById('scoreBox2').style.display='none';window.scrollTo({top:0,behavior:'smooth'})}
+</script>
+</body>
+</html>

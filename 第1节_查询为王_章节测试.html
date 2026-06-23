@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>第1节：查询为王 - 章节测试</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\(', '\)']], displayMath: [['$$', '$$'], ['\[', '\]']] }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"></script>
+<style>
+:root {
+  --paper: #fdf6e3; --paper-dark: #f5ecd7; --ink: #2c2c2c; --ink-light: #555;
+  --accent: #2563eb; --accent-hover: #1d4ed8; --divider: #d6c8a8;
+  --card-bg: #fef9ef; --card-border: #e8dcc8;
+  --correct: #22c55e; --correct-bg: #f0fdf4;
+  --wrong: #ef4444; --wrong-bg: #fef2f2;
+  --radius: 6px;
+}
+* { box-sizing: border-box; }
+body {
+  font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+  font-size: 12pt; line-height: 1.75; color: var(--ink);
+  max-width: 900px; margin: auto; padding: 24px 20px 60px; background: var(--paper);
+}
+@media print { body { font-size: 10.5pt; background: #fff; } }
+h1 { font-size: 1.55em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 8px; }
+h2 { font-size: 1.25em; border-bottom: 1px solid var(--divider); padding-bottom: 4px; margin-top: 28px; }
+h3 { font-size: 1.08em; margin-top: 20px; }
+table { border-collapse: collapse; width: 100%; margin: 10px 0; font-size: 0.95em; }
+td, th { border: 1px solid var(--card-border); padding: 5px 9px; text-align: left; }
+th { background: var(--paper-dark); font-weight: 700; }
+blockquote {
+  border-left: 3px solid #c0392b; background: #fef9ef;
+  padding: 6px 14px; margin: 10px 0; font-size: 0.95em;
+}
+code { background: #f0ede0; padding: 2px 5px; border-radius: 3px; font-size: 0.92em; }
+pre { background: #f0ede0; padding: 10px; border-radius: var(--radius); overflow-x: auto; }
+.nav-bar { text-align: center; margin-bottom: 20px; font-size: 0.95em; }
+.nav-bar a { margin: 0 8px; padding: 4px 10px; border: 1px solid var(--divider); border-radius: 4px; }
+.nav-bar a:hover { background: var(--card-bg); }
+
+/* Quiz styles */
+.quiz-section { margin-bottom: 24px; }
+.question { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 14px 18px; margin: 10px 0; }
+.question.correct { background: var(--correct-bg); border-color: var(--correct); }
+.question.wrong { background: var(--wrong-bg); border-color: var(--wrong); }
+.q-num { font-weight: 700; color: var(--accent); margin-right: 6px; }
+.option { display: block; margin: 4px 0; padding: 4px 10px; border-radius: 4px; cursor: pointer; }
+.option:hover { background: var(--paper-dark); }
+.option.selected { background: #dbeafe; font-weight: 600; }
+.feedback { display: none; margin-top: 8px; padding: 8px 12px; border-radius: 4px; font-size: 0.93em; }
+.feedback.show { display: block; }
+.feedback.correct-fb { background: var(--correct-bg); color: #166534; }
+.feedback.wrong-fb { background: var(--wrong-bg); color: #991b1b; }
+.btn {
+  display: inline-block; padding: 6px 18px; border: none; border-radius: var(--radius);
+  background: var(--accent); color: #fff; font-size: 0.95em; cursor: pointer; margin: 4px;
+}
+.btn:hover { background: var(--accent-hover); }
+.btn-outline { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+.btn-outline:hover { background: #dbeafe; }
+.score-box {
+  text-align: center; font-size: 1.3em; padding: 16px; margin: 16px 0;
+  background: var(--card-bg); border: 2px solid var(--accent); border-radius: var(--radius);
+}
+.fill-blank { font-family: monospace; padding: 3px 8px; border: 1px dashed var(--accent); border-radius: 3px; background: #fff; width: 150px; }
+textarea.essay { width: 100%; min-height: 60px; border: 1px solid var(--card-border); border-radius: var(--radius); padding: 8px; font-family: inherit; }
+</style>
+</head>
+<body>
+
+<div class="nav-bar no-print">
+  <a href="index.html">📑 总目录</a>
+  <a href="第1节_查询为王_知识清单.html">📘 知识清单</a>
+  <a href="第2节_建模与范式_章节测试.html">下一节测试 →</a>
+</div>
+
+<h1>第1节：查询为王 — 章节测试</h1>
+<p style="text-align:center;color:var(--ink-light);margin-top:-8px;">
+  总分 100 分 | 选择题 40分 + 判断题 10分 + 填空题 20分 + 简答题 20分 + 综合题 10分 | 建议 60 分钟
+</p>
+
+<div class="score-box" id="scoreBox" style="display:none;">
+  <span id="scoreDisplay">0</span> / 100 分
+  <br><span id="gradeDisplay" style="font-size:0.8em;color:var(--ink-light);"></span>
+</div>
+
+<!-- ============ 选择题 20题 × 2分 = 40分 ============ -->
+<h2>一、选择题（每题 2 分，共 40 分）</h2>
+
+<div class="quiz-section" id="section1">
+
+<div class="question" id="q1">
+<p><span class="q-num">1.</span> DBMS 五大组件中，负责将声明式 SQL 转换为最优执行计划的是？</p>
+<label class="option"><input type="radio" name="q1" value="A" onclick="selectOption(this)"> A. 查询评估引擎</label>
+<label class="option"><input type="radio" name="q1" value="B" onclick="selectOption(this)"> B. DML 编译器（查询优化器）</label>
+<label class="option"><input type="radio" name="q1" value="C" onclick="selectOption(this)"> C. 存储管理器</label>
+<label class="option"><input type="radio" name="q1" value="D" onclick="selectOption(this)"> D. DDL 编译器</label>
+<div class="feedback correct-fb" id="fb1"><strong>✓ 正确！</strong> DML 编译器的核心是查询优化器，负责将 SQL 转为最优执行计划。A执行计划，C管理物理存储，D处理DDL语句。</div>
+</div>
+
+<div class="question" id="q2">
+<p><span class="q-num">2.</span> "三级模式两级映像"中，提供物理数据独立性的是？</p>
+<label class="option"><input type="radio" name="q2" value="A" onclick="selectOption(this)"> A. 外模式/概念模式映像</label>
+<label class="option"><input type="radio" name="q2" value="B" onclick="selectOption(this)"> B. 概念模式/内模式映像</label>
+<label class="option"><input type="radio" name="q2" value="C" onclick="selectOption(this)"> C. 外模式/内模式映像</label>
+<label class="option"><input type="radio" name="q2" value="D" onclick="selectOption(this)"> D. 模式/实例映像</label>
+<div class="feedback correct-fb" id="fb2"><strong>✓ 正确！</strong> 概念模式/内模式映像提供物理数据独立性，存储结构变化不影响概念模式。</div>
+</div>
+
+<div class="question" id="q3">
+<p><span class="q-num">3.</span> 关系模型中，外键的值可以是什么？</p>
+<label class="option"><input type="radio" name="q3" value="A" onclick="selectOption(this)"> A. 只能是被参照表主键中存在的值</label>
+<label class="option"><input type="radio" name="q3" value="B" onclick="selectOption(this)"> B. 被参照表主键中存在的值或 NULL</label>
+<label class="option"><input type="radio" name="q3" value="C" onclick="selectOption(this)"> C. 任何值</label>
+<label class="option"><input type="radio" name="q3" value="D" onclick="selectOption(this)"> D. 只能是 NULL</label>
+<div class="feedback correct-fb" id="fb3"><strong>✓ 正确！</strong> 参照完整性规定外键必须为被参照表主键中存在的值或 NULL（除非有 NOT NULL 约束）。</div>
+</div>
+
+<div class="question" id="q4">
+<p><span class="q-num">4.</span> 以下哪个 SQL 语句的分类是正确的？</p>
+<label class="option"><input type="radio" name="q4" value="A" onclick="selectOption(this)"> A. SELECT 是 DDL</label>
+<label class="option"><input type="radio" name="q4" value="B" onclick="selectOption(this)"> B. GRANT 是 DML</label>
+<label class="option"><input type="radio" name="q4" value="C" onclick="selectOption(this)"> C. CREATE 是 DDL</label>
+<label class="option"><input type="radio" name="q4" value="D" onclick="selectOption(this)"> D. COMMIT 是 DDL</label>
+<div class="feedback correct-fb" id="fb4"><strong>✓ 正确！</strong> CREATE 属于 DDL（数据定义语言）。SELECT 是 DML，GRANT 是 DCL，COMMIT 是 TCL。</div>
+</div>
+
+<div class="question" id="q5">
+<p><span class="q-num">5.</span> 关系代数中，$\sigma_{age>20}(Student)$ 表示什么操作？</p>
+<label class="option"><input type="radio" name="q5" value="A" onclick="selectOption(this)"> A. 投影</label>
+<label class="option"><input type="radio" name="q5" value="B" onclick="selectOption(this)"> B. 选择</label>
+<label class="option"><input type="radio" name="q5" value="C" onclick="selectOption(this)"> C. 连接</label>
+<label class="option"><input type="radio" name="q5" value="D" onclick="selectOption(this)"> D. 并</label>
+<div class="feedback correct-fb" id="fb5"><strong>✓ 正确！</strong> $\sigma$ 是选择运算，按条件筛选行（水平切分）。投影是 $\pi$。</div>
+</div>
+
+<div class="question" id="q6">
+<p><span class="q-num">6.</span> SQL 执行顺序中，HAVING 子句在什么时候执行？</p>
+<label class="option"><input type="radio" name="q6" value="A" onclick="selectOption(this)"> A. WHERE 之前</label>
+<label class="option"><input type="radio" name="q6" value="B" onclick="selectOption(this)"> B. GROUP BY 之后、SELECT 之前</label>
+<label class="option"><input type="radio" name="q6" value="C" onclick="selectOption(this)"> C. SELECT 之后</label>
+<label class="option"><input type="radio" name="q6" value="D" onclick="selectOption(this)"> D. ORDER BY 之后</label>
+<div class="feedback correct-fb" id="fb6"><strong>✓ 正确！</strong> 执行顺序：FROM→WHERE→GROUP BY→HAVING→SELECT→ORDER BY→LIMIT。</div>
+</div>
+
+<div class="question" id="q7">
+<p><span class="q-num">7.</span> 关于视图，以下说法正确的是？</p>
+<label class="option"><input type="radio" name="q7" value="A" onclick="selectOption(this)"> A. 视图存储实际数据</label>
+<label class="option"><input type="radio" name="q7" value="B" onclick="selectOption(this)"> B. 删除视图会删除基表数据</label>
+<label class="option"><input type="radio" name="q7" value="C" onclick="selectOption(this)"> C. 含 GROUP BY 的视图通常不可更新</label>
+<label class="option"><input type="radio" name="q7" value="D" onclick="selectOption(this)"> D. 视图只能从一个基表定义</label>
+<div class="feedback correct-fb" id="fb7"><strong>✓ 正确！</strong> 含聚合、JOIN、GROUP BY、DISTINCT 的视图不可更新。视图不存数据，可跨多表。</div>
+</div>
+
+<div class="question" id="q8">
+<p><span class="q-num">8.</span> LEFT JOIN 中，当右表无匹配行时，右表列的值是？</p>
+<label class="option"><input type="radio" name="q8" value="A" onclick="selectOption(this)"> A. 0</label>
+<label class="option"><input type="radio" name="q8" value="B" onclick="selectOption(this)"> B. 空字符串</label>
+<label class="option"><input type="radio" name="q8" value="C" onclick="selectOption(this)"> C. NULL</label>
+<label class="option"><input type="radio" name="q8" value="D" onclick="selectOption(this)"> D. 不显示该行</label>
+<div class="feedback correct-fb" id="fb8"><strong>✓ 正确！</strong> LEFT JOIN 保留左表所有行，右表无匹配时填 NULL。</div>
+</div>
+
+<div class="question" id="q9">
+<p><span class="q-num">9.</span> 关于索引，以下说法错误的是？</p>
+<label class="option"><input type="radio" name="q9" value="A" onclick="selectOption(this)"> A. B+ 树索引支持范围查询</label>
+<label class="option"><input type="radio" name="q9" value="B" onclick="selectOption(this)"> B. 哈希索引适合 BETWEEN 查询</label>
+<label class="option"><input type="radio" name="q9" value="C" onclick="selectOption(this)"> C. 聚簇索引的数据物理顺序与索引一致</label>
+<label class="option"><input type="radio" name="q9" value="D" onclick="selectOption(this)"> D. 辅助索引通常是稠密索引</label>
+<div class="feedback correct-fb" id="fb9"><strong>✓ 正确！</strong> 哈希索引不支持范围查询（BETWEEN）、排序和前缀匹配，这是常考点。</div>
+</div>
+
+<div class="question" id="q10">
+<p><span class="q-num">10.</span> 查询优化中最重要的原则是？</p>
+<label class="option"><input type="radio" name="q10" value="A" onclick="selectOption(this)"> A. 尽量用 SELECT *</label>
+<label class="option"><input type="radio" name="q10" value="B" onclick="selectOption(this)"> B. 尽早执行选择（先 σ 再 ⋈）</label>
+<label class="option"><input type="radio" name="q10" value="C" onclick="selectOption(this)"> C. 尽量用子查询代替 JOIN</label>
+<label class="option"><input type="radio" name="q10" value="D" onclick="selectOption(this)"> D. 尽量多建索引</label>
+<div class="feedback correct-fb" id="fb10"><strong>✓ 正确！</strong> "尽早执行选择"是查询优化的首要原则——先用WHERE过滤减少数据量再连接。</div>
+</div>
+
+<div class="question" id="q11">
+<p><span class="q-num">11.</span> 关系代数中，自然连接 (Natural Join) 的特点是？</p>
+<label class="option"><input type="radio" name="q11" value="A" onclick="selectOption(this)"> A. 需要显式指定连接条件</label>
+<label class="option"><input type="radio" name="q11" value="B" onclick="selectOption(this)"> B. 自动按同名属性等值连接并去重</label>
+<label class="option"><input type="radio" name="q11" value="C" onclick="selectOption(this)"> C. 返回两表所有行的笛卡尔积</label>
+<label class="option"><input type="radio" name="q11" value="D" onclick="selectOption(this)"> D. 只返回左表所有行</label>
+<div class="feedback correct-fb" id="fb11"><strong>✓ 正确！</strong> 自然连接自动按所有同名属性等值连接，结果中去掉重复列。</div>
+</div>
+
+<div class="question" id="q12">
+<p><span class="q-num">12.</span> 以下聚合函数中，哪个不考虑 NULL 值？</p>
+<label class="option"><input type="radio" name="q12" value="A" onclick="selectOption(this)"> A. COUNT(*)</label>
+<label class="option"><input type="radio" name="q12" value="B" onclick="selectOption(this)"> B. SUM(col)</label>
+<label class="option"><input type="radio" name="q12" value="C" onclick="selectOption(this)"> C. AVG(col)</label>
+<label class="option"><input type="radio" name="q12" value="D" onclick="selectOption(this)"> D. COUNT(col)</label>
+<div class="feedback correct-fb" id="fb12"><strong>✓ 正确！</strong> COUNT(*) 统计所有行（包括含NULL的行），其他聚合函数都忽略NULL。</div>
+</div>
+
+<div class="question" id="q13">
+<p><span class="q-num">13.</span> SQL 中 UNION 和 UNION ALL 的区别是？</p>
+<label class="option"><input type="radio" name="q13" value="A" onclick="selectOption(this)"> A. 没有区别</label>
+<label class="option"><input type="radio" name="q13" value="B" onclick="selectOption(this)"> B. UNION 去重，UNION ALL 保留重复</label>
+<label class="option"><input type="radio" name="q13" value="C" onclick="selectOption(this)"> C. UNION 保留重复，UNION ALL 去重</label>
+<label class="option"><input type="radio" name="q13" value="D" onclick="selectOption(this)"> D. UNION 只能用于两张表</label>
+<div class="feedback correct-fb" id="fb13"><strong>✓ 正确！</strong> UNION 去重（需排序比较，较慢），UNION ALL 不去重（较快）。</div>
+</div>
+
+<div class="question" id="q14">
+<p><span class="q-num">14.</span> 相关子查询与不相关子查询的区别是？</p>
+<label class="option"><input type="radio" name="q14" value="A" onclick="selectOption(this)"> A. 两者完全相同</label>
+<label class="option"><input type="radio" name="q14" value="B" onclick="selectOption(this)"> B. 相关子查询引用外层列，每行重新执行</label>
+<label class="option"><input type="radio" name="q14" value="C" onclick="selectOption(this)"> C. 不相关子查询引用外层列</label>
+<label class="option"><input type="radio" name="q14" value="D" onclick="selectOption(this)"> D. 相关子查询比不相关子查询快</label>
+<div class="feedback correct-fb" id="fb14"><strong>✓ 正确！</strong> 相关子查询每行都重新执行内层查询（用 EXISTS），不相关子查询独立执行一次。</div>
+</div>
+
+<div class="question" id="q15">
+<p><span class="q-num">15.</span> 在 SELECT 中定义的列别名，可以在哪个子句中使用？</p>
+<label class="option"><input type="radio" name="q15" value="A" onclick="selectOption(this)"> A. WHERE</label>
+<label class="option"><input type="radio" name="q15" value="B" onclick="selectOption(this)"> B. GROUP BY</label>
+<label class="option"><input type="radio" name="q15" value="C" onclick="selectOption(this)"> C. ORDER BY</label>
+<label class="option"><input type="radio" name="q15" value="D" onclick="selectOption(this)"> D. HAVING</label>
+<div class="feedback correct-fb" id="fb15"><strong>✓ 正确！</strong> ORDER BY 在 SELECT 之后执行，所以可以用别名。WHERE、GROUP BY、HAVING 都在 SELECT 之前。</div>
+</div>
+
+<div class="question" id="q16">
+<p><span class="q-num">16.</span> B+ 树索引中，实际数据指针存储在？</p>
+<label class="option"><input type="radio" name="q16" value="A" onclick="selectOption(this)"> A. 根节点</label>
+<label class="option"><input type="radio" name="q16" value="B" onclick="selectOption(this)"> B. 内部节点</label>
+<label class="option"><input type="radio" name="q16" value="C" onclick="selectOption(this)"> C. 叶节点</label>
+<label class="option"><input type="radio" name="q16" value="D" onclick="selectOption(this)"> D. 所有节点</label>
+<div class="feedback correct-fb" id="fb16"><strong>✓ 正确！</strong> B+ 树的所有数据指针都在叶节点，内部节点仅用于导航。叶节点通过链表相连支持范围查询。</div>
+</div>
+
+<div class="question" id="q17">
+<p><span class="q-num">17.</span> 关于 DML 编译器，以下说法正确的是？</p>
+<label class="option"><input type="radio" name="q17" value="A" onclick="selectOption(this)"> A. 它直接执行 SQL 语句</label>
+<label class="option"><input type="radio" name="q17" value="B" onclick="selectOption(this)"> B. 它的核心是查询优化器</label>
+<label class="option"><input type="radio" name="q17" value="C" onclick="selectOption(this)"> C. 它负责磁盘空间管理</label>
+<label class="option"><input type="radio" name="q17" value="D" onclick="selectOption(this)"> D. 它处理事务的提交与回滚</label>
+<div class="feedback correct-fb" id="fb17"><strong>✓ 正确！</strong> DML 编译器的核心是查询优化器，负责选择最优执行计划。执行由查询评估引擎完成。</div>
+</div>
+
+<div class="question" id="q18">
+<p><span class="q-num">18.</span> 下列哪种连接会返回笛卡尔积？</p>
+<label class="option"><input type="radio" name="q18" value="A" onclick="selectOption(this)"> A. INNER JOIN</label>
+<label class="option"><input type="radio" name="q18" value="B" onclick="selectOption(this)"> B. LEFT JOIN</label>
+<label class="option"><input type="radio" name="q18" value="C" onclick="selectOption(this)"> C. CROSS JOIN</label>
+<label class="option"><input type="radio" name="q18" value="D" onclick="selectOption(this)"> D. NATURAL JOIN</label>
+<div class="feedback correct-fb" id="fb18"><strong>✓ 正确！</strong> CROSS JOIN 返回笛卡尔积（所有组合），等价于不加 ON 的 INNER JOIN。</div>
+</div>
+
+<div class="question" id="q19">
+<p><span class="q-num">19.</span> SQL 中的 DISTINCT 关键字作用范围是？</p>
+<label class="option"><input type="radio" name="q19" value="A" onclick="selectOption(this)"> A. 仅作用于第一个列</label>
+<label class="option"><input type="radio" name="q19" value="B" onclick="selectOption(this)"> B. 作用于整个 SELECT 列表的所有列</label>
+<label class="option"><input type="radio" name="q19" value="C" onclick="selectOption(this)"> C. 仅作用于 WHERE 条件中的列</label>
+<label class="option"><input type="radio" name="q19" value="D" onclick="selectOption(this)"> D. 作用于所有列但仅去重第一列</label>
+<div class="feedback correct-fb" id="fb19"><strong>✓ 正确！</strong> DISTINCT 作用于 SELECT 列表的所有列组合。所有列都相同的行才被视为重复。</div>
+</div>
+
+<div class="question" id="q20">
+<p><span class="q-num">20.</span> 关于聚簇索引，以下说法正确的是？</p>
+<label class="option"><input type="radio" name="q20" value="A" onclick="selectOption(this)"> A. 一张表可以有多个聚簇索引</label>
+<label class="option"><input type="radio" name="q20" value="B" onclick="selectOption(this)"> B. 聚簇索引的数据物理顺序与索引顺序一致</label>
+<label class="option"><input type="radio" name="q20" value="C" onclick="selectOption(this)"> C. 聚簇索引一定是主键索引</label>
+<label class="option"><input type="radio" name="q20" value="D" onclick="selectOption(this)"> D. 聚簇索引不适合范围查询</label>
+<div class="feedback correct-fb" id="fb20"><strong>✓ 正确！</strong> 聚簇索引决定了数据的物理存储顺序，因此每表只能有一个。范围查询是聚簇索引的最佳场景。</div>
+</div>
+
+</div>
+
+<!-- ============ 判断题 10题 × 1分 = 10分 ============ -->
+<h2>二、判断题（每题 1 分，共 10 分）</h2>
+
+<div class="quiz-section" id="section2">
+
+<div class="question" id="q21">
+<p><span class="q-num">21.</span> 视图是物理存储的虚拟表，包含实际数据。</p>
+<label class="option"><input type="radio" name="q21" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q21" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb21"><strong>✗ 错误！</strong> 视图只存储定义（查询语句），不存储实际数据。每次访问时动态计算。</div>
+</div>
+
+<div class="question" id="q22">
+<p><span class="q-num">22.</span> 自然连接 (Natural Join) 会自动按同名属性进行等值连接。</p>
+<label class="option"><input type="radio" name="q22" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q22" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb22"><strong>✓ 正确！</strong> 自然连接自动匹配所有同名属性进行等值连接，结果中去除重复列。</div>
+</div>
+
+<div class="question" id="q23">
+<p><span class="q-num">23.</span> WHERE 子句中可以使用聚合函数如 AVG()、SUM()。</p>
+<label class="option"><input type="radio" name="q23" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q23" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb23"><strong>✗ 错误！</strong> WHERE 在分组前执行，不能使用聚合函数。聚合函数只能在 HAVING、SELECT 和 ORDER BY 中使用。</div>
+</div>
+
+<div class="question" id="q24">
+<p><span class="q-num">24.</span> 哈希索引不支持 BETWEEN 范围查询。</p>
+<label class="option"><input type="radio" name="q24" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q24" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb24"><strong>✓ 正确！</strong> 哈希索引仅支持等值比较（=、IN），不支持范围查询、排序和前缀匹配。</div>
+</div>
+
+<div class="question" id="q25">
+<p><span class="q-num">25.</span> 外键值必须是被参照表主键中存在的值，不能为 NULL。</p>
+<label class="option"><input type="radio" name="q25" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q25" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb25"><strong>✗ 错误！</strong> 外键可以为 NULL（除非有 NOT NULL 约束）。NULL 表示「暂未关联」。</div>
+</div>
+
+<div class="question" id="q26">
+<p><span class="q-num">26.</span> SQL 执行顺序中，SELECT 在 GROUP BY 之前执行。</p>
+<label class="option"><input type="radio" name="q26" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q26" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb26"><strong>✗ 错误！</strong> SELECT 在 GROUP BY 和 HAVING 之后执行。顺序：FROM→WHERE→GROUP BY→HAVING→SELECT→ORDER BY。</div>
+</div>
+
+<div class="question" id="q27">
+<p><span class="q-num">27.</span> B+ 树索引的叶节点通过链表相连，支持高效的范围查询。</p>
+<label class="option"><input type="radio" name="q27" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q27" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb27"><strong>✓ 正确！</strong> B+ 树叶节点链表使得范围扫描非常高效，这是 B+ 树优于 B 树的关键特点。</div>
+</div>
+
+<div class="question" id="q28">
+<p><span class="q-num">28.</span> COUNT(col) 和 COUNT(*) 在统计行数时结果始终相同。</p>
+<label class="option"><input type="radio" name="q28" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q28" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb28"><strong>✗ 错误！</strong> COUNT(col) 忽略 NULL 值，COUNT(*) 统计所有行（包括含NULL的行）。</div>
+</div>
+
+<div class="question" id="q29">
+<p><span class="q-num">29.</span> 外模式/概念模式映像提供了逻辑数据独立性。</p>
+<label class="option"><input type="radio" name="q29" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q29" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb29"><strong>✓ 正确！</strong> 外模式/概念模式映像保证概念模式变化时外模式不变，提供逻辑数据独立性。</div>
+</div>
+
+<div class="question" id="q30">
+<p><span class="q-num">30.</span> UNION ALL 会对结果集进行去重排序。</p>
+<label class="option"><input type="radio" name="q30" value="T" onclick="selectOption(this)"> ✓ 正确</label>
+<label class="option"><input type="radio" name="q30" value="F" onclick="selectOption(this)"> ✗ 错误</label>
+<div class="feedback correct-fb" id="fb30"><strong>✗ 错误！</strong> UNION ALL 不去重，保留所有行（包括重复行）。UNION 才会去重。</div>
+</div>
+
+</div>
+
+<!-- ============ 填空题 10题 × 2分 = 20分 ============ -->
+<h2>三、填空题（每题 2 分，共 20 分）</h2>
+
+<div class="quiz-section" id="section3">
+
+<div class="question" id="q31">
+<p><span class="q-num">31.</span> DBMS 五大组件分别是：DDL编译器、DML编译器、查询评估引擎、<input type="text" class="fill-blank" id="fill31" placeholder="填入答案"> 和事务管理器。</p>
+<div class="feedback correct-fb" id="fb31"><strong>答案：存储管理器</strong> — 管理磁盘空间、缓冲区、文件组织和索引维护。</div>
+</div>
+
+<div class="question" id="q32">
+<p><span class="q-num">32.</span> 三级模式包括：外模式、概念模式和 <input type="text" class="fill-blank" id="fill32" placeholder="填入答案">。</p>
+<div class="feedback correct-fb" id="fb32"><strong>答案：内模式</strong> — 即物理层，描述数据在存储介质上的组织方式。</div>
+</div>
+
+<div class="question" id="q33">
+<p><span class="q-num">33.</span> 关系代数中，<input type="text" class="fill-blank" id="fill33" placeholder="填入答案"> 运算相当于 SQL 中的 WHERE 子句。</p>
+<div class="feedback correct-fb" id="fb33"><strong>答案：选择 (σ / Selection)</strong> — 按条件筛选行，是水平切分。</div>
+</div>
+
+<div class="question" id="q34">
+<p><span class="q-num">34.</span> SQL 执行顺序中，<input type="text" class="fill-blank" id="fill34" placeholder="填入答案"> 子句在 GROUP BY 之后、SELECT 之前执行。</p>
+<div class="feedback correct-fb" id="fb34"><strong>答案：HAVING</strong> — HAVING 在分组后过滤，可以使用聚合函数。</div>
+</div>
+
+<div class="question" id="q35">
+<p><span class="q-num">35.</span> 关系模型的三大完整性约束是：实体完整性、<input type="text" class="fill-blank" id="fill35" placeholder="填入答案"> 和用户定义完整性。</p>
+<div class="feedback correct-fb" id="fb35"><strong>答案：参照完整性</strong> — 外键值必须存在于参照表的主键中或为 NULL。</div>
+</div>
+
+<div class="question" id="q36">
+<p><span class="q-num">36.</span> B+ 树索引中，所有数据指针都存储在 <input type="text" class="fill-blank" id="fill36" placeholder="填入答案">。</p>
+<div class="feedback correct-fb" id="fb36"><strong>答案：叶节点</strong> — 内部节点仅用于导航，叶节点存储实际数据指针并形成链表。</div>
+</div>
+
+<div class="question" id="q37">
+<p><span class="q-num">37.</span> 在 SQL 中，<input type="text" class="fill-blank" id="fill37" placeholder="填入答案"> 关键字用于去除查询结果中的重复行。</p>
+<div class="feedback correct-fb" id="fb37"><strong>答案：DISTINCT</strong> — 作用于 SELECT 列表的所有列组合。</div>
+</div>
+
+<div class="question" id="q38">
+<p><span class="q-num">38.</span> <input type="text" class="fill-blank" id="fill38" placeholder="填入答案"> JOIN 会返回两表的笛卡尔积。</p>
+<div class="feedback correct-fb" id="fb38"><strong>答案：CROSS</strong> — CROSS JOIN 返回所有行的两两组合，无需 ON 条件。</div>
+</div>
+
+<div class="question" id="q39">
+<p><span class="q-num">39.</span> 子查询中引用外层列，每行都需要重新执行的是 <input type="text" class="fill-blank" id="fill39" placeholder="填入答案"> 子查询。</p>
+<div class="feedback correct-fb" id="fb39"><strong>答案：相关 (Correlated)</strong> — 使用 EXISTS/ALL/ANY 关键词，每行重新计算。</div>
+</div>
+
+<div class="question" id="q40">
+<p><span class="q-num">40.</span> <input type="text" class="fill-blank" id="fill40" placeholder="填入答案"> 索引的数据物理顺序与索引顺序一致，每张表只能有一个。</p>
+<div class="feedback correct-fb" id="fb40"><strong>答案：聚簇 (Clustered)</strong> — 数据行按索引键物理排序，范围查询性能最优。</div>
+</div>
+
+</div>
+
+<!-- ============ 简答题 4题 × 5分 = 20分 ============ -->
+<h2>四、简答题（每题 5 分，共 20 分）</h2>
+
+<div class="quiz-section" id="section4">
+
+<div class="question" id="q41">
+<p><span class="q-num">41.</span> 简述三级模式两级映像架构，并说明两级映像分别提供什么独立性？</p>
+<textarea class="essay" id="essay41" placeholder="在此作答..."></textarea>
+<div class="feedback correct-fb" id="fb41"><strong>参考答案：</strong>三级模式：外模式（用户视图层）、概念模式（逻辑层）、内模式（物理层）。两级映像：外模式/概念模式映像提供逻辑数据独立性——概念模式变化不影响外模式；概念模式/内模式映像提供物理数据独立性——存储结构变化不影响概念模式。这种架构实现了数据与程序的分离。</div>
+</div>
+
+<div class="question" id="q42">
+<p><span class="q-num">42.</span> 简述 SQL 的完整执行顺序，并说明为什么 WHERE 中不能使用 SELECT 中定义的别名？</p>
+<textarea class="essay" id="essay42" placeholder="在此作答..."></textarea>
+<div class="feedback correct-fb" id="fb42"><strong>参考答案：</strong>执行顺序：FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT。因为 SELECT 在 WHERE 之后执行，所以 SELECT 中定义的列别名在 WHERE 执行时还不存在，无法引用。但 ORDER BY 在 SELECT 之后执行，所以可以使用别名。</div>
+</div>
+
+<div class="question" id="q43">
+<p><span class="q-num">43.</span> 对比 B+ 树索引和哈希索引的优缺点及适用场景。</p>
+<textarea class="essay" id="essay43" placeholder="在此作答..."></textarea>
+<div class="feedback correct-fb" id="fb43"><strong>参考答案：</strong>B+ 树索引：支持等值查询和范围查询，自动平衡 O(log n)，叶节点链表支持高效范围扫描。适用场景：通用查询、范围查询、排序。哈希索引：等值查询快 O(1)，但不支持范围查询（BETWEEN）、排序（ORDER BY）、前缀匹配（LIKE）。适用场景：精确匹配（=、IN）的等值查询。</div>
+</div>
+
+<div class="question" id="q44">
+<p><span class="q-num">44.</span> 什么是视图？视图有哪些优点和局限性？</p>
+<textarea class="essay" id="essay44" placeholder="在此作答..."></textarea>
+<div class="feedback correct-fb" id="fb44"><strong>参考答案：</strong>视图是基于基表的虚拟表，只存储定义不存储数据，访问时动态计算。优点：安全性（隐藏敏感列）、简化复杂查询、逻辑数据独立性。局限：含聚合/JOIN/GROUP BY/DISTINCT 的视图不可更新；每次访问需执行底层查询，可能影响性能；删除基表会导致视图失效。</div>
+</div>
+
+</div>
+
+<!-- ============ 综合题 1题 × 10分 = 10分 ============ -->
+<h2>五、综合题（10 分）</h2>
+
+<div class="quiz-section" id="section5">
+
+<div class="question" id="q45">
+<p><span class="q-num">45.</span> 有以下两个关系：<br>
+<strong>Student</strong>(sid, name, age, dept_id) &nbsp; <strong>Department</strong>(dept_id, dept_name, building)<br><br>
+(1) 用关系代数写出「查询计算机系（CS）所有学生的姓名和年龄」<br>
+(2) 用 SQL 写出「查询每个系的学生人数，按人数降序排列，只显示人数大于10的系」<br>
+(3) 为上述 SQL 查询建议合适的索引策略并说明理由</p>
+<textarea class="essay" id="essay45" placeholder="在此作答..." style="min-height:120px;"></textarea>
+<div class="feedback correct-fb" id="fb45"><strong>参考答案：</strong><br>
+(1) $\pi_{name,age}(\sigma_{dept\_name='CS'}(Student \bowtie Department))$<br>
+(2) <code>SELECT dept_id, COUNT(*) AS cnt FROM Student GROUP BY dept_id HAVING cnt > 10 ORDER BY cnt DESC;</code><br>
+(3) 在 Student.dept_id 上建 B+ 树索引（辅助索引）加速 GROUP BY；如果 dept_name 查询频繁，在 Department.dept_name 上也建索引加速 WHERE 过滤。</div>
+</div>
+
+</div>
+
+<hr>
+<div style="text-align:center;margin:20px 0;">
+  <button class="btn" onclick="checkAll()">📊 提交评分</button>
+  <button class="btn btn-outline" onclick="showAllAnswers()">📖 显示全部答案</button>
+  <button class="btn btn-outline" onclick="resetAll()">🔄 重新作答</button>
+</div>
+
+<div class="score-box" id="scoreBox2" style="display:none;">
+  <span id="scoreDisplay2">0</span> / 100 分
+  <br><span id="gradeDisplay2" style="font-size:0.8em;color:var(--ink-light);"></span>
+</div>
+
+<div class="nav-bar no-print" style="margin-top:20px;">
+  <a href="index.html">📑 总目录</a>
+  <a href="第1节_查询为王_知识清单.html">📘 知识清单</a>
+  <a href="第2节_建模与范式_章节测试.html">下一节测试 →</a>
+</div>
+
+<script>
+// Answer key
+const answers = {
+  q1:'B',q2:'B',q3:'B',q4:'C',q5:'B',q6:'B',q7:'C',q8:'C',q9:'B',q10:'B',
+  q11:'B',q12:'A',q13:'B',q14:'B',q15:'C',q16:'C',q17:'B',q18:'C',q19:'B',q20:'B',
+  q21:'F',q22:'T',q23:'F',q24:'T',q25:'F',q26:'F',q27:'T',q28:'F',q29:'T',q30:'F',
+  fill31:'存储管理器',fill32:'内模式',fill33:'选择',fill34:'HAVING',fill35:'参照完整性',
+  fill36:'叶节点',fill37:'DISTINCT',fill38:'CROSS',fill39:'相关',fill40:'聚簇'
+};
+
+function selectOption(el) {
+  const q = el.closest('.question');
+  q.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function checkAll() {
+  let total = 0;
+  // MCQs (q1-q20) 2 pts each
+  for(let i=1;i<=20;i++) {
+    const q = document.getElementById('q'+i);
+    const sel = q.querySelector('input:checked');
+    q.classList.remove('correct','wrong');
+    const fb = document.getElementById('fb'+i);
+    fb.classList.remove('show');
+    if(sel && sel.value === answers['q'+i]) {
+      q.classList.add('correct'); fb.classList.add('show'); total+=2;
+    } else if(sel) {
+      q.classList.add('wrong'); fb.classList.add('show');
+    }
+  }
+  // T/F (q21-q30) 1 pt each
+  for(let i=21;i<=30;i++) {
+    const q = document.getElementById('q'+i);
+    const sel = q.querySelector('input:checked');
+    q.classList.remove('correct','wrong');
+    const fb = document.getElementById('fb'+i);
+    fb.classList.remove('show');
+    if(sel && sel.value === answers['q'+i]) {
+      q.classList.add('correct'); fb.classList.add('show'); total+=1;
+    } else if(sel) {
+      q.classList.add('wrong'); fb.classList.add('show');
+    }
+  }
+  // Fill-in (q31-q40) 2 pts each
+  const fillKeys = ['fill31','fill32','fill33','fill34','fill35','fill36','fill37','fill38','fill39','fill40'];
+  for(let i=0;i<fillKeys.length;i++) {
+    const q = document.getElementById('q'+(31+i));
+    const inp = document.getElementById(fillKeys[i]);
+    const userAns = inp.value.trim().toLowerCase();
+    const correctAns = answers[fillKeys[i]].toLowerCase();
+    q.classList.remove('correct','wrong');
+    const fb = document.getElementById('fb'+(31+i));
+    fb.classList.remove('show');
+    // Accept multiple correct answers
+    let isCorrect = false;
+    const opts = correctAns.split('/');
+    for(let opt of opts) {
+      if(userAns.includes(opt.trim())) { isCorrect = true; break; }
+    }
+    if(isCorrect) {
+      q.classList.add('correct'); fb.classList.add('show'); total+=2;
+    } else if(userAns !== '') {
+      q.classList.add('wrong'); fb.classList.add('show');
+    }
+  }
+  // Essays - self-graded, give partial credit hint
+  // Show score
+  document.getElementById('scoreDisplay').textContent = total;
+  document.getElementById('scoreDisplay2').textContent = total;
+  document.getElementById('scoreBox').style.display = 'block';
+  document.getElementById('scoreBox2').style.display = 'block';
+  let grade = total>=90?'🏆 优秀':total>=75?'👍 良好':total>=60?'📚 及格':'💪 继续加油';
+  document.getElementById('gradeDisplay').textContent = grade;
+  document.getElementById('gradeDisplay2').textContent = grade;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showAllAnswers() {
+  for(let i=1;i<=30;i++) {
+    const q = document.getElementById('q'+i);
+    const fb = document.getElementById('fb'+i);
+    q.classList.add('correct'); fb.classList.add('show');
+  }
+  for(let i=31;i<=45;i++) {
+    const q = document.getElementById('q'+i);
+    const fb = document.getElementById('fb'+i);
+    if(q) { q.classList.add('correct'); }
+    if(fb) { fb.classList.add('show'); }
+  }
+}
+
+function resetAll() {
+  document.querySelectorAll('input[type=radio]').forEach(r => r.checked = false);
+  document.querySelectorAll('.fill-blank').forEach(i => i.value = '');
+  document.querySelectorAll('textarea').forEach(t => t.value = '');
+  document.querySelectorAll('.question').forEach(q => q.classList.remove('correct','wrong'));
+  document.querySelectorAll('.feedback').forEach(f => f.classList.remove('show'));
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  document.getElementById('scoreBox').style.display = 'none';
+  document.getElementById('scoreBox2').style.display = 'none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+
+</body>
+</html>
