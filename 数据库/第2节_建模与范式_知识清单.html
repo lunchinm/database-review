@@ -41,13 +41,13 @@
                 
                 <h3>1.1 本讲目录</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0033_p9_s2.jpg" alt="建模与范式四个板块">
+                    <img src="images/s2_01_framework.png" alt="建模与范式四个板块">
                     <figcaption>图1-1 建模与范式知识框架</figcaption>
                 </figure>
                 
                 <h3>1.2 ER模型三要素：实体·属性·联系</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0036_p10_s1.jpg" alt="ER模型三要素">
+                    <img src="images/s2_02_er_elements.png" alt="ER模型三要素">
                     <figcaption>图1-2 ER模型三要素</figcaption>
                 </figure>
                 <ul>
@@ -59,7 +59,7 @@
                 
                 <h3>1.3 属性的四组分类（必考概念）</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0037_p10_s2.jpg" alt="属性分类">
+                    <img src="images/s2_02_er_elements.png" alt="属性分类">
                     <figcaption>图1-3 属性的四组分类</figcaption>
                 </figure>
                 <ul>
@@ -72,7 +72,7 @@
                 
                 <h3>1.4 联系的基数比与参与约束</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0038_p10_s3.jpg" alt="联系基数">
+                    <img src="images/s2_02_er_elements.png" alt="联系基数">
                     <figcaption>图1-4 联系的基数比与参与约束</figcaption>
                 </figure>
                 <ul>
@@ -89,7 +89,7 @@
                 
                 <h3>1.5 图书馆ER图例题</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0039_p10_s4.jpg" alt="图书馆ER图">
+                    <img src="images/s2_02_er_elements.png" alt="图书馆ER图">
                     <figcaption>图1-5 图书馆ER图例题</figcaption>
                 </figure>
                 <p><strong>评分点</strong>：五个实体（矩形）+ 四个联系（菱形）+ 基数标注：Publishes 1:N、Writes M:N、Borrow M:N、Holds M:N。实体主码加下划线即可得满分。</p>
@@ -99,11 +99,7 @@
                 <h2><span>2</span>ER转关系模式</h2>
                 
                 <h3>2.1 ER转关系模式：五条规则</h3>
-                <figure class="figure">
-                    <img src="../_images/slide0042_p11_s3.jpg" alt="ER转关系模式规则">
-                    <figcaption>图2-1 ER转关系模式五条规则</figcaption>
-                </figure>
-                <ul>
+<ul>
                     <li><strong>① 强实体</strong>：直接建表，实体主码→主键</li>
                     <li><strong>② 1:1联系</strong>：把任意一端的主键作为外键放到另一端表中（择全部参与方更优）</li>
                     <li><strong>③ 1:N联系</strong>：在「N端」表里加入「1端」的主键作为外键</li>
@@ -113,11 +109,7 @@
                 <p><span class="highlight">口诀</span>："1:N看N端、M:N单建表、多值也建表。"外键永远指向被引用表的主键。</p>
                 
                 <h3>2.2 图书馆ER转关系模式（含主外键）</h3>
-                <figure class="figure">
-                    <img src="../_images/slide0043_p11_s4.jpg" alt="图书馆ER转关系模式">
-                    <figcaption>图2-2 图书馆ER转关系模式示例</figcaption>
-                </figure>
-                <div class="code">
+<div class="code">
 -- 强实体表
 Publisher ( Pub_id, name, address )  PK: Pub_id
 Book ( Book_id, title, price, Pub_id )  PK: Book_id; FK: Pub_id→Publisher
@@ -137,11 +129,7 @@ Holds ( Branch_id, Book_id, copies )  联合主键=两端主键
                 <h2><span>3</span>函数依赖与码</h2>
                 
                 <h3>3.1 函数依赖：完全·部分·传递</h3>
-                <figure class="figure">
-                    <img src="../_images/slide0046_p12_s3.jpg" alt="函数依赖类型">
-                    <figcaption>图3-1 函数依赖的三种类型</figcaption>
-                </figure>
-                <ul>
+<ul>
                     <li><strong>完全函数依赖（Full FD）</strong>：X→Y且X的任何真子集都不能决定Y。例：(学号,课号)→成绩。<span class="highlight">2NF要求</span></li>
                     <li><strong>部分函数依赖（Partial FD）</strong>：X→Y，但X的某个真子集已能决定Y。例：(学号,课号)→姓名，其实学号→姓名。<span class="highlight">违反2NF</span></li>
                     <li><strong>传递函数依赖（Transitive FD）</strong>：X→Y、Y→Z且Y↛X，则X传递决定Z。例：学号→系名→系主任。<span class="highlight">违反3NF</span></li>
@@ -149,11 +137,7 @@ Holds ( Branch_id, Book_id, copies )  联合主键=两端主键
                 <p><strong>范式的主线</strong>：2NF消除「部分依赖」、3NF消除「传递依赖」——一层层把这两种"坏依赖"赶走，就是规范化。</p>
                 
                 <h3>3.2 Armstrong公理 + 属性闭包X⁺算法</h3>
-                <figure class="figure">
-                    <img src="../_images/slide0047_p12_s4.jpg" alt="Armstrong公理">
-                    <figcaption>图3-2 Armstrong公理与属性闭包算法</figcaption>
-                </figure>
-                <p><strong>Armstrong公理（3基本+3推论）</strong>：</p>
+<p><strong>Armstrong公理（3基本+3推论）</strong>：</p>
                 <ul>
                     <li><strong>自反律 Reflexivity</strong>：Y⊆X ⇒ X→Y</li>
                     <li><strong>增广律 Augmentation</strong>：X→Y ⇒ XZ→YZ</li>
@@ -171,11 +155,7 @@ Holds ( Branch_id, Book_id, copies )  联合主键=两端主键
                 <p><strong>为什么要闭包</strong>：X⁺就是"由X出发能推出的全部属性"。若X⁺覆盖了全部属性，就说明X是超键——这是求候选键、判范式的统一工具。</p>
                 
                 <h3>3.3 闭包法求候选键：先分类，再试探</h3>
-                <figure class="figure">
-                    <img src="../_images/slide0048_p13_s1.jpg" alt="求候选键">
-                    <figcaption>图3-3 闭包法求候选键</figcaption>
-                </figure>
-                <ul>
+<ul>
                     <li><strong>L类·只在左边出现</strong>：必在每个候选键中</li>
                     <li><strong>N类·两边都不出现</strong>：必在每个候选键中</li>
                     <li><strong>R类·只在右边出现</strong>：一定不在候选键中</li>
@@ -184,11 +164,7 @@ Holds ( Branch_id, Book_id, copies )  联合主键=两端主键
                 <p><strong>口诀</strong>：先圈出"必在键中"的属性（只在左边/两边都不出现），求闭包；不够全，再逐个并入两边都出现的属性。</p>
                 
                 <h3>3.4 求最小覆盖（Canonical Cover）</h3>
-                <figure class="figure">
-                    <img src="../_images/slide0049_p13_s2.jpg" alt="最小覆盖">
-                    <figcaption>图3-4 求最小覆盖步骤</figcaption>
-                </figure>
-                <ol>
+<ol>
                     <li><strong>右部单属性化</strong>：拆成单属性右部，便于逐条检查</li>
                     <li><strong>去左部冗余属性</strong>：左部只有一个属性时不存在多余属性</li>
                     <li><strong>去冗余依赖</strong>：用闭包验证：去掉后仍能推出即冗余</li>
@@ -200,7 +176,7 @@ Holds ( Branch_id, Book_id, copies )  联合主键=两端主键
                 
                 <h3>4.1 范式金字塔：层层递进</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0052_p14_s1.jpg" alt="范式金字塔">
+                    <img src="images/s2_03_nf_pyramid.png" alt="范式金字塔">
                     <figcaption>图4-1 范式金字塔</figcaption>
                 </figure>
                 <ul>
@@ -213,7 +189,7 @@ Holds ( Branch_id, Book_id, copies )  联合主键=两端主键
                 
                 <h3>4.2 1NF原子性·2NF消部分依赖</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0053_p14_s2.jpg" alt="1NF和2NF">
+                    <img src="images/s2_03_nf_pyramid.png" alt="1NF和2NF">
                     <figcaption>图4-2 1NF原子性与2NF消除部分依赖</figcaption>
                 </figure>
                 <p><strong>1NF 原子性</strong>：每个分量都是不可再分的原子值：没有重复组、没有多值属性、没有"表中表"。关系数据库天然满足1NF。</p>
@@ -221,7 +197,7 @@ Holds ( Branch_id, Book_id, copies )  联合主键=两端主键
                 
                 <h3>4.3 3NF：消除传递依赖</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0054_p14_s3.jpg" alt="3NF">
+                    <img src="images/s2_03_nf_pyramid.png" alt="3NF">
                     <figcaption>图4-3 3NF消除传递依赖</figcaption>
                 </figure>
                 <p><strong>判定法则</strong>：R满足2NF，且对每一个非平凡FD X→A，都有：X是超键 <strong>或</strong> A是主属性（属于某候选键）。两者居其一即可。</p>
@@ -230,7 +206,7 @@ Holds ( Branch_id, Book_id, copies )  联合主键=两端主键
                 
                 <h3>4.4 判断是否BCNF</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0055_p14_s4.jpg" alt="BCNF判定">
+                    <img src="images/s2_04_bcnf_check.png" alt="BCNF判定">
                     <figcaption>图4-4 BCNF判定示例</figcaption>
                 </figure>
                 <p><strong>BCNF定义</strong>：每个FD的决定因素（左部）都必须是超键。</p>
@@ -238,14 +214,14 @@ Holds ( Branch_id, Book_id, copies )  联合主键=两端主键
                 
                 <h3>4.5 判断3NF并分解</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0056_p15_s1.jpg" alt="3NF分解">
+                    <img src="images/s2_04_bcnf_check.png" alt="3NF分解">
                     <figcaption>图4-5 判断3NF并分解示例</figcaption>
                 </figure>
                 <p><strong>评分点</strong>：证明候选键→指出违反3NF的FD→按最小覆盖每条FD建一表→补一张含候选键的表保证无损连接。</p>
                 
                 <h3>4.6 无损连接与保持依赖的取舍</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0057_p15_s2.jpg" alt="3NF vs BCNF">
+                    <img src="images/s2_04_bcnf_check.png" alt="3NF vs BCNF">
                     <figcaption>图4-6 3NF与BCNF的取舍</figcaption>
                 </figure>
                 <ul>
@@ -255,11 +231,7 @@ Holds ( Branch_id, Book_id, copies )  联合主键=两端主键
                 <p><strong>实践取舍</strong>：通常做到3NF即可——既无损又保持依赖；只有当残余冗余不可接受时，才进一步分解到BCNF（接受可能不保持依赖）。</p>
                 
                 <h3>4.7 易错清单</h3>
-                <figure class="figure">
-                    <img src="../_images/slide0060_p16_s1.jpg" alt="易错清单">
-                    <figcaption>图4-7 建模与范式易错清单</figcaption>
-                </figure>
-                <ul>
+<ul>
                     <li>1:N在「N端」加外键、别建表；只有M:N才单独建表</li>
                     <li>求候选键：先锁定只在左边/两边都不出现的属性</li>
                     <li>部分依赖只在「复合主键」时出现（2NF）；单属性码天然满足</li>

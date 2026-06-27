@@ -41,13 +41,13 @@
                 
                 <h3>1.1 本讲目录</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0062_p17_s2.jpg" alt="事务可靠性四个板块">
+                    <img src="images/s3_01_framework.png" alt="事务可靠性四个板块">
                     <figcaption>图1-1 事务可靠性知识框架</figcaption>
                 </figure>
                 
                 <h3>1.2 事务：要么全做，要么全不做</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0065_p18_s1.jpg" alt="事务定义">
+                    <img src="images/s3_02_acid.png" alt="事务定义">
                     <figcaption>图1-2 事务定义与状态机</figcaption>
                 </figure>
                 <p><strong>定义</strong>：事务是访问/更新数据库的一个操作序列，是并发控制与故障恢复的基本单位。经典例子：转账——A减50、B加50，两步必须同时成功或同时失败。</p>
@@ -60,7 +60,7 @@
                 
                 <h3>1.3 事务的四大特性ACID</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0066_p18_s2.jpg" alt="ACID特性">
+                    <img src="images/s3_02_acid.png" alt="ACID特性">
                     <figcaption>图1-3 事务的四大特性ACID</figcaption>
                 </figure>
                 <ul>
@@ -73,7 +73,7 @@
                 
                 <h3>1.4 ACID选择题怎么考</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0067_p18_s3.jpg" alt="ACID选择题">
+                    <img src="images/s3_02_acid.png" alt="ACID选择题">
                     <figcaption>图1-4 ACID选择题考点</figcaption>
                 </figure>
                 <p><strong>易混淆的四个坑</strong>：</p>
@@ -90,11 +90,7 @@
                 <h2><span>2</span>调度与可串行化</h2>
                 
                 <h3>2.1 调度与并发的三类异常</h3>
-                <figure class="figure">
-                    <img src="../_images/slide0069_p19_s1.jpg" alt="并发异常">
-                    <figcaption>图2-1 调度与并发的三类异常</figcaption>
-                </figure>
-                <p><strong>调度Schedule</strong>：一组事务所有操作的一个执行次序。<strong>串行调度</strong>：事务一个接一个；<strong>并发调度</strong>：操作交错。并发能提高吞吐，但调度不当会出错。</p>
+<p><strong>调度Schedule</strong>：一组事务所有操作的一个执行次序。<strong>串行调度</strong>：事务一个接一个；<strong>并发调度</strong>：操作交错。并发能提高吞吐，但调度不当会出错。</p>
                 <ul>
                     <li><strong>丢失更新（Lost Update）</strong>：T2覆盖了T1尚未提交的写，T1的修改"凭空消失"。例：两人同时改同一余额</li>
                     <li><strong>脏读（Dirty Read）</strong>：读到了别的事务"未提交"的数据，而它随后又被回滚。例：读了又被撤销的中间值</li>
@@ -103,11 +99,7 @@
                 <p><strong>并发控制目标</strong>：允许交错以提高效率，但要保证结果等价于某个串行调度——这就是"可串行化"。</p>
                 
                 <h3>2.2 冲突·冲突等价·冲突可串行化</h3>
-                <figure class="figure">
-                    <img src="../_images/slide0070_p19_s2.jpg" alt="冲突可串行化">
-                    <figcaption>图2-2 冲突与冲突可串行化</figcaption>
-                </figure>
-                <p><strong>两个操作"冲突"需同时满足</strong>：①来自不同事务 ②访问同一数据项 ③至少一个是写操作</p>
+<p><strong>两个操作"冲突"需同时满足</strong>：①来自不同事务 ②访问同一数据项 ③至少一个是写操作</p>
                 <p><strong>四种组合</strong>：</p>
                 <ul>
                     <li>R-R：不冲突</li>
@@ -118,11 +110,7 @@
                 <p><span class="highlight">判定口诀</span>：只交换"相邻、非冲突"的操作；能换成串行就是冲突可串行化——但手工交换易错，于是用先行图。</p>
                 
                 <h3>2.3 先行图：三步判定可串行化</h3>
-                <figure class="figure">
-                    <img src="../_images/slide0071_p19_s3.jpg" alt="先行图">
-                    <figcaption>图2-3 先行图判定可串行化</figcaption>
-                </figure>
-                <ol>
+<ol>
                     <li><strong>画结点</strong>：每个事务对应一个结点 T₁, T₂, ...</li>
                     <li><strong>连有向边</strong>：若Tᵢ的某操作与Tⱼ的某操作冲突、且Tᵢ的在前，则画 Tᵢ → Tⱼ</li>
                     <li><strong>看是否有环</strong>：无环⇒冲突可串行化（拓扑排序即串行序）；有环⇒不可串行化</li>
@@ -130,11 +118,7 @@
                 <p><strong>本质</strong>：先行图描述了"谁必须排在谁前面"。如果这种先后要求自相矛盾（成环），就不存在合法的串行次序。</p>
                 
                 <h3>2.4 可串行化的调度例题</h3>
-                <figure class="figure">
-                    <img src="../_images/slide0072_p19_s4.jpg" alt="可串行化例题">
-                    <figcaption>图2-4 可串行化调度例题</figcaption>
-                </figure>
-                <p><strong>找冲突</strong>：</p>
+<p><strong>找冲突</strong>：</p>
                 <ul>
                     <li>在A上：T₁的写W₁(A)都在T₂的R₂(A)/W₂(A)之前⇒仅 T₁→T₂</li>
                     <li>在B上：T₁的写W₁(B)也在T₂的R₂(B)/W₂(B)之前⇒仍 T₁→T₂</li>
@@ -147,7 +131,7 @@
                 
                 <h3>3.1 共享锁S与排他锁X</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0074_p20_s2.jpg" alt="锁类型">
+                    <img src="images/s3_03_2pl.png" alt="锁类型">
                     <figcaption>图3-1 共享锁与排他锁</figcaption>
                 </figure>
                 <ul>
@@ -159,7 +143,7 @@
                 
                 <h3>3.2 两段锁协议2PL与三种变体</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0075_p20_s3.jpg" alt="2PL协议">
+                    <img src="images/s3_03_2pl.png" alt="2PL协议">
                     <figcaption>图3-2 两段锁协议与三种变体</figcaption>
                 </figure>
                 <p><strong>两段锁协议2PL</strong>：每个事务分两个阶段：①<strong>增长阶段</strong>（只能申请锁、不能释放）→ ②<strong>收缩阶段</strong>（只能释放锁、不能再申请）。</p>
@@ -173,7 +157,7 @@
                 
                 <h3>3.3 为两个事务加排他锁例题</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0077_p21_s1.jpg" alt="加锁例题">
+                    <img src="images/s3_03_2pl.png" alt="加锁例题">
                     <figcaption>图3-3 强严格2PL加锁例题</figcaption>
                 </figure>
                 <div class="code">
@@ -205,7 +189,7 @@ UNLOCK(A);  UNLOCK(B)
                 
                 <h3>4.1 崩溃后：谁REDO，谁UNDO</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0081_p22_s1.jpg" alt="REDO和UNDO">
+                    <img src="images/s3_04_redo_undo.png" alt="REDO和UNDO">
                     <figcaption>图4-1 崩溃后的REDO与UNDO</figcaption>
                 </figure>
                 <p>恢复时扫描日志，按事务有没有&lt;COMMIT&gt;把它分成两类，分别处理：</p>
@@ -217,7 +201,7 @@ UNLOCK(A);  UNLOCK(B)
                 
                 <h3>4.2 检查点与恢复流程</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0082_p22_s2.jpg" alt="检查点">
+                    <img src="images/s3_04_redo_undo.png" alt="检查点">
                     <figcaption>图4-2 检查点与恢复流程</figcaption>
                 </figure>
                 <p><strong>检查点Checkpoint</strong>：系统周期性地把内存缓冲刷盘并写一条&lt;CHECKPOINT&gt;。恢复时只需处理最近检查点之后的日志，更早的已提交事务无需REDO，大幅缩短恢复时间。</p>
@@ -231,7 +215,7 @@ UNLOCK(A);  UNLOCK(B)
                 
                 <h3>4.3 崩溃后的日志恢复例题</h3>
                 <figure class="figure">
-                    <img src="../_images/slide0083_p22_s3.jpg" alt="日志恢复例题">
+                    <img src="images/s3_04_redo_undo.png" alt="日志恢复例题">
                     <figcaption>图4-3 崩溃后的日志恢复例题</figcaption>
                 </figure>
                 <p><strong>判断状态</strong>：</p>
@@ -248,11 +232,7 @@ UNLOCK(A);  UNLOCK(B)
                 </ul>
                 
                 <h3>4.4 易错清单与全卷地图</h3>
-                <figure class="figure">
-                    <img src="../_images/slide0085_p23_s1.jpg" alt="易错清单">
-                    <figcaption>图4-4 事务可靠性易错清单与全卷地图</figcaption>
-                </figure>
-                <p><strong>本讲易错清单</strong>：</p>
+<p><strong>本讲易错清单</strong>：</p>
                 <ul>
                     <li>隔离性≠禁止并发，而是效果"等价于串行"</li>
                     <li>先行图判定：有环就一定不可串行化</li>

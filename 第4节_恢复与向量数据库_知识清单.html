@@ -88,7 +88,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <h3>1.1 恢复的目标 <span class="tag-key">重点</span></h3>
 
 <figure>
-  <img class="figure" src="../_images/slide1905_p301_s5.jpg" alt="Recovery in ACID"/>
+  <img class="figure" src="images/s4_01_failure_types.png" alt="Recovery in ACID"/>
   <figcaption>图1-1: 恢复机制保证ACID中的原子性和持久性（来源：recovery6.10）</figcaption>
 </figure>
 
@@ -102,7 +102,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <h3>1.2 三类故障 <span class="tag-must">必考</span></h3>
 
 <figure>
-  <img class="figure" src="../_images/slide1908_p302_s2.jpg" alt="故障类型"/>
+  <img class="figure" src="images/s4_01_failure_types.png" alt="故障类型"/>
   <figcaption>图1-2: 三类故障及其影响（来源：recovery6.10）</figcaption>
 </figure>
 
@@ -118,7 +118,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <h3>1.3 存储的三级信任 <span class="tag-key">重点</span></h3>
 
 <figure>
-  <img class="figure" src="../_images/slide1909_p302_s3.jpg" alt="三级存储"/>
+  <img class="figure" src="images/s4_01_failure_types.png" alt="三级存储"/>
   <figcaption>图1-3: 存储的三级信任模型（来源：recovery6.10）</figcaption>
 </figure>
 
@@ -137,7 +137,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <h3>2.1 Steal 与 Force 策略 <span class="tag-must">必考</span></h3>
 
 <figure>
-  <img class="figure" src="../_images/slide1913_p303_s2.jpg" alt="Steal/Force"/>
+  <img class="figure" src="images/s4_02_steal_force.png" alt="Steal/Force"/>
   <figcaption>图2-1: 决定一切的两大问题（来源：recovery6.10）</figcaption>
 </figure>
 
@@ -152,7 +152,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <h3>2.2 Steal/Force 矩阵 <span class="tag-must">必考</span></h3>
 
 <figure>
-  <img class="figure" src="../_images/slide1914_p303_s3.jpg" alt="Steal/Force矩阵"/>
+  <img class="figure" src="images/s4_02_steal_force.png" alt="Steal/Force矩阵"/>
   <figcaption>图2-2: Steal/Force策略矩阵与恢复需求（来源：recovery6.10）</figcaption>
 </figure>
 
@@ -171,7 +171,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <h3>2.3 WAL 协议 <span class="tag-must">必考</span></h3>
 
 <figure>
-  <img class="figure" src="../_images/slide1918_p304_s2.jpg" alt="WAL协议"/>
+  <img class="figure" src="images/s4_03_wal.png" alt="WAL协议"/>
   <figcaption>图2-3: Write-Ahead Logging (WAL) 协议（来源：recovery6.10）</figcaption>
 </figure>
 
@@ -191,7 +191,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <h3>2.4 日志记录类型</h3>
 
 <figure>
-  <img class="figure" src="../_images/slide1916_p303_s5.jpg" alt="日志类型"/>
+  <img class="figure" src="images/s4_02_steal_force.png" alt="日志类型"/>
   <figcaption>图2-4: 日志记录类型（来源：recovery6.10）</figcaption>
 </figure>
 
@@ -216,7 +216,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <h3>3.1 UNDO 与 REDO 对比 <span class="tag-must">必考</span></h3>
 
 <figure>
-  <img class="figure" src="../_images/slide1919_p304_s3.jpg" alt="UNDO REDO"/>
+  <img class="figure" src="images/s4_03_wal.png" alt="UNDO REDO"/>
   <figcaption>图3-1: UNDO与REDO操作对比（来源：recovery6.10）</figcaption>
 </figure>
 
@@ -229,7 +229,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <h3>3.2 崩溃恢复示例 <span class="tag-freq">高频</span></h3>
 
 <figure>
-  <img class="figure" src="../_images/slide1920_p304_s4.jpg" alt="恢复示例"/>
+  <img class="figure" src="images/s4_03_wal.png" alt="恢复示例"/>
   <figcaption>图3-2: 崩溃后的REDO与UNDO示例（来源：recovery6.10）</figcaption>
 </figure>
 
@@ -249,11 +249,6 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 
 <h3>3.3 恢复后的日志</h3>
 
-<figure>
-  <img class="figure" src="../_images/slide1923_p305_s2.jpg" alt="恢复后的日志"/>
-  <figcaption>图3-3: 恢复后的日志状态（来源：recovery6.10）</figcaption>
-</figure>
-
 <p>恢复不仅改变数据，还向日志<strong>追加新记录</strong>：</p>
 <ul>
 <li><strong>REDO</strong>不追加任何内容——原始记录已说明如何重新应用</li>
@@ -265,17 +260,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 
 <h3>3.4 恢复练习题 <span class="tag-freq">高频</span></h3>
 
-<figure>
-  <img class="figure" src="../_images/slide1924_p305_s3.jpg" alt="恢复练习"/>
-  <figcaption>图3-4: 恢复练习题（来源：recovery6.10）</figcaption>
-</figure>
-
 <p><strong>问题</strong>：哪些事务需要UNDO？哪些需要REDO？A,B,C,D,E的最终值？</p>
-
-<figure>
-  <img class="figure" src="../_images/slide1925_p305_s4.jpg" alt="恢复解答"/>
-  <figcaption>图3-5: 恢复练习解答（来源：recovery6.10）</figcaption>
-</figure>
 
 <p><strong>答案</strong>：</p>
 <ul>
@@ -293,7 +278,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <h3>4.1 检查点原理 <span class="tag-key">重点</span></h3>
 
 <figure>
-  <img class="figure" src="../_images/slide1921_p304_s5.jpg" alt="检查点"/>
+  <img class="figure" src="images/s4_03_wal.png" alt="检查点"/>
   <figcaption>图4-1: 检查点机制（来源：recovery6.10）</figcaption>
 </figure>
 
@@ -318,7 +303,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <h3>5.1 核心概念 <span class="tag-key">重点</span></h3>
 
 <figure>
-  <img class="figure" src="../_images/slide1960_p312_s3.jpg" alt="向量数据库"/>
+  <img class="figure" src="images/s4_04_ann_strategies.png" alt="向量数据库"/>
   <figcaption>图5-1: 从精确匹配到相似性搜索（来源：vectordb6.10）</figcaption>
 </figure>
 
@@ -336,11 +321,6 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 
 <h3>5.2 为什么传统索引无效</h3>
 
-<figure>
-  <img class="figure" src="../_images/slide1966_p313_s3.jpg" alt="传统索引无效"/>
-  <figcaption>图5-2: 为什么传统索引在向量搜索中无效（来源：vectordb6.10）</figcaption>
-</figure>
-
 <ul>
 <li><strong>B<sup>+</sup>-树</strong>：索引全序——适合=和范围查询。"相似"没有单一排序键</li>
 <li><strong>哈希</strong>：回答精确相等——差一点就哈希到不同桶</li>
@@ -350,11 +330,6 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <p><strong>不匹配之处</strong>：经典索引使用<strong>一维顺序</strong>或<strong>精确键</strong>进行剪枝。相似性存在于<strong>高维度量空间</strong>中——根本不同的查询。</p>
 
 <h3>5.3 三种相似度度量 <span class="tag-must">必考</span></h3>
-
-<figure>
-  <img class="figure" src="../_images/slide1967_p313_s4.jpg" alt="相似度度量"/>
-  <figcaption>图5-3: 三种距离度量（来源：vectordb6.10）</figcaption>
-</figure>
 
 <table>
 <tr><th>度量</th><th>公式</th><th>特点</th></tr>
@@ -368,7 +343,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <h3>5.4 k-NN查询与维度诅咒</h3>
 
 <figure>
-  <img class="figure" src="../_images/slate1968_p313_s5.jpg" alt="k-NN成本"/>
+  <img class="figure" src="images/s4_04_ann_strategies.png" alt="k-NN成本"/>
   <figcaption>图5-4: k-最近邻查询及其成本（来源：vectordb6.10）</figcaption>
 </figure>
 
@@ -379,11 +354,6 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <p>当N=1亿，d=1024时，每次查询约10<sup>11</sup>次乘加运算——单机每秒数千次查询是不可能的。</p>
 
 <h3>5.5 维度诅咒</h3>
-
-<figure>
-  <img class="figure" src="../_images/slide1970_p314_s2.jpg" alt="维度诅咒"/>
-  <figcaption>图5-5: 维度诅咒——距离集中现象（来源：vectordb6.10）</figcaption>
-</figure>
 
 <p>随着d增长，几何不再直观：</p>
 <ul>
@@ -397,7 +367,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <h3>5.6 ANN：近似最近邻 <span class="tag-key">重点</span></h3>
 
 <figure>
-  <img class="figure" src="../_images/slide1973_p314_s5.jpg" alt="ANN"/>
+  <img class="figure" src="images/s4_04_ann_strategies.png" alt="ANN"/>
   <figcaption>图5-6: 近似最近邻(ANN)的权衡（来源：vectordb6.10）</figcaption>
 </figure>
 
@@ -413,7 +383,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <h3>5.7 四大ANN策略 <span class="tag-must">必考</span></h3>
 
 <figure>
-  <img class="figure" src="../_images/slide1975_p315_s2.jpg" alt="四大策略"/>
+  <img class="figure" src="images/s4_04_ann_strategies.png" alt="四大策略"/>
   <figcaption>图5-7: 四大ANN索引策略（来源：vectordb6.10）</figcaption>
 </figure>
 
@@ -430,7 +400,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <h3>5.8 IVF：分区与剪枝</h3>
 
 <figure>
-  <img class="figure" src="../_images/slide1976_p315_s3.jpg" alt="IVF"/>
+  <img class="figure" src="images/s4_04_ann_strategies.png" alt="IVF"/>
   <figcaption>图5-8: IVF索引原理（来源：vectordb6.10）</figcaption>
 </figure>
 
@@ -446,7 +416,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <h3>5.9 PQ：乘积量化</h3>
 
 <figure>
-  <img class="figure" src="../_images/slide1977_p315_s4.jpg" alt="PQ"/>
+  <img class="figure" src="images/s4_04_ann_strategies.png" alt="PQ"/>
   <figcaption>图5-9: 乘积量化(PQ)原理（来源：vectordb6.10）</figcaption>
 </figure>
 
@@ -464,7 +434,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <h3>5.10 IVF-PQ：分区+压缩</h3>
 
 <figure>
-  <img class="figure" src="../_images/slide1982_p316_s3.jpg" alt="IVF-PQ"/>
+  <img class="figure" src="images/s4_04_ann_strategies.png" alt="IVF-PQ"/>
   <figcaption>图5-10: IVF-PQ结合分区与压缩（来源：vectordb6.10）</figcaption>
 </figure>
 
@@ -480,7 +450,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <h3>5.11 LSH：局部敏感哈希</h3>
 
 <figure>
-  <img class="figure" src="../_images/slide1983_p316_s4.jpg" alt="LSH"/>
+  <img class="figure" src="images/s4_04_ann_strategies.png" alt="LSH"/>
   <figcaption>图5-11: 局部敏感哈希(LSH)原理（来源：vectordb6.10）</figcaption>
 </figure>
 
@@ -495,7 +465,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <h3>5.12 HNSW：分层导航小世界</h3>
 
 <figure>
-  <img class="figure" src="../_images/slide1985_p317_s1.jpg" alt="HNSW"/>
+  <img class="figure" src="images/s4_04_ann_strategies.png" alt="HNSW"/>
   <figcaption>图5-12: HNSW贪婪搜索步骤（来源：vectordb6.10）</figcaption>
 </figure>
 
@@ -515,7 +485,7 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <h3>5.13 算法家族对比 <span class="tag-freq">高频</span></h3>
 
 <figure>
-  <img class="figure" src="../_images/slide1988_p317_s4.jpg" alt="算法对比"/>
+  <img class="figure" src="images/s4_04_ann_strategies.png" alt="算法对比"/>
   <figcaption>图5-13: 四大ANN算法家族对比（来源：vectordb6.10）</figcaption>
 </figure>
 
@@ -533,11 +503,6 @@ figcaption { text-align: center; font-size: 0.88em; color: var(--ink-light); mar
 <p>没有通用赢家——你在召回/延迟/内存前沿上选择一个点。今天的默认选择：内存工作负载用<strong>HNSW</strong>；海量语料库用<strong>IVF-PQ</strong>或<strong>DiskANN</strong>。</p>
 
 <h3>5.14 向量数据库系统全景</h3>
-
-<figure>
-  <img class="figure" src="../_images/slide1989_p317_s5.jpg" alt="系统全景"/>
-  <figcaption>图5-14: 向量数据库系统三类形态（来源：vectordb6.10）</figcaption>
-</figure>
 
 <table>
 <tr><th>类型</th><th>代表</th><th>特点</th></tr>
