@@ -41,13 +41,13 @@
                 
                 <h3>1.1 本讲目录</h3>
                 <figure class="figure">
-                    <img src="images/s2_01_framework.png" alt="建模与范式四个板块">
+                    <img src="../images/s2_01_framework.png" alt="建模与范式四个板块">
                     <figcaption>图1-1 建模与范式知识框架</figcaption>
                 </figure>
                 
                 <h3>1.2 ER模型三要素：实体·属性·联系</h3>
                 <figure class="figure">
-                    <img src="images/s2_02_er_elements.png" alt="ER模型三要素">
+                    <img src="../images/s2_02_er_elements.png" alt="ER模型三要素">
                     <figcaption>图1-2 ER模型三要素</figcaption>
                 </figure>
                 <ul>
@@ -59,7 +59,7 @@
                 
                 <h3>1.3 属性的四组分类（必考概念）</h3>
                 <figure class="figure">
-                    <img src="images/s2_02_er_elements.png" alt="属性分类">
+                    <img src="../images/s2_02_er_elements.png" alt="属性分类">
                     <figcaption>图1-3 属性的四组分类</figcaption>
                 </figure>
                 <ul>
@@ -72,7 +72,7 @@
                 
                 <h3>1.4 联系的基数比与参与约束</h3>
                 <figure class="figure">
-                    <img src="images/s2_02_er_elements.png" alt="联系基数">
+                    <img src="../images/s2_02_er_elements.png" alt="联系基数">
                     <figcaption>图1-4 联系的基数比与参与约束</figcaption>
                 </figure>
                 <ul>
@@ -89,7 +89,7 @@
                 
                 <h3>1.5 图书馆ER图例题</h3>
                 <figure class="figure">
-                    <img src="images/s2_02_er_elements.png" alt="图书馆ER图">
+                    <img src="../images/s2_02_er_elements.png" alt="图书馆ER图">
                     <figcaption>图1-5 图书馆ER图例题</figcaption>
                 </figure>
                 <p><strong>评分点</strong>：五个实体（矩形）+ 四个联系（菱形）+ 基数标注：Publishes 1:N、Writes M:N、Borrow M:N、Holds M:N。实体主码加下划线即可得满分。</p>
@@ -176,7 +176,7 @@ Holds ( Branch_id, Book_id, copies )  联合主键=两端主键
                 
                 <h3>4.1 范式金字塔：层层递进</h3>
                 <figure class="figure">
-                    <img src="images/s2_03_nf_pyramid.png" alt="范式金字塔">
+                    <img src="../images/s2_03_nf_pyramid.png" alt="范式金字塔">
                     <figcaption>图4-1 范式金字塔</figcaption>
                 </figure>
                 <ul>
@@ -189,7 +189,7 @@ Holds ( Branch_id, Book_id, copies )  联合主键=两端主键
                 
                 <h3>4.2 1NF原子性·2NF消部分依赖</h3>
                 <figure class="figure">
-                    <img src="images/s2_03_nf_pyramid.png" alt="1NF和2NF">
+                    <img src="../images/s2_03_nf_pyramid.png" alt="1NF和2NF">
                     <figcaption>图4-2 1NF原子性与2NF消除部分依赖</figcaption>
                 </figure>
                 <p><strong>1NF 原子性</strong>：每个分量都是不可再分的原子值：没有重复组、没有多值属性、没有"表中表"。关系数据库天然满足1NF。</p>
@@ -197,7 +197,7 @@ Holds ( Branch_id, Book_id, copies )  联合主键=两端主键
                 
                 <h3>4.3 3NF：消除传递依赖</h3>
                 <figure class="figure">
-                    <img src="images/s2_03_nf_pyramid.png" alt="3NF">
+                    <img src="../images/s2_03_nf_pyramid.png" alt="3NF">
                     <figcaption>图4-3 3NF消除传递依赖</figcaption>
                 </figure>
                 <p><strong>判定法则</strong>：R满足2NF，且对每一个非平凡FD X→A，都有：X是超键 <strong>或</strong> A是主属性（属于某候选键）。两者居其一即可。</p>
@@ -206,7 +206,7 @@ Holds ( Branch_id, Book_id, copies )  联合主键=两端主键
                 
                 <h3>4.4 判断是否BCNF</h3>
                 <figure class="figure">
-                    <img src="images/s2_04_bcnf_check.png" alt="BCNF判定">
+                    <img src="../images/s2_04_bcnf_check.png" alt="BCNF判定">
                     <figcaption>图4-4 BCNF判定示例</figcaption>
                 </figure>
                 <p><strong>BCNF定义</strong>：每个FD的决定因素（左部）都必须是超键。</p>
@@ -214,14 +214,14 @@ Holds ( Branch_id, Book_id, copies )  联合主键=两端主键
                 
                 <h3>4.5 判断3NF并分解</h3>
                 <figure class="figure">
-                    <img src="images/s2_04_bcnf_check.png" alt="3NF分解">
+                    <img src="../images/s2_04_bcnf_check.png" alt="3NF分解">
                     <figcaption>图4-5 判断3NF并分解示例</figcaption>
                 </figure>
                 <p><strong>评分点</strong>：证明候选键→指出违反3NF的FD→按最小覆盖每条FD建一表→补一张含候选键的表保证无损连接。</p>
                 
                 <h3>4.6 无损连接与保持依赖的取舍</h3>
                 <figure class="figure">
-                    <img src="images/s2_04_bcnf_check.png" alt="3NF vs BCNF">
+                    <img src="../images/s2_04_bcnf_check.png" alt="3NF vs BCNF">
                     <figcaption>图4-6 3NF与BCNF的取舍</figcaption>
                 </figure>
                 <ul>

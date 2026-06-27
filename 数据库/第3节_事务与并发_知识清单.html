@@ -41,13 +41,13 @@
                 
                 <h3>1.1 本讲目录</h3>
                 <figure class="figure">
-                    <img src="images/s3_01_framework.png" alt="事务可靠性四个板块">
+                    <img src="../images/s3_01_framework.png" alt="事务可靠性四个板块">
                     <figcaption>图1-1 事务可靠性知识框架</figcaption>
                 </figure>
                 
                 <h3>1.2 事务：要么全做，要么全不做</h3>
                 <figure class="figure">
-                    <img src="images/s3_02_acid.png" alt="事务定义">
+                    <img src="../images/s3_02_acid.png" alt="事务定义">
                     <figcaption>图1-2 事务定义与状态机</figcaption>
                 </figure>
                 <p><strong>定义</strong>：事务是访问/更新数据库的一个操作序列，是并发控制与故障恢复的基本单位。经典例子：转账——A减50、B加50，两步必须同时成功或同时失败。</p>
@@ -60,7 +60,7 @@
                 
                 <h3>1.3 事务的四大特性ACID</h3>
                 <figure class="figure">
-                    <img src="images/s3_02_acid.png" alt="ACID特性">
+                    <img src="../images/s3_02_acid.png" alt="ACID特性">
                     <figcaption>图1-3 事务的四大特性ACID</figcaption>
                 </figure>
                 <ul>
@@ -73,7 +73,7 @@
                 
                 <h3>1.4 ACID选择题怎么考</h3>
                 <figure class="figure">
-                    <img src="images/s3_02_acid.png" alt="ACID选择题">
+                    <img src="../images/s3_02_acid.png" alt="ACID选择题">
                     <figcaption>图1-4 ACID选择题考点</figcaption>
                 </figure>
                 <p><strong>易混淆的四个坑</strong>：</p>
@@ -131,7 +131,7 @@
                 
                 <h3>3.1 共享锁S与排他锁X</h3>
                 <figure class="figure">
-                    <img src="images/s3_03_2pl.png" alt="锁类型">
+                    <img src="../images/s3_03_2pl.png" alt="锁类型">
                     <figcaption>图3-1 共享锁与排他锁</figcaption>
                 </figure>
                 <ul>
@@ -143,7 +143,7 @@
                 
                 <h3>3.2 两段锁协议2PL与三种变体</h3>
                 <figure class="figure">
-                    <img src="images/s3_03_2pl.png" alt="2PL协议">
+                    <img src="../images/s3_03_2pl.png" alt="2PL协议">
                     <figcaption>图3-2 两段锁协议与三种变体</figcaption>
                 </figure>
                 <p><strong>两段锁协议2PL</strong>：每个事务分两个阶段：①<strong>增长阶段</strong>（只能申请锁、不能释放）→ ②<strong>收缩阶段</strong>（只能释放锁、不能再申请）。</p>
@@ -157,7 +157,7 @@
                 
                 <h3>3.3 为两个事务加排他锁例题</h3>
                 <figure class="figure">
-                    <img src="images/s3_03_2pl.png" alt="加锁例题">
+                    <img src="../images/s3_03_2pl.png" alt="加锁例题">
                     <figcaption>图3-3 强严格2PL加锁例题</figcaption>
                 </figure>
                 <div class="code">
@@ -189,7 +189,7 @@ UNLOCK(A);  UNLOCK(B)
                 
                 <h3>4.1 崩溃后：谁REDO，谁UNDO</h3>
                 <figure class="figure">
-                    <img src="images/s3_04_redo_undo.png" alt="REDO和UNDO">
+                    <img src="../images/s3_04_redo_undo.png" alt="REDO和UNDO">
                     <figcaption>图4-1 崩溃后的REDO与UNDO</figcaption>
                 </figure>
                 <p>恢复时扫描日志，按事务有没有&lt;COMMIT&gt;把它分成两类，分别处理：</p>
@@ -201,7 +201,7 @@ UNLOCK(A);  UNLOCK(B)
                 
                 <h3>4.2 检查点与恢复流程</h3>
                 <figure class="figure">
-                    <img src="images/s3_04_redo_undo.png" alt="检查点">
+                    <img src="../images/s3_04_redo_undo.png" alt="检查点">
                     <figcaption>图4-2 检查点与恢复流程</figcaption>
                 </figure>
                 <p><strong>检查点Checkpoint</strong>：系统周期性地把内存缓冲刷盘并写一条&lt;CHECKPOINT&gt;。恢复时只需处理最近检查点之后的日志，更早的已提交事务无需REDO，大幅缩短恢复时间。</p>
@@ -215,7 +215,7 @@ UNLOCK(A);  UNLOCK(B)
                 
                 <h3>4.3 崩溃后的日志恢复例题</h3>
                 <figure class="figure">
-                    <img src="images/s3_04_redo_undo.png" alt="日志恢复例题">
+                    <img src="../images/s3_04_redo_undo.png" alt="日志恢复例题">
                     <figcaption>图4-3 崩溃后的日志恢复例题</figcaption>
                 </figure>
                 <p><strong>判断状态</strong>：</p>

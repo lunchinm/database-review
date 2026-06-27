@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模拟试卷2：事务并发与恢复 - 四川大学数据库原理</title>
+    <style>
+        :root {
+            --paper: #fdf6e3; --ink: #2c2c2c; --ink-light: #555;
+            --accent: #dc2626; --divider: #d6c8a8; --radius: 8px;
+            --green: #166534; --red: #991b1b; --blue: #1e40af;
+            --card-bg: #fef9ef; --card-border: #e8dcc8;
+            --ans-bg: #f0fdf4; --ans-border: #86efac;
+            --tip-bg: #fff7ed; --tip-border: #fdba74;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+            font-size: 13pt; line-height: 1.85; color: var(--ink);
+            max-width: 860px; margin: auto; padding: 24px 20px 60px;
+            background: var(--paper);
+        }
+        h1 { font-size: 1.7em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 12px; margin-bottom: 8px; color: var(--red); }
+        h2 { font-size: 1.2em; margin-top: 32px; color: var(--red); border-left: 4px solid var(--accent); padding-left: 10px; }
+        h3 { font-size: 1.05em; margin-top: 20px; color: var(--ink); }
+        .subtitle { text-align: center; color: var(--ink-light); font-size: 0.95em; margin-bottom: 24px; }
+        .meta { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-bottom: 20px; font-size: 0.9em; color: var(--ink-light); }
+        .meta span { background: var(--card-bg); border: 1px solid var(--card-border); padding: 4px 12px; border-radius: 4px; }
+
+        .question { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 16px 20px; margin: 12px 0; }
+        .question .q-header { font-weight: 700; color: var(--red); margin-bottom: 8px; font-size: 1.02em; }
+        .question .q-body { padding-left: 8px; }
+        .options { list-style: none; padding: 0; }
+        .options li { padding: 3px 0 3px 8px; }
+
+        .answer-block { margin: 10px 0 0 0; border-top: 1px dashed var(--divider); padding-top: 10px; display: none; }
+        .answer-block.show { display: block; }
+        .answer-block .ans-label { font-weight: 700; color: var(--green); }
+        .answer-block .ans-text { color: var(--ink-light); font-size: 0.92em; }
+        .answer-block .ans-explanation { color: var(--ink-light); font-size: 0.88em; background: var(--ans-bg); border: 1px solid var(--ans-border); border-radius: 4px; padding: 8px 12px; margin-top: 6px; }
+
+        .btn { display: inline-block; padding: 6px 18px; border-radius: 4px; font-size: 0.9em; font-weight: 600; cursor: pointer; border: 1px solid var(--divider); background: #fff; color: var(--red); margin: 4px; transition: all 0.2s; }
+        .btn:hover { background: #fee2e2; }
+        .btn-all { background: var(--accent); color: #fff; border-color: var(--accent); }
+        .btn-all:hover { background: #b91c1c; }
+
+        .nav { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 14px 20px; margin-top: 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .nav a { color: var(--red); text-decoration: none; font-weight: 600; }
+        .nav a:hover { text-decoration: underline; }
+
+        .footer { text-align: center; margin-top: 28px; font-size: 0.85em; color: var(--ink-light); }
+
+        .sql-code { background: #1e293b; color: #e2e8f0; padding: 12px 16px; border-radius: 6px; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.88em; overflow-x: auto; margin: 8px 0; white-space: pre; line-height: 1.6; }
+        .schedule { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 14px; margin: 8px 0; font-family: 'Consolas', monospace; font-size: 0.9em; overflow-x: auto; white-space: pre; line-height: 1.6; }
+        table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+        th, td { border: 1px solid var(--divider); padding: 6px 10px; text-align: center; font-size: 0.9em; }
+        th { background: var(--card-bg); }
+
+        @media (max-width: 600px) {
+            body { padding: 12px 10px; font-size: 12pt; }
+            h1 { font-size: 1.3em; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>📄 模拟试卷二：事务并发与恢复</h1>
+<p class="subtitle">四川大学《数据库系统原理》期末模拟卷</p>
+<div class="meta">
+    <span>⏱ 120分钟</span><span>📊 满分100分</span><span>📅 模拟卷</span>
+</div>
+
+<div style="text-align:center;margin-bottom:24px;">
+    <button class="btn btn-all" onclick="toggleAll()">展开/收起 全部答案</button>
+</div>
+
+<!-- ============================================================ -->
+<h2>一、单项选择题（本大题共15小题，每小题2分，共30分）</h2>
+<!-- ============================================================ -->
+
+<div class="question">
+    <div class="q-header">1. 事务的ACID特性中，C代表（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 原子性（Atomicity）</li><li>B. 一致性（Consistency）</li>
+            <li>C. 隔离性（Isolation）</li><li>D. 持久性（Durability）</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B</span>
+            <div class="ans-explanation">ACID：A=Atomicity（原子性）、C=Consistency（一致性）、I=Isolation（隔离性）、D=Durability（持久性）。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">2. 以下哪项不是事务的ACID特性之一？（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 原子性</li><li>B. 持久性</li>
+            <li>C. 可串行性</li><li>D. 一致性</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：C</span>
+            <div class="ans-explanation">可串行性（Serializability）是并发控制的目标，描述的是多个事务并发执行的正确性准则，而不是单个事务的性质。ACID四性是原子性、一致性、隔离性、持久性。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">3. 关于两段锁协议（2PL），以下说法正确的是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 2PL可以完全避免死锁</li>
+            <li>B. 所有遵守2PL的事务调度一定是冲突可串行化的</li>
+            <li>C. 2PL要求事务一次性获取所有锁</li>
+            <li>D. 2PL与可串行化无关</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B</span>
+            <div class="ans-explanation">核心定理：所有事务遵守两段锁协议，则这些事务的任意并发调度都是冲突可串行化的。2PL不能避免死锁（锁可能形成循环等待），也不要求一次性获取所有锁（那是一次性封锁法）。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">4. 事务T获得了数据项Q上的排他锁（X锁），则其他事务（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 可以读Q但不能写Q</li><li>B. 可以写Q但不能读Q</li>
+            <li>C. 既不能读Q也不能写Q</li><li>D. 既可以读Q也可以写Q</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：C</span>
+            <div class="ans-explanation">X锁（排他锁/写锁）：持有X锁的事务可以读/写数据项，其他事务不能获取任何锁。S锁（共享锁/读锁）：持有S锁的事务可以读但不能写，其他事务可以同时获取S锁但不能获取X锁。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">5. 关于死锁，以下说法正确的是（　）（多选等价——单选正确答案为D）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 两段锁协议可以完全避免死锁</li><li>B. DBMS通常采用超时法或等待图法检测死锁</li>
+            <li>C. 死锁一定由事务重启造成</li><li>D. 至少两个并发事务才可能发生死锁</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：D（或B和D在多选题中均正确）</span>
+            <div class="ans-explanation">A错误：2PL只能预防但不能完全避免死锁。B正确：超时法和等待图法是DBMS常用的死锁检测方法。C错误：死锁源于资源竞争，非重启造成。D正确：单个事务不可能形成循环等待。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">6. 数据库恢复技术中，UNDO操作的作用是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 重做已提交事务</li><li>B. 撤销未提交事务的修改</li>
+            <li>C. 恢复被删除的数据文件</li><li>D. 重建索引</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B</span>
+            <div class="ans-explanation">UNDO撤销未提交事务（保证原子性A），REDO重做已提交事务（保证持久性D）。UNDO扫描方向从后往前，数据项赋旧值；REDO扫描方向从前往后，数据项赋新值。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">7. WAL（Write-Ahead Logging）协议的核心规则是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 先写数据后写日志</li><li>B. 日志记录必须在数据修改写入磁盘之前写入稳定存储</li>
+            <li>C. 所有数据必须先写入缓存</li><li>D. 事务提交后才写日志</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B</span>
+            <div class="ans-explanation">WAL规则：①日志记录必须在对应数据页写入磁盘之前先写入稳定存储（Force-log-before-page）；②事务提交时，其所有日志记录必须先刷入磁盘。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">8. Steal/No-Steal 和 Force/No-Force 策略中，No-Steal + Force 的组合意味着（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 未提交数据不能写入磁盘，提交时必须写入磁盘</li>
+            <li>B. 未提交数据可以写入磁盘，提交时不必写入磁盘</li>
+            <li>C. 未提交数据可以写入磁盘，提交时必须写入磁盘</li>
+            <li>D. 未提交数据不能写入磁盘，提交时不必写入磁盘</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：A</span>
+            <div class="ans-explanation">
+                Steal：未提交事务的脏页是否允许刷盘？<br>
+                - No-Steal：不允许（最简单，UNDO最简单）<br>
+                - Steal：允许（需要UNDO恢复）<br><br>
+                Force：提交时是否必须将所有脏页刷盘？<br>
+                - Force：必须（REDO最简单）<br>
+                - No-Force：不必须（需要REDO恢复）<br><br>
+                大多数数据库采用 Steal + No-Force（最灵活但恢复最复杂，需UNDO+REDO）。
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">9. 日志记录 <span class="inline-code">&lt;T, X, V1, V2&gt;</span> 的含义是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 事务T开始</li>
+            <li>B. 事务T修改了数据项X，旧值为V1，新值为V2</li>
+            <li>C. 事务T提交</li>
+            <li>D. 检查点记录</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B</span>
+            <div class="ans-explanation">这是Update日志记录格式。UNDO时用V1恢复，REDO时用V2恢复。&lt;T, start&gt;是事务开始记录，&lt;T, commit&gt;是提交记录。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">10. 冲突可串行化的判定通常使用（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 优先图（Precedence Graph）</li><li>B. ER图</li>
+            <li>C. 数据流图</li><li>D. 状态转换图</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：A</span>
+            <div class="ans-explanation">优先图：节点为事务，若T_i和T_j存在冲突操作且T_i先执行，则加有向边T_i→T_j。若无环则调度是冲突可串行化的。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">11. 隔离级别中，能防止脏读但不能防止不可重复读的是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. Read Uncommitted</li><li>B. Read Committed</li>
+            <li>C. Repeatable Read</li><li>D. Serializable</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B</span>
+            <div class="ans-explanation">
+                Read Uncommitted：三种都允许（脏读、不可重复读、幻读）<br>
+                Read Committed：防止脏读 ✓<br>
+                Repeatable Read：防止脏读+不可重复读 ✓<br>
+                Serializable：防止全部 ✓
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">12. Wait-Die 死锁预防策略中，若T1的时间戳小于T2（即T1更老），当T1请求T2持有的锁时（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. T1等待T2</li><li>B. T1终止（Die）</li>
+            <li>C. T2终止</li><li>D. 随机选择一个终止</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：A</span>
+            <div class="ans-explanation">Wait-Die：老事务等新事务（老等新），新事务等老则终止（Die）。Wound-Wait：老事务等新则"伤"（Wound，终止新事务），新事务等老则等。两者都保证不产生死锁，且都偏向老事务。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">13. 数据库故障类型中，需要用到备份（dump）和日志共同恢复的是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 事务故障</li><li>B. 系统故障</li>
+            <li>C. 介质故障</li><li>D. 逻辑故障</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：C</span>
+            <div class="ans-explanation">介质故障（磁盘损坏）需要：先装入最新备份（dump），再重做备份之后提交的事务（REDO）。事务故障（逻辑错误/死锁）只需UNDO该事务；系统故障（停电/OS崩溃）需UNDO未提交事务+REDO已提交事务。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">14. 检查点（Checkpoint）在恢复中的作用是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 完全避免恢复</li><li>B. 减少恢复时需要扫描的日志量</li>
+            <li>C. 替代WAL协议</li><li>D. 消除所有未提交事务</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B</span>
+            <div class="ans-explanation">检查点将当前所有已提交的脏页刷盘并记录检查点日志，恢复时只需从最后一个检查点开始扫描日志，大大减少恢复时间。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">15. 以下关于向量数据库和ANN的说法，错误的是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. ANN是近似最近邻搜索</li>
+            <li>B. HNSW是一种基于图的ANN索引结构</li>
+            <li>C. 向量数据库主要用于存储和检索高维向量</li>
+            <li>D. 向量数据库使用B+树作为默认索引</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：D</span>
+            <div class="ans-explanation">向量数据库使用ANN索引（如HNSW、IVF、LSH、PQ等），而非传统B+树。B+树适用于一维排序键，无法处理高维向量的相似性搜索。</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<h2>二、填空题（本大题共10空，每空2分，共20分）</h2>
+<!-- ============================================================ -->
+
+<div class="question">
+    <div class="q-header">16. 事务的ACID特性中，I代表__________，保证并发事务互不干扰。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：隔离性（Isolation）</span>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">17. 两段锁协议分为两个阶段：__________阶段和__________阶段。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：加锁（Growing/扩展）、解锁（Shrinking/收缩）</span>
+            <div class="ans-explanation">在加锁阶段只能获取锁不能释放锁；在解锁阶段只能释放锁不能获取锁。两个阶段严格分开。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">18. WAL是__________的缩写，中文称为预写日志。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：Write-Ahead Logging</span>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">19. 并发事务可能导致的数据不一致问题包括：丢失修改、__________和读"脏"数据。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：不可重复读（Non-repeatable Read）</span>
+            <div class="ans-explanation">三大问题：丢失修改（Lost Update）、不可重复读（同一事务两次读结果不同）、读脏数据（Dirty Read，读到未提交数据）。还有幻读（Phantom Read）也是常见问题。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">20. Steal/Force 策略中，__________允许未提交事务的脏页刷盘，需要UNDO操作恢复。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：Steal</span>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">21. 死锁检测的两种常见方法是：__________和等待图法。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：超时法（Timeout）</span>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">22. 日志文件中，__________记录标志一个事务已成功完成所有操作。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：&lt;T, commit&gt;（提交记录）</span>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">23. 共享锁（S锁）又称为__________锁。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：读锁（Read Lock）</span>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">24. 向量数据库的核心操作是__________，即在向量空间中查找与查询向量最相似的K个向量。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：近似最近邻搜索（ANN / Approximate Nearest Neighbor Search）</span>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">25. 系统故障恢复时，需要__________未提交的事务和__________已提交的事务。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：UNDO（撤销）、REDO（重做）</span>
+            <div class="ans-explanation">系统故障恢复三步：①分析（Analysis）→ ②UNDO未提交事务（保证原子性）→ ③REDO已提交事务（保证持久性）。这就是ARIES算法。</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<h2>三、判断题（本大题共10小题，每小题1分，共10分）</h2>
+<!-- ============================================================ -->
+
+<div class="question">
+    <div class="q-header">26. 事务是数据库的逻辑工作单位，是用户定义的一个数据库操作序列，要么全做，要么全不做。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✓（正确）</span>
+            <div class="ans-explanation">这是事务的原子性定义。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">27. 共享锁（S锁）和排他锁（X锁）可以同时被不同事务获取。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✗（错误）</span>
+            <div class="ans-explanation">S锁与S锁可共存（多事务同时读），但S锁与X锁、X锁与X锁不可共存。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">28. 系统故障（如停电）后，DBMS需要用到数据库备份进行恢复。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✗（错误）</span>
+            <div class="ans-explanation">系统故障（存储介质完好）只需利用日志进行UNDO/REDO即可恢复，不需要备份。介质故障（磁盘损坏）才需要备份+日志。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">29. 冲突可串行化是可串行化的必要条件，而非充分条件。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✗（错误——反了）</span>
+            <div class="ans-explanation">冲突可串行化是可串行化的充分条件而非必要条件。即：冲突可串行化 ⇒ 可串行化，但反过来不一定（存在视图可串行化但非冲突可串行化的情况）。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">30. Steal策略下，系统崩溃后可能需要UNDO未提交事务的修改。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✓（正确）</span>
+            <div class="ans-explanation">Steal允许未提交数据写入磁盘，崩溃后磁盘上可能有未提交数据，需要UNDO恢复。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">31. 一次封锁法可以完全避免死锁，但降低了并发度。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✓（正确）</span>
+            <div class="ans-explanation">一次封锁法要求事务开始时一次性获取所有需要的锁，避免了持有并等待条件，可避免死锁，但降低了系统并发度。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">32. 向量数据库使用欧氏距离和余弦相似度来度量向量之间的相似性。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✓（正确）</span>
+            <div class="ans-explanation">常用相似度度量：欧氏距离（L2）、余弦相似度、内积（点积）、曼哈顿距离（L1）等。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">33. 恢复管理器（Recovery Manager）在系统重启后不需要知道哪些事务需要UNDO。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✗（错误）</span>
+            <div class="ans-explanation">恢复管理器必须通过分析日志确定：有begin无commit的事务需UNDO，有commit但数据可能未刷盘的事务需REDO。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">34. SQL中的事务默认是自动提交模式（autocommit）。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✓（正确）</span>
+            <div class="ans-explanation">大多数DBMS默认每条SQL语句自动作为一个事务提交。需使用BEGIN/START TRANSACTION显式开启事务，用COMMIT/ROLLBACK结束。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">35. 在Wound-Wait策略中，若老事务等待新事务持有的锁，则新事务被"伤"（终止回滚）。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✓（正确）</span>
+            <div class="ans-explanation">Wound-Wait：老事务请求新事务的锁 → 新事务被Wound（终止）；新事务请求老事务的锁 → 新事务Wait（等待）。两者均偏向老事务。</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<h2>四、简答题（本大题共3小题，每小题6分，共18分）</h2>
+<!-- ============================================================ -->
+
+<div class="question">
+    <div class="q-header">36. 简述事务的ACID特性，并各举一个违反该特性的场景。（6分）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">参考答案：</span>
+            <div class="ans-explanation">
+                <strong>① 原子性（Atomicity）：</strong>事务的所有操作要么全部执行，要么全部不执行。<br>
+                <em>违反场景：</em>转账中扣款成功但加款失败，系统未回滚扣款。<br><br>
+                <strong>② 一致性（Consistency）：</strong>事务执行前后数据库都处于一致性状态。<br>
+                <em>违反场景：</em>转账后总金额变了（A-100, B不变），违反A+B=常数的约束。<br><br>
+                <strong>③ 隔离性（Isolation）：</strong>并发事务之间互不干扰，仿佛串行执行。<br>
+                <em>违反场景：</em>两个事务同时读取同一余额后各自扣款，导致丢失修改（Lost Update）。<br><br>
+                <strong>④ 持久性（Durability）：</strong>事务一旦提交，其修改永久保存在数据库中。<br>
+                <em>违反场景：</em>事务提交后系统崩溃，重启后修改丢失。
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">37. 设有调度 S: R1(A), R2(B), W2(B), R1(B), W1(A)。判断该调度是否是冲突可串行化的，若是，给出等价串行顺序。（6分）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">参考答案：</span>
+            <div class="ans-explanation">
+                <strong>构建优先图：</strong><br>
+                冲突操作对分析：<br>
+                ① R2(B) → W1(A)：不同数据项，无冲突。<br>
+                ② W2(B) → R1(B)：冲突！W2(B)先于R1(B) → T2→T1<br>
+                ③ R1(A) → W1(A)：同一事务，不产生边。<br>
+                ④ R1(B) → W1(A)：不同数据项，无冲突。<br>
+                ⑤ W2(B) → W1(A)：不同数据项，无冲突。<br>
+                ⑥ R2(B) → R1(B)：两个读，不冲突。<br>
+                ⑦ R1(A) → ...：R1(A)与其他操作检查<br>
+                ⑧ R1(A)与W2(B)：不同数据项，无冲突。<br><br>
+                优先图只有一条边：T2→T1。无环。<br>
+                <strong>因此该调度是冲突可串行化的，等价串行顺序为：T2 → T1。</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">38. 简述数据库系统恢复中ARIES算法的三个主要阶段及其作用。（6分）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">参考答案：</span>
+            <div class="ans-explanation">
+                <strong>第一阶段：分析（Analysis Phase）</strong><br>
+                从最后一个检查点开始向前扫描日志，确定哪些事务需要UNDO（未提交），哪些需要REDO（已提交但数据可能未刷盘），重建脏页表和事务表。<br><br>
+                <strong>第二阶段：REDO（Redo Phase）</strong><br>
+                从分析阶段确定的最早LSN开始，向前重做所有更新操作（包括已提交和未提交事务的更新），将数据库恢复到崩溃前的状态。<br><br>
+                <strong>第三阶段：UNDO（Undo Phase）</strong><br>
+                从日志末尾向后扫描，撤销所有未提交事务（Active事务）的更新操作，保证事务的原子性。对每个UNDO操作写入CLR（补偿日志记录）。
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<h2>五、综合应用题（本大题共2小题，共22分）</h2>
+<!-- ============================================================ -->
+
+<div class="question">
+    <div class="q-header">39. 并发调度分析（12分）</div>
+    <div class="q-body">
+        <p>设有三个事务：</p>
+        <p>T1: R(A), W(A), R(B), W(B)</p>
+        <p>T2: R(B), W(B), R(A), W(A)</p>
+        <p>T3: R(A), R(B), W(A)</p>
+        <p>给出调度：S = R1(A), R2(B), W1(A), R2(A), W3(A), R1(B), W2(B), W1(B)</p>
+        <p>(1) 画出该调度的优先图（Precedence Graph）。（4分）</p>
+        <p>(2) 判断该调度是否是冲突可串行化的，若是，给出一个等价串行顺序。（4分）</p>
+        <p>(3) 该调度是否满足两段锁协议（2PL）？请说明理由。（4分）</p>
+
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">参考答案：</span>
+            <div class="ans-explanation">
+                <strong>(1) 优先图：</strong><br>
+                分析各冲突对（按执行顺序）：<br>
+                - R1(A) ... W3(A)：R1(A)先于W3(A) → T1→T3<br>
+                - W1(A) ... R2(A)：W1(A)先于R2(A) → T1→T2<br>
+                - W1(A) ... W3(A)：W1(A)先于W3(A) → T1→T3<br>
+                - R2(B) ... W1(B)：R2(B)先于W1(B) → T2→T1<br>
+                - R2(A) ... W3(A)：R2(A)先于W3(A) → T2→T3<br>
+                - W2(B) ... W1(B)：W2(B)先于W1(B) → T2→T1<br><br>
+                优先图中存在边：T1→T2, T1→T3, T2→T1, T2→T3<br>
+                由于存在T1→T2和T2→T1，形成环路。<br><br>
+                <strong>(2) 该调度不是冲突可串行化的。</strong>因为优先图中有环(T1→T2→T1)。<br><br>
+                <strong>(3) 不满足2PL。</strong>2PL定理：若所有事务都遵守2PL，则调度是冲突可串行化的。逆否命题：若调度不是冲突可串行化的，则至少有一个事务不满足2PL。由于该调度不是冲突可串行化的，不可能所有事务都遵守2PL。
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">40. 恢复日志分析（10分）</div>
+    <div class="q-body">
+        <p>系统崩溃后，恢复管理器扫描日志，发现如下日志记录（按时间顺序，LSN递增）：</p>
+        <div class="schedule">1: &lt;T1, start&gt;
+2: &lt;T1, A, 100, 200&gt;
+3: &lt;T2, start&gt;
+4: &lt;T2, B, 50, 150&gt;
+5: &lt;T1, C, 30, 80&gt;
+6: &lt;T2, commit&gt;
+7: &lt;Checkpoint {T1}&gt;
+8: &lt;T3, start&gt;
+9: &lt;T3, D, 10, 90&gt;
+10: &lt;T1, commit&gt;
+11: &lt;T3, E, 20, 60&gt;
+---- 崩溃 ----</div>
+        <p>(1) 系统重启后，哪些事务需要UNDO？哪些需要REDO？（4分）</p>
+        <p>(2) 简述恢复过程。（3分）</p>
+        <p>(3) 最终数据项A、B、C、D、E的值分别是多少？（3分）</p>
+
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">参考答案：</span>
+            <div class="ans-explanation">
+                <strong>(1) 需要UNDO/UNDO的事务：</strong><br>
+                从检查点(LSN=7)开始分析：<br>
+                - 检查点记录Active事务：{T1}<br>
+                - T1 在 LSN=10 提交 → <strong>T1需要REDO</strong>（检查点后提交的事务，修改可能未完全刷盘）<br>
+                - T2 在 LSN=6 提交（检查点之前已提交）→ <strong>T2不需要REDO</strong>（检查点时已刷盘）<br>
+                - T3 有 start(LSN=8) 无 commit → <strong>T3需要UNDO</strong><br><br>
+                结论：UNDO {T3}，REDO {T1}，T2已完成无需处理。<br><br>
+
+                <strong>(2) 恢复过程：</strong><br>
+                ① 从检查点开始向后扫描，重做T1和T3的所有操作（LSN 5, 9, 10, 11）<br>
+                ② 从日志末尾向前扫描，撤销T3的操作：E恢复为20（LSN 11），D恢复为10（LSN 9）<br><br>
+
+                <strong>(3) 最终值：</strong><br>
+                A = 200（T1 REDO后）<br>
+                B = 150（T2已提交且检查点时刷盘）<br>
+                C = 80（T1 REDO后）<br>
+                D = 10（T3 UNDO后恢复旧值）<br>
+                E = 20（T3 UNDO后恢复旧值）
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Navigation -->
+<div class="nav">
+    <a href="期末试卷1_基础与查询.html">← 试卷1：基础与查询</a>
+    <span>试卷2/3</span>
+    <a href="期末试卷3_综合模拟.html">试卷3：综合模拟 →</a>
+</div>
+
+<div class="footer">
+    <p>模拟试卷2 · 事务并发与恢复 · 基于四川大学历年题型编制</p>
+    <p>Generated by ExamPass Assistant · 2026-06-27</p>
+</div>
+
+<script>
+function toggleAns(btn) {
+    var block = btn.nextElementSibling;
+    if (block) {
+        block.classList.toggle('show');
+        btn.textContent = block.classList.contains('show') ? '隐藏答案' : '显示答案';
+    }
+}
+function toggleAll() {
+    var blocks = document.querySelectorAll('.answer-block');
+    var btns = document.querySelectorAll('.question .btn');
+    var allShown = true;
+    blocks.forEach(function(b) { if (!b.classList.contains('show')) allShown = false; });
+    blocks.forEach(function(b) { if (allShown) b.classList.remove('show'); else b.classList.add('show'); });
+    btns.forEach(function(b) {
+        var blk = b.nextElementSibling;
+        if (blk) b.textContent = (allShown ? '显示答案' : '隐藏答案');
+    });
+}
+</script>
+
+</body>
+</html>

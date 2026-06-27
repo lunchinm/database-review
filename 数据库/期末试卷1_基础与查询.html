@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模拟试卷1：数据库基础与查询 - 四川大学数据库原理</title>
+    <style>
+        :root {
+            --paper: #fdf6e3; --ink: #2c2c2c; --ink-light: #555;
+            --accent: #2563eb; --divider: #d6c8a8; --radius: 8px;
+            --green: #166534; --red: #991b1b; --blue: #1e40af;
+            --card-bg: #fef9ef; --card-border: #e8dcc8;
+            --ans-bg: #f0fdf4; --ans-border: #86efac;
+            --tip-bg: #fff7ed; --tip-border: #fdba74;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+            font-size: 13pt; line-height: 1.85; color: var(--ink);
+            max-width: 860px; margin: auto; padding: 24px 20px 60px;
+            background: var(--paper);
+        }
+        h1 { font-size: 1.7em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 12px; margin-bottom: 8px; }
+        h2 { font-size: 1.2em; margin-top: 32px; color: var(--blue); border-left: 4px solid var(--accent); padding-left: 10px; }
+        h3 { font-size: 1.05em; margin-top: 20px; color: var(--ink); }
+        .subtitle { text-align: center; color: var(--ink-light); font-size: 0.95em; margin-bottom: 24px; }
+        .meta { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-bottom: 20px; font-size: 0.9em; color: var(--ink-light); }
+        .meta span { background: var(--card-bg); border: 1px solid var(--card-border); padding: 4px 12px; border-radius: 4px; }
+
+        .question { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 16px 20px; margin: 12px 0; }
+        .question .q-header { font-weight: 700; color: var(--accent); margin-bottom: 8px; font-size: 1.02em; }
+        .question .q-body { padding-left: 8px; }
+        .options { list-style: none; padding: 0; }
+        .options li { padding: 3px 0 3px 8px; }
+        .options li::before { content: ""; }
+
+        .answer-block { margin: 10px 0 0 0; border-top: 1px dashed var(--divider); padding-top: 10px; display: none; }
+        .answer-block.show { display: block; }
+        .answer-block .ans-label { font-weight: 700; color: var(--green); }
+        .answer-block .ans-text { color: var(--ink-light); font-size: 0.92em; }
+        .answer-block .ans-explanation { color: var(--ink-light); font-size: 0.88em; background: var(--ans-bg); border: 1px solid var(--ans-border); border-radius: 4px; padding: 8px 12px; margin-top: 6px; }
+
+        .btn { display: inline-block; padding: 6px 18px; border-radius: 4px; font-size: 0.9em; font-weight: 600; cursor: pointer; border: 1px solid var(--divider); background: #fff; color: var(--accent); margin: 4px; transition: all 0.2s; }
+        .btn:hover { background: #dbeafe; }
+        .btn-all { background: var(--accent); color: #fff; border-color: var(--accent); }
+        .btn-all:hover { background: #1d4ed8; }
+
+        .nav { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 14px 20px; margin-top: 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .nav a { color: var(--accent); text-decoration: none; font-weight: 600; }
+        .nav a:hover { text-decoration: underline; }
+
+        .footer { text-align: center; margin-top: 28px; font-size: 0.85em; color: var(--ink-light); }
+
+        .sql-code { background: #1e293b; color: #e2e8f0; padding: 12px 16px; border-radius: 6px; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.88em; overflow-x: auto; margin: 8px 0; white-space: pre; line-height: 1.6; }
+        .inline-code { background: #f1f5f9; color: #be123c; padding: 1px 6px; border-radius: 3px; font-family: 'Consolas', monospace; font-size: 0.92em; }
+
+        @media (max-width: 600px) {
+            body { padding: 12px 10px; font-size: 12pt; }
+            h1 { font-size: 1.3em; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>📄 模拟试卷一：数据库基础与查询</h1>
+<p class="subtitle">四川大学《数据库系统原理》期末模拟卷</p>
+<div class="meta">
+    <span>⏱ 120分钟</span><span>📊 满分100分</span><span>📅 模拟卷</span>
+</div>
+
+<div style="text-align:center;margin-bottom:24px;">
+    <button class="btn btn-all" onclick="toggleAll()">展开/收起 全部答案</button>
+    <button class="btn" onclick="scrollToAnswers()">跳转到答案区</button>
+</div>
+
+<!-- ============================================================ -->
+<h2>一、单项选择题（本大题共15小题，每小题2分，共30分）</h2>
+<!-- ============================================================ -->
+
+<div class="question">
+    <div class="q-header">1. 数据库系统的核心是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 数据库</li><li>B. 数据库管理系统（DBMS）</li>
+            <li>C. 数据模型</li><li>D. 软件工具</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B</span>
+            <div class="ans-explanation">DBMS是位于用户与操作系统之间的一层数据管理软件，是数据库系统的核心。它负责数据的组织、存储、维护和访问控制。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">2. 关系代数中，五种基本运算不包括以下哪项？（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 并（∪）</li><li>B. 差（−）</li>
+            <li>C. 选择（σ）</li><li>D. 连接（⋈）</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：D</span>
+            <div class="ans-explanation">五种基本关系代数运算是：并（∪）、差（−）、选择（σ）、投影（π）、笛卡尔积（×）。连接（⋈）可由笛卡尔积和选择导出，属于非基本运算。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">3. SQL语言中，删除表中所有数据但保留表结构的命令是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. DELETE FROM 表名</li><li>B. DROP TABLE 表名</li>
+            <li>C. TRUNCATE TABLE 表名</li><li>D. ALTER TABLE 表名</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：C</span>
+            <div class="ans-explanation">TRUNCATE 快速删除所有数据且不可回滚，保留表结构；DELETE 逐行删除可回滚；DROP 删除整个表（包括结构）；ALTER 修改表结构。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">4. 在关系数据库中，外关键字（Foreign Key）的作用是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 保证实体完整性</li><li>B. 保证参照完整性</li>
+            <li>C. 保证用户自定义完整性</li><li>D. 保证域完整性</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B</span>
+            <div class="ans-explanation">外键约束确保一个表中的数据匹配另一个表中的值，从而实现参照完整性。实体完整性由主键保证；域完整性约束属性的取值范围。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">5. SELECT 语句中，与关系代数"投影"运算对应的是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. WHERE 子句</li><li>B. FROM 子句</li>
+            <li>C. SELECT 后的列名列表</li><li>D. GROUP BY 子句</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：C</span>
+            <div class="ans-explanation">SELECT 列名对应投影（π，选列）；WHERE 子句对应选择（σ，选行）；FROM 子句指定关系来源。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">6. 数据库系统的三级模式结构不包括（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 外模式</li><li>B. 模式</li><li>C. 内模式</li><li>D. 概念模式（注：三级中模式即概念模式）——正确选项应为：存储模式不是独立一级</li>
+        </ul>
+        <p style="margin-top:4px;color:var(--ink-light);">重新表述：以下哪项不属于ANSI/SPARC三级模式结构？</p>
+        <ul class="options">
+            <li>A. 外模式（用户模式）</li><li>B. 概念模式（模式）</li>
+            <li>C. 内模式（存储模式）</li><li>D. 物理模式（独立于内模式的层级）</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：D</span>
+            <div class="ans-explanation">三级模式为外模式、概念模式（模式）、内模式。物理模式包含在内模式中，不存在独立的"物理模式"层级。外模式/模式映像保证逻辑独立性，模式/内模式映像保证物理独立性。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">7. 设关系R有m个元组，关系S有n个元组，则R × S（笛卡尔积）的元组数为（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. m + n</li><li>B. m − n</li><li>C. m × n</li><li>D. max(m, n)</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：C</span>
+            <div class="ans-explanation">笛卡尔积是两关系的无连接条件的全组合，每个R元组与每个S元组配对，因此结果元组数 = m × n，属性数 = R属性数 + S属性数。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">8. SQL中，HAVING子句的作用是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 对分组前数据进行筛选</li><li>B. 对分组后数据进行筛选</li>
+            <li>C. 对查询结果排序</li><li>D. 限制返回行数</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B</span>
+            <div class="ans-explanation">WHERE 在分组前筛选行，HAVING 在 GROUP BY 分组后对分组结果进行条件过滤。ORDER BY 用于排序，LIMIT/TOP 用于限制行数。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">9. E-R模型中的"联系"（Relationship）在关系数据库中通常转换为（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 索引</li><li>B. 视图</li><li>C. 关系（表）或外键</li><li>D. 触发器</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：C</span>
+            <div class="ans-explanation">E-R图转换为关系模式时：实体→表；1:1和1:N联系可与任一端实体合并或独立成表；M:N联系必须转换为独立的关系表。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">10. 若关系模式 R(A,B,C) 的函数依赖为 A→B, B→C，则R最高属于（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 1NF</li><li>B. 2NF</li><li>C. 3NF</li><li>D. BCNF</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B</span>
+            <div class="ans-explanation">A是候选键，A→B, B→C。存在传递依赖 A→B→C，C传递依赖于候选键A，违反3NF。无部分依赖（A是单属性），满足2NF。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">11. 视图（View）在数据库中的作用，以下说法错误的是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 简化复杂查询</li><li>B. 提供数据安全性</li>
+            <li>C. 视图本身存储数据</li><li>D. 提供逻辑数据独立性</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：C</span>
+            <div class="ans-explanation">视图是虚拟表，不存储数据，只保存查询定义。数据仍存储在基表中。物化视图是例外（会存储数据）。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">12. 关于聚集索引和非聚集索引，以下说法正确的是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 一张表可以有多个聚集索引</li>
+            <li>B. 聚集索引的叶子节点存储数据页</li>
+            <li>C. 非聚集索引改变数据的物理存储顺序</li>
+            <li>D. 聚集索引和非聚集索引结构完全相同</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B</span>
+            <div class="ans-explanation">聚集索引叶子节点即数据页，决定了数据的物理存储顺序，因此一张表只能有一个聚集索引。非聚集索引叶子节点存储指向数据行的指针（或聚集键值）。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">13. Armstrong公理系统中，伪传递律可表示为（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 若 X→Y, Y→Z 则 X→Z</li>
+            <li>B. 若 X→Y, WY→Z 则 WX→Z</li>
+            <li>C. 若 X→Y 则 XZ→YZ</li>
+            <li>D. 若 X→Y, X→Z 则 X→YZ</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B</span>
+            <div class="ans-explanation">A是传递律（A3），B是伪传递律（由A1自反律+A2增广律+A3导出），C是增广律（A2），D是合并律（导出规则）。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">14. SQL中，INNER JOIN 和 LEFT OUTER JOIN 的区别是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 性能不同</li><li>B. LEFT JOIN 会保留左表所有行，不匹配时右表填NULL</li>
+            <li>C. INNER JOIN 不支持多表连接</li><li>D. 没有区别</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B</span>
+            <div class="ans-explanation">INNER JOIN 只返回两表匹配的行；LEFT JOIN 保留左表所有行，右表无匹配时对应列填NULL；RIGHT JOIN 保留右表所有行；FULL JOIN 保留两表所有行。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">15. 关系代数表达式 σ<sub>age&gt;20</sub>(π<sub>name,age</sub>(Student))，以下说法正确的是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 先选择后投影</li><li>B. 先投影后选择</li>
+            <li>C. 选择操作不需要 age 属性</li><li>D. 该表达式等价于先选择再投影</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B（该表达式中先投影后选择，等价于先选择再投影因为选择条件涉及的列在投影中保留）</span>
+            <div class="ans-explanation">表达式结构：外层σ在π结果上操作，即先投影再选择。但由于选择条件 age>20 涉及的 age 列在投影中被保留，该表达式等价于 σ(age>20)∘π(name,age)，且可优化为先选择后投影以减少中间结果。</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<h2>二、填空题（本大题共10空，每空2分，共20分）</h2>
+<!-- ============================================================ -->
+
+<div class="question">
+    <div class="q-header">16. 数据库系统的三级模式结构为外模式、__________ 和内模式。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：模式（概念模式）</span>
+            <div class="ans-explanation">ANSI/SPARC三级模式：外模式（用户视图）、概念模式（全局逻辑结构）、内模式（物理存储结构）。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">17. 关系模型中，每一行称为一个__________，每一列称为一个属性。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：元组（Tuple）</span>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">18. SQL的数据定义语言（DDL）主要包括 CREATE、__________ 和 DROP 三种操作。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：ALTER</span>
+            <div class="ans-explanation">DDL：CREATE（创建）、ALTER（修改）、DROP（删除）。DML：INSERT、UPDATE、DELETE、SELECT。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">19. 关系代数的选择运算记为__________，投影运算记为π。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：σ（sigma）</span>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">20. 如果关系模式R的每个分量都是不可分的数据项，则称R属于__________范式。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：第一范式（1NF）</span>
+            <div class="ans-explanation">1NF的定义：关系模式R的所有属性都是原子的（不可再分）。这是关系模式的最基本要求。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">21. E-R图中，实体用__________形表示，联系用菱形表示，属性用椭圆形表示。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：矩（长方）</span>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">22. 在SQL中，使用__________关键字可以去除查询结果中的重复行。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：DISTINCT</span>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">23. 关系代数中，自然连接（Natural Join）要求两个关系具有__________。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：公共属性（同名的属性）</span>
+            <div class="ans-explanation">自然连接自动在公共属性上做等值连接，并去除重复列。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">24. 关系模式的规范化程度通常用__________来衡量，包括1NF、2NF、3NF、BCNF、4NF等。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：范式（Normal Form）</span>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">25. SQL中，__________约束用于确保某列（或列组）的值在表中唯一且非空。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：PRIMARY KEY（主键）</span>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<h2>三、判断题（本大题共10小题，每小题1分，共10分）</h2>
+<!-- ============================================================ -->
+
+<div class="question">
+    <div class="q-header">26. 数据库系统的数据独立性包括逻辑独立性和物理独立性。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✓（正确）</span>
+            <div class="ans-explanation">逻辑独立性：模式改变时无需修改外模式/应用程序；物理独立性：内模式改变时无需修改模式。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">27. 在关系代数中，自然连接等价于等值连接。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✗（错误）</span>
+            <div class="ans-explanation">自然连接自动在所有公共属性上做等值连接并去除重复列；而等值连接需要显式指定条件，且不自动去除重复列。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">28. GROUP BY 子句必须与聚合函数一起使用。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✗（错误）</span>
+            <div class="ans-explanation">GROUP BY 可以单独使用（去重效果类似DISTINCT），但通常与聚合函数（COUNT, SUM, AVG, MAX, MIN）搭配使用才有意义。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">29. 候选键（Candidate Key）可以有多个，但主键（Primary Key）只能有一个。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✓（正确）</span>
+            <div class="ans-explanation">一个关系可以有多个候选键（都能唯一标识元组），但只能选择一个作为主键，其余的称为替代键（Alternate Key）。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">30. BCNF范式一定满足3NF，但3NF不一定满足BCNF。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✓（正确）</span>
+            <div class="ans-explanation">范式级别：1NF ⊃ 2NF ⊃ 3NF ⊃ BCNF ⊃ 4NF。BCNF比3NF更严格，消除了所有非平凡函数依赖中决定因素不是候选键的情况。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">31. NULL值在SQL中表示0或空字符串。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✗（错误）</span>
+            <div class="ans-explanation">NULL 表示"未知"或"不存在"的值，不等于0、空字符串或任何其他值。涉及NULL的比较运算结果通常为 UNKNOWN。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">32. E-R图中的弱实体必须依赖强实体而存在。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✓（正确）</span>
+            <div class="ans-explanation">弱实体没有自己的主键，必须通过与强实体的标识性联系（identifying relationship）来唯一标识，其主键 = 强实体主键 + 部分键。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">33. 索引一定能提高查询效率，建得越多越好。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✗（错误）</span>
+            <div class="ans-explanation">索引在加速查询的同时会降低增删改的性能（需要维护索引），且占用额外存储空间。过多索引反而可能使优化器选错执行计划。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">34. UNION 和 UNION ALL 的区别在于前者自动去重。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✓（正确）</span>
+            <div class="ans-explanation">UNION 合并结果集并自动去除重复行（排序去重），UNION ALL 保留所有行（包括重复），性能更好。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">35. 关系模型中的实体完整性规则要求主键的任何属性都不能取空值。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✓（正确）</span>
+            <div class="ans-explanation">实体完整性规则：若属性A是基本关系R的主属性，则A不能取空值。这确保了每个实体可被唯一标识。</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<h2>四、简答题（本大题共3小题，每小题6分，共18分）</h2>
+<!-- ============================================================ -->
+
+<div class="question">
+    <div class="q-header">36. 简述数据库系统的三级模式结构，并说明两级映像如何保证数据独立性。（6分）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">参考答案：</span>
+            <div class="ans-explanation">
+                <strong>三级模式：</strong><br>
+                ① <strong>外模式（子模式/用户模式）</strong>：数据库用户能看见和使用的局部数据的逻辑结构和特征描述。<br>
+                ② <strong>模式（概念模式/逻辑模式）</strong>：数据库中全体数据的逻辑结构和特征的描述，是所有用户的公共数据视图。<br>
+                ③ <strong>内模式（存储模式）</strong>：数据物理结构和存储方式的描述。<br><br>
+                <strong>两级映像：</strong><br>
+                ① <strong>外模式/模式映像</strong>：定义外模式与模式之间的对应关系。当模式改变时，DBA修改映像使外模式不变 → 保证<strong>逻辑数据独立性</strong>。<br>
+                ② <strong>模式/内模式映像</strong>：定义模式与内模式之间的对应关系。当内模式（存储结构）改变时，DBA修改映像使模式不变 → 保证<strong>物理数据独立性</strong>。
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">37. 解释什么是函数依赖，并举例说明部分函数依赖和传递函数依赖的区别。（6分）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">参考答案：</span>
+            <div class="ans-explanation">
+                <strong>函数依赖：</strong>设R(U)是属性集U上的关系模式，X,Y ⊆ U。若对于R的任意可能关系r，r中不存在两个元组在X上相等而在Y上不等，则称"X函数确定Y"或"Y函数依赖于X"，记作 X→Y。<br><br>
+                <strong>部分函数依赖：</strong>X→Y，但存在X的真子集X'使得X'→Y也成立。<br>
+                <em>例：</em>关系模式R(学号, 课程号, 姓名, 成绩)，主键(学号, 课程号)。有(学号, 课程号)→姓名，但学号→姓名也成立（姓名只依赖主键的一部分），故姓名为部分依赖。<br><br>
+                <strong>传递函数依赖：</strong>X→Y, Y→Z, 且 Y↛X（Y不函数确定X），Z不是X和Y的子集。<br>
+                <em>例：</em>R(学号, 系号, 系主任)，学号→系号, 系号→系主任。系主任通过系号传递依赖于学号，故为传递依赖。
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">38. 简述E-R图转换为关系模式的基本原则（至少说明实体、1:1联系、1:N联系、M:N联系的转换方法）。（6分）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">参考答案：</span>
+            <div class="ans-explanation">
+                ① <strong>实体 → 关系模式：</strong>每个实体类型转换为一个关系模式，实体属性即为关系属性，实体码即为关系码。<br><br>
+                ② <strong>1:1 联系：</strong>可与任一端实体合并，将另一端实体的码和联系本身的属性加入。也可单独成表。<br><br>
+                ③ <strong>1:N 联系：</strong>可与N端实体合并，将1端实体的码和联系属性加入N端的关系模式中。也可单独成表。<br><br>
+                ④ <strong>M:N 联系：</strong>必须转换为一个独立的关系模式，包含两端实体的码作为外键（两者共同作为主键），以及联系本身的属性。<br><br>
+                ⑤ <strong>弱实体：</strong>转换为独立关系模式，其主键由所依赖的强实体主键 + 弱实体的部分键组成。
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<h2>五、SQL查询与综合题（本大题共2小题，共22分）</h2>
+<!-- ============================================================ -->
+
+<div class="question">
+    <div class="q-header">39. 设有以下关系模式（12分）</div>
+    <div class="q-body">
+        <p><strong>Student</strong>(Sno, Sname, Ssex, Sage, Sdept) — 学生表</p>
+        <p><strong>Course</strong>(Cno, Cname, Cpno, Ccredit) — 课程表（Cpno为先修课号）</p>
+        <p><strong>SC</strong>(Sno, Cno, Grade) — 选课表</p>
+        <p>请写出以下SQL查询：</p>
+        <p>(1) 查询"计算机系"（CS）所有学生的学号和姓名。（2分）</p>
+        <p>(2) 查询选修了课程号"C01"的学生的学号和成绩，按成绩降序排列。（2分）</p>
+        <p>(3) 查询选修了"数据库原理"课程的学生姓名。（3分）</p>
+        <p>(4) 查询选修了全部课程的学生学号和姓名。（5分）</p>
+
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">参考答案：</span>
+            <div class="ans-explanation">
+                <strong>(1)</strong>
+                <div class="sql-code">SELECT Sno, Sname FROM Student WHERE Sdept = 'CS';</div>
+
+                <strong>(2)</strong>
+                <div class="sql-code">SELECT Sno, Grade FROM SC WHERE Cno = 'C01' ORDER BY Grade DESC;</div>
+
+                <strong>(3)</strong>
+                <div class="sql-code">SELECT Sname FROM Student
+WHERE Sno IN (
+    SELECT SC.Sno FROM SC
+    JOIN Course ON SC.Cno = Course.Cno
+    WHERE Course.Cname = '数据库原理'
+);</div>
+
+                <strong>(4)</strong> — 查询选修了全部课程的学生（除法）
+                <div class="sql-code">SELECT Sno, Sname FROM Student
+WHERE NOT EXISTS (
+    SELECT * FROM Course
+    WHERE NOT EXISTS (
+        SELECT * FROM SC
+        WHERE SC.Sno = Student.Sno
+          AND SC.Cno = Course.Cno
+    )
+);</div>
+                <p style="margin-top:8px;color:var(--ink-light);">解析：(4)用了双重NOT EXISTS实现关系除法的语义——不存在某门课该学生没有选。</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">40. 设有关系模式 R(A, B, C, D, E)，函数依赖集 F = {A→BC, B→D, D→E}。（10分）</div>
+    <div class="q-body">
+        <p>(1) 求属性集A关于F的闭包 A<sub>F</sub><sup>+</sup>。（3分）</p>
+        <p>(2) 判断R属于第几范式，并说明理由。（3分）</p>
+        <p>(3) 若R不属于BCNF，请将其分解为满足BCNF的关系模式集合。（4分）</p>
+
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">参考答案：</span>
+            <div class="ans-explanation">
+                <strong>(1) 求闭包 A<sup>+</sup>：</strong><br>
+                初始：X = {A}<br>
+                A→BC → X = {A,B,C}<br>
+                B→D → X = {A,B,C,D}<br>
+                D→E → X = {A,B,C,D,E} = U<br>
+                <strong>A<sup>+</sup> = {A,B,C,D,E} = U</strong>，因此A是候选键。<br><br>
+
+                <strong>(2) 范式判断：</strong><br>
+                候选键：A<br>
+                检查BCNF：对每个非平凡FD X→Y，X是否为超键？<br>
+                - A→BC ✓（A是候选键）<br>
+                - B→D ✗（B不是超键，B<sup>+</sup>={B,D,E} ≠ U）<br>
+                - D→E ✗（D不是超键，D<sup>+</sup>={D,E} ≠ U）<br>
+                存在B→D违反BCNF，但检查是否违反3NF：B→D中D不是主属性（主属性只有A），违反了3NF（非主属性D依赖于非候选键B）。<br>
+                <strong>R ∈ 2NF</strong>（无部分依赖，因为A是单属性候选键）。<br><br>
+
+                <strong>(3) BCNF分解：</strong><br>
+                先处理违反BCNF的FD：B→D<br>
+                R1(B,D) + R2(A,B,C,E) — 因为B<sup>+</sup>={B,D,E}，分解为(B,D,E)和(A,B,C)<br>
+                实际上：R1(B,D,E)，F1={B→D, D→E}；R2(A,B,C)，F2={A→BC}<br>
+                检查R1：候选键B，D→E违反BCNF，继续分解 → R11(D,E)，R12(B,D)<br>
+                最终BCNF分解：<strong>{R1(D,E), R2(B,D), R3(A,B,C)}</strong><br>
+                （也可写为 {R1(B,C), R2(B,D), R3(D,E), R4(A,B)} 等，BCNF分解不唯一，关键是保持无损连接。）
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Navigation -->
+<div class="nav">
+    <a href="index.html">← 返回总目录</a>
+    <span>试卷1/3</span>
+    <a href="期末试卷2_事务与恢复.html">试卷2：事务与恢复 →</a>
+</div>
+
+<div class="footer">
+    <p>模拟试卷1 · 数据库基础与查询 · 基于四川大学历年题型编制</p>
+    <p>Generated by ExamPass Assistant · 2026-06-27</p>
+</div>
+
+<script>
+function toggleAns(btn) {
+    var block = btn.nextElementSibling;
+    if (block) {
+        block.classList.toggle('show');
+        btn.textContent = block.classList.contains('show') ? '隐藏答案' : '显示答案';
+    }
+}
+function toggleAll() {
+    var blocks = document.querySelectorAll('.answer-block');
+    var btns = document.querySelectorAll('.question .btn');
+    var allShown = true;
+    blocks.forEach(function(b) { if (!b.classList.contains('show')) allShown = false; });
+    blocks.forEach(function(b) { if (allShown) b.classList.remove('show'); else b.classList.add('show'); });
+    btns.forEach(function(b) {
+        var blk = b.nextElementSibling;
+        if (blk) b.textContent = (allShown ? '显示答案' : '隐藏答案');
+    });
+}
+function scrollToAnswers() {
+    window.scrollTo(0, document.body.scrollHeight);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模拟试卷3：综合模拟 - 四川大学数据库原理</title>
+    <style>
+        :root {
+            --paper: #fdf6e3; --ink: #2c2c2c; --ink-light: #555;
+            --accent: #7c3aed; --divider: #d6c8a8; --radius: 8px;
+            --green: #166534; --red: #991b1b;
+            --card-bg: #fef9ef; --card-border: #e8dcc8;
+            --ans-bg: #f0fdf4; --ans-border: #86efac;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: "Microsoft YaHei", "Noto Sans SC", "SimSun", sans-serif;
+            font-size: 13pt; line-height: 1.85; color: var(--ink);
+            max-width: 860px; margin: auto; padding: 24px 20px 60px;
+            background: var(--paper);
+        }
+        h1 { font-size: 1.7em; text-align: center; border-bottom: 2px solid var(--divider); padding-bottom: 12px; margin-bottom: 8px; color: var(--accent); }
+        h2 { font-size: 1.2em; margin-top: 32px; color: var(--accent); border-left: 4px solid var(--accent); padding-left: 10px; }
+        .subtitle { text-align: center; color: var(--ink-light); font-size: 0.95em; margin-bottom: 24px; }
+        .meta { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-bottom: 20px; font-size: 0.9em; color: var(--ink-light); }
+        .meta span { background: var(--card-bg); border: 1px solid var(--card-border); padding: 4px 12px; border-radius: 4px; }
+
+        .question { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 16px 20px; margin: 12px 0; }
+        .question .q-header { font-weight: 700; color: var(--accent); margin-bottom: 8px; font-size: 1.02em; }
+        .question .q-body { padding-left: 8px; }
+        .options { list-style: none; padding: 0; }
+        .options li { padding: 3px 0 3px 8px; }
+
+        .answer-block { margin: 10px 0 0 0; border-top: 1px dashed var(--divider); padding-top: 10px; display: none; }
+        .answer-block.show { display: block; }
+        .answer-block .ans-label { font-weight: 700; color: var(--green); }
+        .answer-block .ans-explanation { color: var(--ink-light); font-size: 0.88em; background: var(--ans-bg); border: 1px solid var(--ans-border); border-radius: 4px; padding: 8px 12px; margin-top: 6px; }
+
+        .btn { display: inline-block; padding: 6px 18px; border-radius: 4px; font-size: 0.9em; font-weight: 600; cursor: pointer; border: 1px solid var(--divider); background: #fff; color: var(--accent); margin: 4px; transition: all 0.2s; }
+        .btn:hover { background: #ede9fe; }
+        .btn-all { background: var(--accent); color: #fff; border-color: var(--accent); }
+        .btn-all:hover { background: #6d28d9; }
+
+        .nav { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius); padding: 14px 20px; margin-top: 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .nav a { color: var(--accent); text-decoration: none; font-weight: 600; }
+        .nav a:hover { text-decoration: underline; }
+
+        .footer { text-align: center; margin-top: 28px; font-size: 0.85em; color: var(--ink-light); }
+
+        .sql-code { background: #1e293b; color: #e2e8f0; padding: 12px 16px; border-radius: 6px; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.88em; overflow-x: auto; margin: 8px 0; white-space: pre; line-height: 1.6; }
+        .inline-code { background: #f1f5f9; color: #be123c; padding: 1px 6px; border-radius: 3px; font-family: 'Consolas', monospace; font-size: 0.92em; }
+
+        table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+        th, td { border: 1px solid var(--divider); padding: 6px 10px; text-align: center; font-size: 0.9em; }
+        th { background: var(--card-bg); }
+
+        @media (max-width: 600px) {
+            body { padding: 12px 10px; font-size: 12pt; }
+            h1 { font-size: 1.3em; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>📄 模拟试卷三：综合模拟</h1>
+<p class="subtitle">四川大学《数据库系统原理》期末模拟卷（全知识点覆盖）</p>
+<div class="meta">
+    <span>⏱ 120分钟</span><span>📊 满分100分</span><span>📅 模拟卷</span>
+</div>
+
+<div style="text-align:center;margin-bottom:24px;">
+    <button class="btn btn-all" onclick="toggleAll()">展开/收起 全部答案</button>
+</div>
+
+<!-- ============================================================ -->
+<h2>一、单项选择题（本大题共15小题，每小题2分，共30分）</h2>
+<!-- ============================================================ -->
+
+<div class="question">
+    <div class="q-header">1. 数据库管理系统（DBMS）是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 一个完整的数据库应用系统</li><li>B. 一组硬件设备</li>
+            <li>C. 位于用户和操作系统之间的一层数据管理软件</li>
+            <li>D. 一种操作系统</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：C</span>
+            <div class="ans-explanation">DBMS是管理和维护数据库的系统软件，位于用户/应用程序与操作系统之间。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">2. 概念模型最常用的表示方法是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 关系模型</li><li>B. 层次模型</li>
+            <li>C. E-R模型（实体-联系模型）</li><li>D. 网状模型</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：C</span>
+            <div class="ans-explanation">E-R模型（Entity-Relationship Model）由陈品山（Peter Chen）提出，是概念设计阶段最常用的工具。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">3. 关系模式 R(A,B,C) 中，候选键为 (A,B)，函数依赖有 A→C。则R最高属于（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 1NF</li><li>B. 2NF</li><li>C. 3NF</li><li>D. BCNF</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：A</span>
+            <div class="ans-explanation">候选键为(A,B)，但A→C成立，C部分依赖于候选键(A,B)中的A。存在非主属性C对候选键的部分依赖 → 违反2NF，因此R ∈ 1NF。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">4. 以下SQL语句中，属于DCL（数据控制语言）的是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. SELECT</li><li>B. INSERT</li>
+            <li>C. GRANT</li><li>D. CREATE</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：C</span>
+            <div class="ans-explanation">GRANT（授权）和 REVOKE（收回权限）属于DCL。SELECT/INSERT/UPDATE/DELETE属于DML，CREATE/ALTER/DROP属于DDL。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">5. 关系代数中，除法运算（÷）常用来回答（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. "所有…都…"类查询</li><li>B. 条件筛选</li>
+            <li>C. 笛卡尔积</li><li>D. 分组聚合</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：A</span>
+            <div class="ans-explanation">除法运算：R÷S 的结果是R中那些与S中所有元组都有关联的X值（R属性集减去S属性集），典型问题如"查询选修了全部课程的学生"。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">6. 关于B+树索引，以下说法错误的是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. B+树的所有叶子节点在同一层</li><li>B. B+树的非叶子节点存储数据记录</li>
+            <li>C. B+树支持范围查询</li><li>D. B+树叶子节点通过指针链接</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B</span>
+            <div class="ans-explanation">B+树中，非叶子节点只存储索引键值和子节点指针，所有数据记录存储在叶子节点中。B树的非叶子节点也可存储数据。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">7. 事务从失败状态可以进入的状态是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 活动状态</li><li>B. 部分提交状态</li>
+            <li>C. 中止状态</li><li>D. 提交状态</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：C</span>
+            <div class="ans-explanation">事务状态转换：活动→（最后一条语句执行完→）部分提交→（成功完成→）提交；任何阶段出错→失败→（回滚→）中止。失败状态只能进入中止状态。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">8. 以下哪种并发控制技术使用时间戳来保证可串行化？（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 两段锁协议（2PL）</li><li>B. 时间戳排序协议（Timestamp Ordering）</li>
+            <li>C. 多版本并发控制（MVCC）</li><li>D. 意向锁</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B</span>
+            <div class="ans-explanation">时间戳排序协议给每个事务分配时间戳，强制冲突操作按时间戳顺序执行。2PL用锁，MVCC用多版本，意向锁是多粒度锁的辅助机制。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">9. No-Force策略意味着（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 事务提交时必须将所有脏页写入磁盘</li><li>B. 事务提交时不必将所有脏页立即写入磁盘</li>
+            <li>C. 未提交的数据不能写入磁盘</li><li>D. 数据库不使用日志</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B</span>
+            <div class="ans-explanation">No-Force：提交时脏页可以留在内存中不立即刷盘，提高性能。但崩溃后需要REDO已提交事务。Force：提交时必须刷盘，简化恢复但降低性能。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">10. 以下哪个不是ER模型中实体的属性类型？（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 简单属性</li><li>B. 复合属性</li>
+            <li>C. 多值属性</li><li>D. 递归属性</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：D</span>
+            <div class="ans-explanation">ER模型中属性的分类：简单/复合、单值/多值、存储/派生、NULL属性。"递归"描述的是联系类型（recursive relationship），不是属性类型。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">11. 设有关系 R(A,B) 和 S(B,C)，R⋈S（自然连接）结果的属性个数是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 2</li><li>B. 3</li><li>C. 4</li><li>D. 5</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B</span>
+            <div class="ans-explanation">自然连接：在公共属性B上做等值连接，并去除重复列B。结果属性 = R的属性 + S的属性 - 公共属性 = 2 + 2 - 1 = 3，即{A, B, C}。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">12. 意向锁（IS, IX, SIX）主要用于（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 单粒度封锁</li><li>B. 多粒度封锁</li>
+            <li>C. 死锁检测</li><li>D. 时间戳排序</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B</span>
+            <div class="ans-explanation">多粒度封锁允许在不同粒度级别（数据库、表、页、行）加锁。意向锁用于高层节点标记低层节点已有锁，避免逐层检查。IS=意向共享，IX=意向排他，SIX=共享意向排他。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">13. 关于日志的UNDO规则，以下描述正确的是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. UNDO时从前往后扫描日志</li>
+            <li>B. UNDO操作本身不需要记录日志</li>
+            <li>C. UNDO时数据项恢复为旧值V1</li>
+            <li>D. UNDO只对已提交事务执行</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：C</span>
+            <div class="ans-explanation">UNDO：从后往前扫描，数据项赋旧值V1，针对未提交事务。REDO：从前往后扫描，数据项赋新值V2，针对已提交事务。UNDO操作本身也会写CLR（补偿日志记录）。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">14. HNSW（Hierarchical Navigable Small World）算法属于以下哪类ANN策略？（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 基于树的索引</li><li>B. 基于哈希的索引</li>
+            <li>C. 基于图的索引</li><li>D. 基于量化的索引</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：C</span>
+            <div class="ans-explanation">ANN四大策略：①基于树（如KD-Tree、Annoy）②基于哈希（LSH）③基于量化（PQ、IVF）④基于图（HNSW、NSW）。HNSW构建多层图结构，是目前最流行的ANN算法之一。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">15. 数据库范式从低到高的正确顺序是（　）</div>
+    <div class="q-body">
+        <ul class="options">
+            <li>A. 1NF → 3NF → 2NF → BCNF</li><li>B. 1NF → 2NF → 3NF → BCNF → 4NF</li>
+            <li>C. BCNF → 3NF → 2NF → 1NF</li><li>D. 2NF → 1NF → 3NF → BCNF</li>
+        </ul>
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：B</span>
+            <div class="ans-explanation">范式严格递进：1NF（原子值）⊃ 2NF（消除部分依赖）⊃ 3NF（消除传递依赖）⊃ BCNF（所有决定因素都是候选键）⊃ 4NF（消除多值依赖）。</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<h2>二、填空题（本大题共10空，每空2分，共20分）</h2>
+<!-- ============================================================ -->
+
+<div class="question">
+    <div class="q-header">16. 数据库系统的数据独立性分为__________独立性和__________独立性。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：逻辑、物理</span>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">17. SQL中，与关系代数选择运算σ对应的子句是__________。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：WHERE</span>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">18. 函数依赖的Armstrong公理系统包括自反律、__________和传递律三条基本公理。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：增广律（Augmentation）</span>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">19. 在SQL中，使用__________语句可以创建视图。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：CREATE VIEW</span>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">20. 封锁的粒度越__________（大/小），并发度越高，但系统开销也越大。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：小</span>
+            <div class="ans-explanation">封锁粒度越小（如行级锁），并发度越高，但锁管理开销越大。粒度越大（如表级锁），并发度越低，但开销小。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">21. ER图中，弱实体用__________边框的矩形表示。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：双线（Double-line）</span>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">22. 如果关系模式 R ∈ BCNF，则 R 一定属于__________范式，但反之不一定成立。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：第三（3NF）</span>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">23. 死锁的四个必要条件包括：互斥条件、__________、不剥夺条件和循环等待条件。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：请求和保持（Hold and Wait）</span>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">24. 向量数据库中，__________索引通过将向量空间划分为多个单元（cell/Voronoi区域）来加速搜索。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：IVF（Inverted File Index / 倒排文件索引）</span>
+            <div class="ans-explanation">IVF先用K-Means聚类将向量空间划分为多个Voronoi区域，查询时只搜索最近的几个聚类中心所在的区域。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">25. ARIES恢复算法中，__________记录用于记录UNDO操作本身，保证恢复过程的幂等性。</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：CLR（Compensation Log Record / 补偿日志记录）</span>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<h2>三、判断题（本大题共10小题，每小题1分，共10分）</h2>
+<!-- ============================================================ -->
+
+<div class="question">
+    <div class="q-header">26. 关系数据库中的"关系"指的是表与表之间的联系。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✗（错误）</span>
+            <div class="ans-explanation">关系模型中的"关系"就是一张二维表（Table），是元组的集合。表之间的联系通过外键来实现。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">27. 子查询的效率一定比连接查询高。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✗（错误）</span>
+            <div class="ans-explanation">子查询（特别是相关子查询）可能效率更低，优化器常将子查询转换为连接（JOIN）执行。应具体分析执行计划，不能一概而论。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">28. 数据库的物理独立性是指当内模式改变时，模式和外模式可以保持不变。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✓（正确）</span>
+            <div class="ans-explanation">物理独立性由模式/内模式映像保证：当存储结构（内模式）改变时，只需修改模式/内模式映像，模式和外模式不变。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">29. 一个关系可以有多个候选键，但只能有一个主键。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✓（正确）</span>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">30. 多值依赖 X→→Y 表示X的一个值对应Y的一组值，且与Z（U-X-Y）无关。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✓（正确）</span>
+            <div class="ans-explanation">多值依赖定义：R(U)中，X→→Y当且仅当给定X值，Y的取值集合与Z=U-X-Y的取值无关。多值依赖可能导致4NF以下范式存在冗余。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">31. COMMIT 语句执行后，事务的所有修改立即写入磁盘。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✗（错误）</span>
+            <div class="ans-explanation">在No-Force策略下，COMMIT只保证日志写入磁盘（WAL），数据页可能延迟写入。只要日志持久化，崩溃后可通过REDO恢复已提交事务。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">32. 查询优化中，"先选择后连接"是常用的启发式规则之一。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✓（正确）</span>
+            <div class="ans-explanation">关系代数优化启发式规则：①尽早执行选择（σ下推）②尽早执行投影（π下推）③选择与笛卡尔积合并为连接④公共子表达式消除。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">33. Embedding（向量嵌入）是将非结构化数据（文本、图像等）映射到高维向量空间的技术。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✓（正确）</span>
+            <div class="ans-explanation">Embedding通过深度学习模型将非结构化数据映射为固定维度的稠密向量，语义相近的对象在向量空间中距离较近。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">34. SQL标准中，事务的默认隔离级别是 Serializable。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✗（错误）</span>
+            <div class="ans-explanation">SQL标准定义的默认级别因DBMS而异：MySQL默认为Repeatable Read，PostgreSQL默认为Read Committed，Oracle默认为Read Committed。</div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">35. 检查点（Checkpoint）越频繁，系统恢复时间越短，但正常运行时开销越大。（　）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">答案：✓（正确）</span>
+            <div class="ans-explanation">检查点越频繁，需要REDO的日志越少，恢复越快；但频繁刷盘会增加正常运行时I/O开销。需要在恢复时间和运行性能之间权衡。</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<h2>四、简答题（本大题共3小题，共18分）</h2>
+<!-- ============================================================ -->
+
+<div class="question">
+    <div class="q-header">36. 解释关系的三类完整性约束，并各举一例。（6分）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">参考答案：</span>
+            <div class="ans-explanation">
+                <strong>① 实体完整性（Entity Integrity）：</strong>主键的属性值不能为空。<br>
+                <em>例：</em>Student表中Sno为主键，任何学生记录必须有学号。<br><br>
+                <strong>② 参照完整性（Referential Integrity）：</strong>外键的值必须是被参照关系中主键的有效值或为空。<br>
+                <em>例：</em>SC表中的Sno必须存在于Student表中，不能引用不存在的学生。<br><br>
+                <strong>③ 用户自定义完整性（User-defined Integrity）：</strong>用户根据应用需求定义的约束。<br>
+                <em>例：</em>成绩Grade必须在0~100之间，性别只能为'男'或'女'。
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">37. 什么是丢失修改（Lost Update）？请给出一个具体的调度示例，并说明2PL如何防止该问题。（6分）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">参考答案：</span>
+            <div class="ans-explanation">
+                <strong>丢失修改：</strong>两个事务并发读取同一数据、各自修改后写回，后写回的事务覆盖了前一个事务的修改。<br><br>
+                <strong>示例调度：</strong><br>
+                T1: R(A=100), A=A-30, W(A=70)<br>
+                T2: R(A=100), A=A-50, W(A=50)<br>
+                最终A=50，T1的修改丢失了。正确结果应为A=20（100-30-50）。<br><br>
+                <strong>2PL如何防止：</strong><br>
+                在2PL下，T1修改A前必须先获取X锁，T2在T1释放锁之前无法获取X锁，因此T2必须等T1提交后才能读取和修改A。调度变为串行执行，避免了丢失修改。
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">38. 简述数据库设计中概念结构设计和逻辑结构设计的主要任务和常用工具。（6分）</div>
+    <div class="q-body">
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">参考答案：</span>
+            <div class="ans-explanation">
+                <strong>概念结构设计：</strong><br>
+                任务：将用户需求抽象为信息世界结构（概念模型），独立于具体DBMS。<br>
+                工具：E-R图（实体-联系图），UML类图。<br>
+                方法：自顶向下、自底向上、由里向外、混合策略。<br><br>
+                <strong>逻辑结构设计：</strong><br>
+                任务：将概念模型转换为特定DBMS支持的数据模型（如关系模型）。<br>
+                工具：E-R图转关系模式规则、规范化理论。<br>
+                步骤：①E-R图→关系模式 ②关系模式规范化 ③模式评价与优化。
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================ -->
+<h2>五、综合应用题（本大题共2小题，共22分）</h2>
+<!-- ============================================================ -->
+
+<div class="question">
+    <div class="q-header">39. ER图与关系模式设计（12分）</div>
+    <div class="q-body">
+        <p>某图书馆管理系统需求如下：</p>
+        <ul style="padding-left:20px;margin-bottom:8px;">
+            <li>每个读者有借书证号、姓名、单位；</li>
+            <li>每本图书有书号、书名、作者、出版社；</li>
+            <li>每本图书由出版社出版，一个出版社可出版多种图书，出版社有出版社编号、名称、地址；</li>
+            <li>读者可以借阅图书，需记录借阅日期和应还日期；</li>
+            <li>同一种书可能有多个复本，每个复本有唯一的条形码和状态（在馆/借出）。</li>
+        </ul>
+        <p>(1) 画出该系统的E-R图（只需描述实体、属性和联系类型）。（6分）</p>
+        <p>(2) 将E-R图转换为关系模式，标注主键和外键。（6分）</p>
+
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">参考答案：</span>
+            <div class="ans-explanation">
+                <strong>(1) E-R图描述：</strong><br><br>
+                实体：<br>
+                <strong>读者</strong>（借书证号, 姓名, 单位）— 主键：借书证号<br>
+                <strong>图书</strong>（书号, 书名, 作者）— 主键：书号<br>
+                <strong>出版社</strong>（出版社编号, 名称, 地址）— 主键：出版社编号<br>
+                <strong>复本</strong>（条形码, 状态）— 弱实体，依赖图书<br><br>
+                联系：<br>
+                - 出版社 <strong>出版</strong> 图书：1:N（一个出版社出版多种图书）<br>
+                - 读者 <strong>借阅</strong> 复本：M:N（需记录借阅日期、应还日期）<br>
+                - 图书 <strong>拥有</strong> 复本：1:N（标识性联系，复本为弱实体）<br><br>
+
+                <strong>(2) 关系模式：</strong><br>
+                <strong>Reader</strong>(<u>Rno</u>, Rname, Rdept)<br>
+                <strong>Publisher</strong>(<u>Pno</u>, Pname, Paddr)<br>
+                <strong>Book</strong>(<u>Bno</u>, Bname, Author, Pno)<br>
+                &emsp;外键：Pno REFERENCES Publisher(Pno)<br>
+                <strong>Copy</strong>(<u>Bno</u>, <u>Barcode</u>, Status)<br>
+                &emsp;主键：(Bno, Barcode)；外键：Bno REFERENCES Book(Bno)<br>
+                <strong>Borrow</strong>(<u>Rno</u>, <u>Bno</u>, <u>Barcode</u>, <u>BorrowDate</u>, ReturnDate)<br>
+                &emsp;主键：(Rno, Bno, Barcode, BorrowDate)<br>
+                &emsp;外键：Rno REFERENCES Reader(Rno)，(Bno, Barcode) REFERENCES Copy(Bno, Barcode)
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="question">
+    <div class="q-header">40. 关系代数与SQL综合（10分）</div>
+    <div class="q-body">
+        <p>设有以下关系模式：</p>
+        <p><strong>S</strong>(Sno, Sname, Age, Dept) — 学生</p>
+        <p><strong>C</strong>(Cno, Cname, Teacher) — 课程</p>
+        <p><strong>SC</strong>(Sno, Cno, Grade) — 选课</p>
+        <p>(1) 用关系代数表达"查询选修了'数据库'课程的学生姓名"。（3分）</p>
+        <p>(2) 写出(1)对应的SQL语句。（2分）</p>
+        <p>(3) 用关系代数表达"查询选修了全部课程的学生学号"。（3分）</p>
+        <p>(4) 写出(3)对应的SQL语句（用NOT EXISTS实现）。（2分）</p>
+
+        <button class="btn" onclick="toggleAns(this)">显示答案</button>
+        <div class="answer-block">
+            <span class="ans-label">参考答案：</span>
+            <div class="ans-explanation">
+                <strong>(1) 关系代数：</strong><br>
+                π<sub>Sname</sub>(σ<sub>Cname='数据库'</sub>(C) ⋈ SC ⋈ S)<br>
+                或：π<sub>Sname</sub>(S ⋈ SC ⋈ σ<sub>Cname='数据库'</sub>(C))<br><br>
+
+                <strong>(2) SQL：</strong>
+                <div class="sql-code">SELECT S.Sname FROM S
+JOIN SC ON S.Sno = SC.Sno
+JOIN C ON SC.Cno = C.Cno
+WHERE C.Cname = '数据库';</div>
+
+                <strong>(3) 关系代数（除法）：</strong><br>
+                π<sub>Sno, Cno</sub>(SC) ÷ π<sub>Cno</sub>(C)<br><br>
+
+                <strong>(4) SQL（NOT EXISTS）：</strong>
+                <div class="sql-code">SELECT Sno FROM S
+WHERE NOT EXISTS (
+    SELECT * FROM C
+    WHERE NOT EXISTS (
+        SELECT * FROM SC
+        WHERE SC.Sno = S.Sno
+          AND SC.Cno = C.Cno
+    )
+);</div>
+                <p style="margin-top:6px;color:var(--ink-light);">解析：双重NOT EXISTS实现除法语义——"不存在任何课程该学生没有选"。</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Navigation -->
+<div class="nav">
+    <a href="期末试卷2_事务与恢复.html">← 试卷2：事务与恢复</a>
+    <span>试卷3/3</span>
+    <a href="index.html">返回总目录 →</a>
+</div>
+
+<div class="footer">
+    <p>模拟试卷3 · 综合模拟 · 基于四川大学历年题型编制</p>
+    <p>Generated by ExamPass Assistant · 2026-06-27</p>
+</div>
+
+<script>
+function toggleAns(btn) {
+    var block = btn.nextElementSibling;
+    if (block) {
+        block.classList.toggle('show');
+        btn.textContent = block.classList.contains('show') ? '隐藏答案' : '显示答案';
+    }
+}
+function toggleAll() {
+    var blocks = document.querySelectorAll('.answer-block');
+    var btns = document.querySelectorAll('.question .btn');
+    var allShown = true;
+    blocks.forEach(function(b) { if (!b.classList.contains('show')) allShown = false; });
+    blocks.forEach(function(b) { if (allShown) b.classList.remove('show'); else b.classList.add('show'); });
+    btns.forEach(function(b) {
+        var blk = b.nextElementSibling;
+        if (blk) b.textContent = (allShown ? '显示答案' : '隐藏答案');
+    });
+}
+</script>
+
+</body>
+</html>
